@@ -46,6 +46,7 @@
         </div>
         <img id="modal-image" src="" alt="Foto en grande" class="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl">
         <p id="modal-guest-name" class="text-stone-300 mt-6 text-lg font-medium tracking-wide"></p>
+        <p id="modal-challenge-name" class="text-amber-400 mt-2 text-sm md:text-base font-medium tracking-wide hidden text-center max-w-lg px-4 italic"></p>
     </div>
 
     <!-- ==========================================
@@ -940,11 +941,19 @@
         };
 
         // FUNCIONES DE FOTOS
-        window.openPhotoModal = function(url, guestName) {
+        window.openPhotoModal = function(url, guestName, challengeText) {
             currentPhotoUrl = url;
             currentPhotoName = guestName;
             document.getElementById('modal-image').src = url;
             document.getElementById('modal-guest-name').innerText = `📸 Compartida por: ${guestName}`;
+            
+            const challengeEl = document.getElementById('modal-challenge-name');
+            if (challengeText && challengeText !== "null") {
+                challengeEl.innerText = `🎯 Reto: ${challengeText}`;
+                challengeEl.classList.remove('hidden');
+            } else {
+                challengeEl.classList.add('hidden');
+            }
             
             const modal = document.getElementById('photo-modal');
             modal.classList.remove('hidden');
@@ -958,6 +967,7 @@
             currentPhotoUrl = '';
             currentPhotoName = '';
             document.getElementById('modal-image').src = '';
+            document.getElementById('modal-challenge-name').classList.add('hidden');
         };
 
         window.downloadCurrentPhoto = function() {
@@ -1208,6 +1218,7 @@
                             url: compressedBase64,
                             guestName: currentGuest ? currentGuest.name : 'Anónimo',
                             guestId: currentGuest ? currentGuest.id : null,
+                            challenge: wasChallenge ? window.selectedChallenge : null,
                             timestamp: Date.now()
                         });
                     } catch (e) {
@@ -1238,12 +1249,15 @@
                 photos.forEach(photo => {
                     const item = document.createElement('div');
                     item.className = 'relative aspect-square rounded-xl overflow-hidden shadow-sm group cursor-pointer border border-stone-200';
-                    item.onclick = () => window.openPhotoModal(photo.url, photo.guestName);
+                    item.onclick = () => window.openPhotoModal(photo.url, photo.guestName, photo.challenge);
                     
+                    const challengeText = photo.challenge ? `<p class="text-amber-400 text-[10px] truncate mt-0.5" title="${photo.challenge.replace(/"/g, '&quot;')}">🎯 ${photo.challenge}</p>` : '';
+
                     item.innerHTML = `
                         <img src="${photo.url}" alt="Momento del evento" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                         <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 pt-10">
                             <p class="text-white text-xs font-medium truncate">📸 ${photo.guestName}</p>
+                            ${challengeText}
                         </div>
                     `;
                     container.appendChild(item);
