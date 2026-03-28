@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App de Eventos y Bodas</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- JSZip para descargar todas las fotos -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        /* Oculta los elementos visuales base hasta que se decida qué vista mostrar */
+        .hidden-view {
+            display: none !important;
+        }
+        /* Animación para el conteo regresivo y modales */
+        @keyframes pop-in {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop {
+            animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+    </style>
+</head>
+<body class="bg-stone-100 text-stone-800 font-sans antialiased">
+
+    <!-- INPUTS GLOBAL DE ARCHIVOS (Ocultos) -->
+    <input type="file" id="camera-file-input" accept="image/*" capture="environment" class="hidden">
+    <input type="file" id="gallery-file-input" accept="image/*" class="hidden">
+
+    <!-- ==========================================
+         MODAL PARA VER Y DESCARGAR FOTOS
+         ========================================== -->
+    <div id="photo-modal" class="fixed inset-0 bg-black/95 z-[100] hidden flex-col items-center justify-center p-4">
+        <div class="absolute top-6 right-6 flex gap-4 z-50">
+            <button onclick="window.downloadCurrentPhoto()" class="text-stone-900 bg-amber-500 hover:bg-amber-400 p-3 rounded-full transition-colors shadow-lg" title="Descargar foto">
+                <i data-lucide="download" class="w-6 h-6"></i>
+            </button>
+            <button onclick="window.closePhotoModal()" class="text-white bg-white/20 hover:bg-white/30 p-3 rounded-full transition-colors shadow-lg backdrop-blur-md" title="Cerrar">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <img id="modal-image" src="" alt="Foto en grande" class="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl">
+        <p id="modal-guest-name" class="text-stone-300 mt-6 text-lg font-medium tracking-wide"></p>
+    </div>
+
+    <!-- ==========================================
+         DINÁMICA DE RETOS (RULETA, CONTEO, REVELACIÓN Y ÉXITO)
+         ========================================== -->
+    
+    <!-- 1. Modal de Ruleta -->
+    <div id="modal-roulette" class="fixed inset-0 bg-stone-900/90 backdrop-blur-sm z-[100] hidden flex-col items-center justify-center p-4">
+        <div class="max-w-sm w-full bg-white rounded-3xl shadow-2xl p-8 text-center space-y-6">
+            <h2 class="text-3xl font-serif text-stone-800">¡Misión Sorpresa!</h2>
+            <p id="roulette-desc-text" class="text-stone-500 text-sm">Gira la ruleta para descubrir tu reto fotográfico en esta boda.</p>
+
+            <div class="relative w-64 h-64 mx-auto my-10">
+                <!-- Puntero Corregido (Apuntando hacia abajo a la ruleta) -->
+                <div class="absolute -top-7 left-1/2 transform -translate-x-1/2 z-30 text-amber-600 drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]">
+                    <i data-lucide="triangle" class="w-12 h-12 fill-current rotate-180"></i>
+                </div>
+                <!-- Ruleta Visual -->
+                <div id="roulette-wheel" class="w-full h-full rounded-full border-8 border-stone-900 shadow-[0_0_25px_rgba(0,0,0,0.5)] relative overflow-hidden bg-cover bg-center" 
+                     style="transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1);">
+                    
+                    <!-- Capa de divisiones (8 segmentos pares) con conic-gradient para dar efecto de ruleta -->
+                    <div class="absolute inset-0" style="background: conic-gradient(rgba(0,0,0,0.4) 0 45deg, rgba(255,255,255,0.15) 45deg 90deg, rgba(0,0,0,0.4) 90deg 135deg, rgba(255,255,255,0.15) 135deg 180deg, rgba(0,0,0,0.4) 180deg 225deg, rgba(255,255,255,0.15) 225deg 270deg, rgba(0,0,0,0.4) 270deg 315deg, rgba(255,255,255,0.15) 315deg 360deg);"></div>
+
+                    <!-- Decoración interna -->
+                    <div class="absolute inset-1.5 rounded-full border-[3px] border-amber-500/50 z-10"></div>
+                    
+                    <!-- Líneas divisorias -->
+                    <div class="absolute inset-0 flex items-center justify-center z-10">
+                        <div class="w-full h-1 bg-stone-900/80 absolute transform rotate-0"></div>
+                        <div class="w-full h-1 bg-stone-900/80 absolute transform rotate-45"></div>
+                        <div class="w-full h-1 bg-stone-900/80 absolute transform rotate-90"></div>
+                        <div class="w-full h-1 bg-stone-900/80 absolute transform rotate-135"></div>
+                    </div>
+
+                    <!-- Centro de la ruleta (Imagen Personalizada adaptada) -->
+                    <div class="absolute inset-0 flex items-center justify-center z-20">
+                        <div class="w-24 h-24 bg-white rounded-full shadow-[0_0_15px_rgba(0,0,0,0.7)] border-[4px] border-amber-500 flex items-center justify-center p-1">
+                            <img id="roulette-center-img" src="" alt="Centro" class="w-full h-full object-contain rounded-full" onerror="this.src='https://via.placeholder.com/150/f59e0b/ffffff?text=Boda'" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button id="btn-spin" onclick="window.spinRoulette()" class="w-full bg-amber-600 text-white py-4 rounded-xl font-semibold text-xl hover:bg-amber-700 transition-colors shadow-xl active:scale-95 flex items-center justify-center gap-2">
+                <i data-lucide="dices" class="w-6 h-6"></i>
+                ¡GIRAR RULETA!
+            </button>
+            <button onclick="window.skipRoulette()" class="text-stone-400 text-sm underline mt-2 hover:text-stone-600 transition-colors">
+                Saltar reto e ir a mi mesa
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. Modal de Conteo (3, 2, 1) -->
+    <div id="modal-countdown" class="fixed inset-0 bg-amber-600/95 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
+        <div class="text-center flex flex-col items-center justify-center w-full">
+            <h3 class="text-white text-xl font-medium mb-4 uppercase tracking-widest opacity-80">Preparando reto...</h3>
+            <span id="countdown-text" class="text-9xl font-black text-white drop-shadow-2xl font-serif mx-auto w-32 h-32 flex items-center justify-center">3</span>
+        </div>
+    </div>
+
+    <!-- 2.5 Modal de Instrucción antes del reto -->
+    <div id="modal-challenge-instruction" class="fixed inset-0 bg-stone-900/95 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center space-y-6 relative overflow-hidden animate-pop">
+            <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                <i data-lucide="info" class="w-10 h-10 text-amber-600"></i>
+            </div>
+            <h2 class="text-2xl font-serif text-stone-800">¡Atención!</h2>
+            <p class="text-stone-600 text-lg">Sube la foto a nuestra galería cuando lo consigas y demuestra que eres el mejor invitado.</p>
+            <button onclick="window.showChallengeReveal()" class="w-full bg-amber-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-amber-700 transition-colors shadow-lg mt-4 relative z-10">
+                Siguiente
+            </button>
+        </div>
+    </div>
+
+    <!-- 3. Revelación del reto -->
+    <div id="modal-challenge-reveal" class="fixed inset-0 bg-stone-900/95 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center space-y-6 relative overflow-hidden">
+            <div class="absolute -top-10 -left-10 w-32 h-32 bg-amber-100 rounded-full opacity-50 blur-2xl"></div>
+            <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-amber-200 rounded-full opacity-50 blur-2xl"></div>
+            
+            <h2 class="text-2xl font-serif text-amber-600 uppercase tracking-widest relative z-10">Tu Reto Es:</h2>
+            <div class="bg-stone-50 rounded-2xl p-6 border border-stone-100 shadow-inner relative z-10">
+                <p id="challenge-reveal-text" class="text-2xl font-medium text-stone-800 italic">"Tomar una foto..."</p>
+            </div>
+            <button onclick="window.closeChallengeReveal()" class="w-full bg-stone-900 text-white py-4 rounded-xl font-semibold text-lg hover:bg-stone-800 transition-colors shadow-lg mt-4 relative z-10">
+                ¡Aceptar Reto e ir a mi mesa!
+            </button>
+        </div>
+    </div>
+
+    <!-- 4. Modal de Éxito y Nuevo Reto -->
+    <div id="modal-challenge-success" class="fixed inset-0 bg-stone-900/90 backdrop-blur-sm z-[110] hidden flex-col items-center justify-center p-4">
+        <div class="max-w-sm w-full bg-white rounded-3xl shadow-2xl p-8 text-center space-y-6 animate-pop">
+            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                <i data-lucide="check-circle" class="w-10 h-10 text-green-600"></i>
+            </div>
+            <h2 class="text-3xl font-serif text-stone-800">¡Reto Verificado!</h2>
+            <p class="text-stone-500 text-lg">Tu foto se está subiendo a la galería de los novios.</p>
+
+            <div class="bg-amber-50 rounded-2xl p-4 border border-amber-200 mt-4">
+                <p class="text-amber-800 font-semibold mb-1 flex items-center justify-center gap-2"><i data-lucide="gift" class="w-5 h-5"></i> ¡Sigue así!</p>
+                <p class="text-sm text-amber-700">¿Aceptas el siguiente reto para ganar más oportunidades?</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 pt-2">
+                <button onclick="window.declineNextChallenge()" class="w-full bg-stone-200 text-stone-700 py-3 rounded-xl font-semibold hover:bg-stone-300 transition-colors shadow-sm">
+                    No acepto
+                </button>
+                <button onclick="window.acceptNextChallenge()" class="w-full bg-amber-600 text-white py-3 rounded-xl font-semibold hover:bg-amber-700 transition-colors shadow-lg flex items-center justify-center gap-1">
+                    <i data-lucide="shuffle" class="w-4 h-4"></i> ¡Sí, acepto!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         VISTA 1: TÓTEM (ENTRADA PRINCIPAL)
+         ========================================== -->
+    <div id="view-totem" class="view min-h-screen bg-gradient-to-br from-stone-100 to-stone-300 flex flex-col items-center justify-center p-6">
+        <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center space-y-8 border border-stone-200">
+            <div class="space-y-2">
+                <h1 id="totem-title" class="text-4xl font-serif text-amber-700">¡Bienvenidos!</h1>
+                <p id="totem-subtitle" class="text-stone-500">Encuentra tu mesa y únete a la celebración</p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="relative text-left">
+                    <i data-lucide="search" class="absolute left-4 top-4 text-stone-400 w-6 h-6"></i>
+                    <input
+                        type="text"
+                        id="search-input"
+                        placeholder="Ingresa tu nombre o apellido..."
+                        class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-stone-200 focus:border-amber-500 focus:ring-0 text-lg transition-colors outline-none"
+                    />
+                </div>
+                <button 
+                    id="btn-search"
+                    class="w-full bg-stone-800 text-white py-4 rounded-xl font-semibold text-lg hover:bg-stone-900 transition-colors shadow-lg active:scale-95"
+                >
+                    Buscar mi Mesa
+                </button>
+            </div>
+
+            <div class="relative flex items-center py-2">
+                <div class="flex-grow border-t border-stone-300"></div>
+                <!-- Texto con acción oculta -->
+                <span 
+                    class="flex-shrink-0 mx-4 text-stone-400 text-sm cursor-pointer select-none" 
+                    onclick="window.handleSecretClick()" 
+                    title="Doble tap secreto">
+                    O usa tu celular
+                </span>
+                <div class="flex-grow border-t border-stone-300"></div>
+            </div>
+
+            <button 
+                onclick="window.switchView('view-show-qr')"
+                class="w-full bg-white border-2 border-stone-800 text-stone-800 py-4 rounded-xl font-semibold text-lg hover:bg-stone-50 transition-colors flex items-center justify-center gap-2 active:scale-95"
+            >
+                <i data-lucide="qr-code" class="w-6 h-6"></i>
+                Mostrar Código QR
+            </button>
+        </div>
+
+        <button 
+            onclick="window.switchView('view-admin-login')"
+            class="mt-8 text-stone-400 hover:text-stone-600 flex items-center gap-2 text-sm transition-colors p-2"
+        >
+            <i data-lucide="users" class="w-4 h-4"></i> Acceso Organizador
+        </button>
+    </div>
+
+    <!-- ==========================================
+         VISTA 1.5: MOSTRAR CÓDIGO QR
+         ========================================== -->
+    <div id="view-show-qr" class="view hidden-view min-h-screen bg-stone-900 flex flex-col items-center justify-center p-6 relative">
+        <button 
+            onclick="window.switchView('view-totem')"
+            class="absolute top-8 right-8 text-white p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+        >
+            <i data-lucide="x" class="w-7 h-7"></i>
+        </button>
+
+        <div class="text-center mb-10 max-w-md">
+            <h2 class="text-3xl font-serif text-white mb-4">Escanea con tu celular</h2>
+            <p class="text-stone-400 text-lg">Abre la cámara de tu teléfono y apunta a este código para acceder a la plataforma web.</p>
+        </div>
+
+        <div class="bg-white p-8 rounded-3xl shadow-[0_0_50px_rgba(245,158,11,0.2)]">
+            <img 
+                id="dynamic-qr-img"
+                src="" 
+                alt="Código QR del Evento" 
+                class="w-64 h-64 md:w-80 md:h-80"
+            />
+        </div>
+        
+        <p class="mt-8 text-amber-500 font-medium tracking-wide text-center text-xl">
+            App de Eventos y Bodas
+        </p>
+    </div>
+
+    <!-- ==========================================
+         VISTA 2: DASHBOARD DEL INVITADO
+         ========================================== -->
+    <div id="view-guest-dashboard" class="view hidden-view min-h-screen bg-stone-50 flex flex-col p-4 sm:p-6 md:max-w-2xl md:mx-auto">
+        <div class="flex justify-between items-center mb-6">
+            <button onclick="window.logout()" class="p-2 bg-white rounded-full shadow hover:bg-stone-100 transition-colors text-stone-600">
+                <i data-lucide="home" class="w-6 h-6"></i>
+            </button>
+            <div class="p-2 bg-transparent">
+               <!-- Botón de galería removido -->
+            </div>
+        </div>
+
+        <div class="bg-white rounded-3xl p-8 text-center shadow-lg border border-stone-100 mb-6 relative overflow-hidden">
+            <h2 class="text-3xl font-serif text-stone-800 mb-2">¡Hola, <span id="guest-name-display"></span>!</h2>
+            <p class="text-stone-500 mb-6">Nos alegra mucho que estés aquí.</p>
+            
+            <div class="inline-block bg-amber-50 border border-amber-200 rounded-2xl p-6 px-12">
+                <p id="table-label-text" class="text-sm text-amber-800 font-semibold uppercase tracking-widest mb-1">Tu mesa es la número</p>
+                <p id="guest-table-display" class="text-6xl font-serif text-amber-600">--</p>
+            </div>
+            
+            <!-- Banner de Reto Activo Mejorado -->
+            <div id="active-challenge-banner" class="hidden mt-6 pt-6 border-t border-stone-100">
+                <div class="bg-amber-50 rounded-2xl p-5 border border-amber-200 shadow-sm">
+                    <p class="text-xs font-bold uppercase tracking-widest text-amber-600 mb-3 flex items-center justify-center gap-1">
+                        <i data-lucide="star" class="w-4 h-4"></i> Tu Reto Activo
+                    </p>
+                    <p id="active-challenge-text" class="text-stone-800 italic font-medium text-lg mb-4">...</p>
+                    
+                    <p class="text-xs text-amber-700 mb-5 font-medium px-2 bg-amber-100/50 py-2 rounded-lg">
+                        🎁 ¡Sube la foto para completar el reto y gana oportunidades para un premio sorpresa!
+                    </p>
+                    
+                    <!-- Contenedor para completar reto con fotos -->
+                    <div id="challenge-action-container" class="space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="window.triggerCameraUpload()" class="w-full bg-amber-600 text-white py-3 rounded-xl font-semibold hover:bg-amber-700 transition-colors flex flex-col items-center justify-center gap-2 active:scale-95 shadow-md">
+                                <i data-lucide="camera" class="w-6 h-6"></i>
+                                <span class="text-xs">Tomar Foto</span>
+                            </button>
+                            <button onclick="window.triggerGalleryUpload()" class="w-full bg-stone-800 text-white py-3 rounded-xl font-semibold hover:bg-stone-900 transition-colors flex flex-col items-center justify-center gap-2 active:scale-95 shadow-md">
+                                <i data-lucide="image" class="w-6 h-6"></i>
+                                <span class="text-xs">Subir Galería</span>
+                            </button>
+                        </div>
+                        <button onclick="window.postponeChallenge()" class="w-full bg-stone-200 text-stone-700 py-2.5 rounded-xl font-semibold hover:bg-stone-300 transition-colors shadow-sm flex items-center justify-center gap-2 text-sm active:scale-95">
+                            <i data-lucide="clock" class="w-4 h-4"></i>
+                            Posponer y pedir otro
+                        </button>
+                    </div>
+
+                    <p id="pending-challenges-text" class="text-xs text-stone-500 mt-3 hidden text-center font-medium">
+                        Tienes <span id="pending-count" class="text-amber-600 font-bold">0</span> retos pendientes.
+                    </p>
+                    
+                    <!-- Contenedor para pedir otro reto (oculto inicialmente) -->
+                    <div id="next-challenge-container" class="hidden space-y-3 mt-4">
+                        <p class="text-sm font-bold text-green-600 flex items-center justify-center gap-1">
+                            <i data-lucide="party-popper" class="w-5 h-5"></i> ¡Reto superado excelente!
+                        </p>
+                        <button onclick="window.getNewChallenge()" class="w-full bg-amber-500 text-stone-900 py-3 rounded-xl font-semibold hover:bg-amber-400 transition-colors shadow-md flex items-center justify-center gap-2 text-sm active:scale-95">
+                            <i data-lucide="shuffle" class="w-5 h-5"></i>
+                            ¡Dame otro reto!
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN DE VIDEO DE LOS NOVIOS ACTUALIZADA -->
+        <div class="bg-stone-900 rounded-3xl overflow-hidden shadow-lg mb-6 flex flex-col">
+            <div class="p-4 text-center border-b border-stone-800">
+                <h3 class="font-semibold text-lg text-white flex justify-center items-center gap-2">
+                    <i data-lucide="video" class="w-5 h-5 text-amber-500"></i> Mensaje de los Novios
+                </h3>
+                <p class="text-stone-400 text-xs mt-1">Dale play a nuestro anuncio</p>
+            </div>
+            <div class="w-full bg-black flex justify-center items-center overflow-hidden rounded-b-3xl">
+                <iframe 
+                    id="novios-video"
+                    src="" 
+                    class="w-full h-[60vh] border-0" 
+                    allow="autoplay; fullscreen" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <!-- Sección estándar de fotos (si no hay reto activo, se sigue mostrando) -->
+        <div class="bg-white rounded-3xl p-6 text-center shadow-lg border border-stone-100">
+            <h3 class="font-semibold text-stone-800 mb-2">Ayúdanos a capturar el momento</h3>
+            <p class="text-stone-500 text-sm mb-4">Sube las fotos y videos que tomes hoy a nuestra galería compartida.</p>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <button 
+                    onclick="window.triggerCameraUpload()"
+                    class="w-full bg-amber-600 text-white py-4 rounded-xl font-semibold hover:bg-amber-700 transition-colors flex flex-col items-center justify-center gap-2 active:scale-95 shadow-md"
+                >
+                    <i data-lucide="camera" class="w-7 h-7"></i>
+                    <span class="text-sm">Tomar Foto</span>
+                </button>
+                <button 
+                    onclick="window.triggerGalleryUpload()"
+                    class="w-full bg-stone-800 text-white py-4 rounded-xl font-semibold hover:bg-stone-900 transition-colors flex flex-col items-center justify-center gap-2 active:scale-95 shadow-md"
+                >
+                    <i data-lucide="image" class="w-7 h-7"></i>
+                    <span class="text-sm">Subir de Galería</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         VISTA 3: LOGIN DE ADMINISTRADOR
+         ========================================== -->
+    <div id="view-admin-login" class="view hidden-view min-h-screen bg-stone-900 flex flex-col items-center justify-center p-6 relative">
+        <button 
+            onclick="window.switchView('view-totem')"
+            class="absolute top-8 right-8 text-white p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+        >
+            <i data-lucide="x" class="w-7 h-7"></i>
+        </button>
+
+        <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center space-y-6">
+            <div class="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="lock" class="w-8 h-8 text-stone-600"></i>
+            </div>
+            <h2 class="text-3xl font-serif text-stone-800">Acceso Privado</h2>
+            <p class="text-stone-500">Ingresa la contraseña del organizador para continuar.</p>
+            
+            <form id="admin-login-form" class="space-y-4">
+                <input 
+                    type="password" 
+                    id="admin-password-input"
+                    placeholder="Contraseña" 
+                    class="w-full p-4 rounded-xl border-2 border-stone-200 focus:border-amber-500 focus:ring-0 text-lg transition-colors outline-none text-center tracking-widest"
+                    required
+                >
+                <p id="admin-login-error" class="text-red-500 text-sm hidden font-medium">Contraseña incorrecta. Inténtalo de nuevo.</p>
+                <button type="submit" class="w-full bg-amber-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-amber-700 transition-colors shadow-lg active:scale-95">
+                    Entrar al Panel
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         VISTA 4: PANEL DE ADMINISTRACIÓN (Con Galería Integrada)
+         ========================================== -->
+    <div id="view-admin" class="view hidden-view min-h-screen bg-stone-100 p-6 md:p-12">
+        <div class="max-w-6xl mx-auto space-y-8 mt-4">
+            
+            <!-- Header -->
+            <div class="bg-stone-900 p-6 rounded-3xl shadow-xl text-white flex justify-between items-center gap-3">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="users" class="w-8 h-8 text-amber-500"></i>
+                    <div>
+                        <h1 class="text-2xl font-bold font-serif">Panel de Organización</h1>
+                    </div>
+                </div>
+                <button onclick="window.switchView('view-totem')" class="px-4 py-2 bg-stone-700 rounded-lg hover:bg-stone-600 transition-colors text-sm font-medium flex items-center gap-2">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Salir
+                </button>
+            </div>
+
+            <!-- Contenido Principal: Formulario y Lista -->
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Formulario Izquierda -->
+                <div class="md:col-span-1 bg-stone-50 p-6 rounded-3xl border border-stone-200 h-fit shadow-md">
+                    <h3 class="font-semibold text-lg mb-4 text-stone-800">Agregar Invitado</h3>
+                    <form id="admin-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-stone-600 mb-1">Nombre Completo</label>
+                            <input 
+                                id="admin-input-name" 
+                                placeholder="Ej. Juan Pérez" 
+                                required
+                                class="w-full p-3 rounded-lg border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none transition-colors"
+                            >
+                        </div>
+                        <div>
+                            <label class="block text-sm text-stone-600 mb-1">Número/Nombre de Mesa</label>
+                            <input 
+                                id="admin-input-table" 
+                                placeholder="Ej. 12" 
+                                required
+                                class="w-full p-3 rounded-lg border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none transition-colors"
+                            >
+                        </div>
+                        <button type="submit" class="w-full bg-stone-800 text-white py-3 rounded-lg hover:bg-stone-900 transition-colors font-medium flex items-center justify-center mt-4 text-center mx-auto shadow-md active:scale-95">
+                            Guardar Invitado
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Lista Derecha -->
+                <div class="md:col-span-2">
+                    <div class="flex justify-between items-center mb-4 px-2">
+                        <h3 class="font-semibold text-lg text-stone-800 flex items-center gap-2"><i data-lucide="list-ordered" class="w-5 h-5 text-amber-600"></i> Tabla de Posiciones</h3>
+                        <span class="text-sm text-stone-500">Actualizado en vivo</span>
+                    </div>
+                    
+                    <div class="bg-white rounded-3xl border border-stone-200 overflow-hidden shadow-md">
+                        <!-- La lista se genera aquí con JS -->
+                        <ul id="admin-guest-list" class="divide-y divide-stone-100 flex flex-col min-h-[200px]">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN: GALERÍA INTEGRADA PARA EL ADMINISTRADOR -->
+            <div class="bg-white rounded-3xl border border-stone-200 overflow-hidden shadow-md p-6 md:p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h3 class="font-semibold text-2xl text-stone-800 flex items-center gap-2"><i data-lucide="image" class="w-6 h-6 text-amber-600"></i> Galería de Fotos del Evento</h3>
+                        <p class="text-sm text-stone-500 mt-1">Todas las fotos capturadas por los invitados aparecerán aquí.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="bg-amber-100 text-amber-800 font-bold px-4 py-2 rounded-full text-sm" id="admin-photo-count">0 Fotos Totales</span>
+                        <button onclick="window.downloadAllPhotosZip()" class="bg-stone-800 text-white px-4 py-2 rounded-full text-sm hover:bg-stone-900 transition-colors flex items-center gap-2 shadow-md active:scale-95" title="Descargar todas en ZIP">
+                            <i data-lucide="folder-down" class="w-4 h-4"></i> Descargar Todas
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Contenedor Dinámico de Fotos en Admin -->
+                <div id="admin-gallery-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    <!-- Las fotos se inyectarán aquí mediante JS -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ==========================================
+         VISTA 5: CONFIGURACIÓN OCULTA
+         ========================================== -->
+    <div id="view-config" class="view hidden-view min-h-screen bg-stone-900 flex flex-col items-center justify-center p-6 relative">
+        <button onclick="window.switchView('view-totem')" class="absolute top-8 right-8 text-white p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
+            <i data-lucide="x" class="w-7 h-7"></i>
+        </button>
+
+        <div class="max-w-2xl w-full bg-white rounded-3xl shadow-2xl p-8 space-y-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center gap-3 border-b border-stone-200 pb-4">
+                <i data-lucide="settings" class="w-8 h-8 text-amber-600"></i>
+                <h2 class="text-3xl font-serif text-stone-800">Panel de Configuración General</h2>
+            </div>
+            
+            <form id="config-form" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-stone-700 mb-1">Título de Bienvenida</label>
+                    <input id="cfg-title" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-stone-700 mb-1">Subtítulo</label>
+                    <input id="cfg-subtitle" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-stone-700 mb-1">Texto Botón de Búsqueda</label>
+                    <input id="cfg-search-btn" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-stone-700 mb-1">Texto Descripción Ruleta</label>
+                    <input id="cfg-roulette-text" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-stone-700 mb-1">Texto Etiqueta de Mesa</label>
+                    <input id="cfg-table-label" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-stone-700 mb-1">URL Imagen Fondo Ruleta</label>
+                    <input id="cfg-roulette-bg" type="url" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-stone-700 mb-1">URL Imagen Centro Ruleta</label>
+                    <input id="cfg-roulette-center" type="url" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-stone-700 mb-1">URL Video Novios (Ej. Google Drive preview)</label>
+                    <input id="cfg-video" type="url" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-stone-700 mb-1">Contraseña de Administrador (Panel Organización)</label>
+                    <input id="cfg-admin-pass" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
+                </div>
+                
+                <button type="submit" class="w-full bg-amber-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-amber-700 transition-colors shadow-lg active:scale-95 flex justify-center items-center gap-2 mt-4">
+                    <i data-lucide="save" class="w-5 h-5"></i> Guardar Cambios
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         LÓGICA JAVASCRIPT CON FIREBASE UNIFICADO
+         ========================================== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // 1. Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBxE8t9sEWalMO_i0bFDjGp5I95iuYj5Io",
+            authDomain: "dinastiamesas.firebaseapp.com",
+            projectId: "dinastiamesas",
+            storageBucket: "dinastiamesas.firebasestorage.app",
+            messagingSenderId: "23829938113",
+            appId: "1:23829938113:web:d0d791c86b5b8c1df63940"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhwV00ZSwM8mPhI4k3Cg4ztmd3TGC1HqLm32gdhGepFhKZp0dS-P5WyAi-tRplcapVPw/exec'; 
+
+        // 2. Variables de estado
+        let guests = [];
+        let photos = [];
+        let currentGuest = null;
+        let challengeAccepted = false; 
+        
+        let currentPhotoUrl = '';
+        let currentPhotoName = '';
+        window.selectedChallenge = ''; 
+        window.pendingChallenges = []; 
+
+        // ESTADO DE CONFIGURACIÓN GLOBAL (Valores por defecto)
+        window.appConfig = {
+            title: "¡Bienvenidos!",
+            subtitle: "Encuentra tu mesa y únete a la celebración",
+            searchBtnText: "Buscar mi Mesa",
+            rouletteText: "Gira la ruleta para descubrir tu reto fotográfico en esta boda.",
+            tableLabelText: "Tu mesa es la número",
+            rouletteBg: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+            rouletteCenter: "https://image2url.com/r2/default/images/1773931962266-01b311d3-46f3-49f7-a83b-cf9dc1b67e7c.avif",
+            videoLink: "https://drive.google.com/file/d/1pJXSVBktub3dYF72z1OJodXbgwYpvP4L/preview",
+            adminPassword: "admin123"
+        };
+
+        const RETOS_BODA = [
+            "Tómate una selfie con la novia.", "Tómate una selfie con el novio.", "Fotografía un beso apasionado (que no sea el tuyo).", "Captura una lágrima de felicidad.", "Toma una foto del centro de mesa más bonito.",
+            "Fotografía a alguien riendo a carcajadas.", "Capta a un niño haciendo una travesura.", "Toma una foto de tres generaciones juntas.", "Fotografía los zapatos más elegantes de la fiesta.", "Selfie con alguien que acabas de conocer.",
+            "Toma una foto brindando con tu bebida favorita.", "Captura el momento exacto en que alguien muerde el pastel.", "Fotografía a los novios tomados de la mano sin que se den cuenta.", "Tómate una foto con los padres de la novia.", "Tómate una foto con los padres del novio.",
+            "Consigue una foto grupal de toda tu mesa.", "Toma una foto artística de los anillos (si puedes).", "Fotografía el vestido de la novia en todo su esplendor.", "Selfie haciendo una mueca graciosa con tu acompañante.", "Captura a alguien abrazando a los novios.",
+            "Toma una foto de la decoración de luces.", "Fotografía a la pareja con más tiempo de casados.", "Consigue una foto con el DJ o la banda.", "Captura a alguien cantando a todo pulmón.", "Toma una foto de las flores más bellas del salón.",
+            "Selfie con la persona más alta de la fiesta.", "Fotografía a alguien disfrutando el banquete.", "Captura el peinado más espectacular.", "Toma una foto del ramo de la novia.", "Consigue una foto con el padrino o dama de honor.",
+            "Fotografía una pose de baile dramática.", "Captura a los novios mirándose a los ojos.", "Toma una foto de un grupo chocando las copas.", "Selfie con el bartender.", "Fotografía un detalle escondido de la decoración.",
+            "Capta la corbata o moño más llamativo.", "Toma una foto de las manos entrelazadas de los novios.", "Consigue una foto de alguien secándose una lágrima.", "Fotografía a la persona que más ha bailado.", "Selfie en la pista de baile vacía.",
+            "Toma una foto de una pareja bailando lento.", "Captura el momento en que sirven la comida.", "Fotografía a alguien arreglándose el maquillaje o traje.", "Consigue una foto grupal de solo hombres.", "Consigue una foto grupal de solo mujeres.",
+            "Toma una foto de las sombras de los invitados bailando.", "Selfie mostrando tu outfit completo.", "Capta a los novios en un momento de relajación.", "Fotografía el mejor paso de baile de la noche.", "Toma una foto de una bebida muy colorida.",
+            "Captura a alguien mirando su celular y sonriendo.", "Fotografía a alguien que se haya quitado los zapatos para bailar.", "Selfie con la persona de mayor edad en la fiesta.", "Toma una foto de alguien probando un postre.", "Fotografía el cielo o techo del lugar.",
+            "Consigue una foto de los novios con sus mejores amigos.", "Capta la expression de asombro de un invitado.", "Toma una foto de espaldas a los novios mientras miran al frente.", "Selfie usando algún accesorio de la fiesta.", "Fotografía a alguien levantando los brazos en la pista.",
+            "Capta el momento de partir el pastel.", "Toma una foto de las copas vacías después de un brindis.", "Fotografía a dos personas susurrándose algo.", "Selfie grupal más grande que puedas lograr.", "Toma una foto de los regalos o buzón de los novios.",
+            "Captura un abrazo súper apretado.", "Fotografía a alguien dando un discurso.", "Toma una foto de los novios llegando a la pista.", "Consigue una foto de una mirada cómplice.", "Selfie guiñando el ojo.",
+            "Fotografía a la persona con el mejor ritmo.", "Capta a un invitado durmiéndose (o casi).", "Toma una foto de un plato recién servido.", "Fotografía el menú de la boda de forma creativa.", "Selfie con alguien que lleve el mismo color que tú.",
+            "Captura a los novios bailando su primera canción.", "Toma una foto de un brindis desde el suelo (ángulo bajo).", "Fotografía la mesa de dulces antes de que se acaben.", "Consigue una foto de un niño bailando.", "Selfie con la iluminación más dramática del lugar.",
+            "Capta a alguien robándose un beso.", "Toma una foto de las sillas de los novios.", "Fotografía el momento de lanzar el ramo.", "Captura a la persona que atrapó el ramo.", "Selfie haciendo un corazón con las manos.",
+            "Fotografía a alguien brindando con agua.", "Toma una foto de los centros de mesa al final de la fiesta.", "Capta a alguien corriendo hacia la pista de baile.", "Consigue una foto de un apretón de manos emotivo.", "Selfie con los meseros (¡son los héroes!).",
+            "Toma una foto de un detalle del traje del novio.", "Fotografía a dos invitados que no se conocían hablando.", "Captura la silueta de los novios a contraluz.", "Selfie desenfocada pero divertida.", "Toma una foto del letrero de bienvenida.",
+            "Fotografía a alguien comiendo a escondidas.", "Capta a los invitados haciendo 'el trencito' o coreografía grupal.", "Toma una foto del reloj marcando la medianoche.", "Consigue una foto de un invitado muy elegante.", "Selfie final antes de irte de la fiesta."
+        ];
+
+        window.switchView = function(viewId) {
+            document.querySelectorAll('.view').forEach(el => {
+                el.classList.add('hidden-view');
+            });
+            document.getElementById(viewId).classList.remove('hidden-view');
+
+            if (viewId === 'view-show-qr') {
+                renderDynamicQR();
+            } else if (viewId === 'view-admin-login') {
+                document.getElementById('admin-password-input').value = '';
+                document.getElementById('admin-login-error').classList.add('hidden');
+            } else if (viewId === 'view-admin') {
+                renderAdminList();
+                renderGallery(); 
+            }
+            if (window.lucide) lucide.createIcons();
+        };
+
+        // --- SISTEMA DE CONFIGURACIÓN DINÁMICA ---
+        function cargarConfiguracion() {
+            onSnapshot(doc(db, "configuracion", "general"), (docSnap) => {
+                if (docSnap.exists()) {
+                    window.appConfig = { ...window.appConfig, ...docSnap.data() };
+                }
+                aplicarConfiguracion();
+            });
+        }
+
+        function aplicarConfiguracion() {
+            // Aplicar al DOM
+            const titleEl = document.getElementById('totem-title');
+            if(titleEl) titleEl.innerText = window.appConfig.title || "¡Bienvenidos!";
+
+            const subtitleEl = document.getElementById('totem-subtitle');
+            if(subtitleEl) subtitleEl.innerText = window.appConfig.subtitle || "Encuentra tu mesa y únete a la celebración";
+
+            const searchBtnEl = document.getElementById('btn-search');
+            if(searchBtnEl) searchBtnEl.innerText = window.appConfig.searchBtnText || "Buscar mi Mesa";
+
+            const rouletteDescEl = document.getElementById('roulette-desc-text');
+            if(rouletteDescEl) rouletteDescEl.innerText = window.appConfig.rouletteText || "Gira la ruleta para descubrir tu reto fotográfico en esta boda.";
+
+            const tableLabelEl = document.getElementById('table-label-text');
+            if(tableLabelEl) tableLabelEl.innerText = window.appConfig.tableLabelText || "Tu mesa es la número";
+
+            const rBgEl = document.getElementById('roulette-wheel');
+            if(rBgEl) rBgEl.style.backgroundImage = `url('${window.appConfig.rouletteBg}')`;
+
+            const rCenterEl = document.getElementById('roulette-center-img');
+            if(rCenterEl) rCenterEl.src = window.appConfig.rouletteCenter;
+
+            const videoEl = document.getElementById('novios-video');
+            if(videoEl) videoEl.src = window.appConfig.videoLink;
+
+            // Rellenar formulario de config
+            document.getElementById('cfg-title').value = window.appConfig.title || "¡Bienvenidos!";
+            document.getElementById('cfg-subtitle').value = window.appConfig.subtitle || "Encuentra tu mesa y únete a la celebración";
+            document.getElementById('cfg-search-btn').value = window.appConfig.searchBtnText || "Buscar mi Mesa";
+            document.getElementById('cfg-roulette-text').value = window.appConfig.rouletteText || "Gira la ruleta para descubrir tu reto fotográfico en esta boda.";
+            document.getElementById('cfg-table-label').value = window.appConfig.tableLabelText || "Tu mesa es la número";
+            document.getElementById('cfg-roulette-bg').value = window.appConfig.rouletteBg;
+            document.getElementById('cfg-roulette-center').value = window.appConfig.rouletteCenter;
+            document.getElementById('cfg-video').value = window.appConfig.videoLink;
+            document.getElementById('cfg-admin-pass').value = window.appConfig.adminPassword;
+        }
+
+        window.handleSaveConfig = async function(event) {
+            event.preventDefault();
+            const newConfig = {
+                title: document.getElementById('cfg-title').value,
+                subtitle: document.getElementById('cfg-subtitle').value,
+                searchBtnText: document.getElementById('cfg-search-btn').value,
+                rouletteText: document.getElementById('cfg-roulette-text').value,
+                tableLabelText: document.getElementById('cfg-table-label').value,
+                rouletteBg: document.getElementById('cfg-roulette-bg').value,
+                rouletteCenter: document.getElementById('cfg-roulette-center').value,
+                videoLink: document.getElementById('cfg-video').value,
+                adminPassword: document.getElementById('cfg-admin-pass').value
+            };
+
+            try {
+                await setDoc(doc(db, "configuracion", "general"), newConfig);
+                alert("¡Configuración actualizada en vivo!");
+                window.switchView('view-totem');
+            } catch (error) {
+                console.error("Error guardando config:", error);
+                alert("Error al guardar la configuración.");
+            }
+        };
+
+        // Detector de clic secreto (5 clics rápidos)
+        let secretClicks = 0;
+        let clickTimer;
+        window.handleSecretClick = function() {
+            secretClicks++;
+            clearTimeout(clickTimer);
+            clickTimer = setTimeout(() => { secretClicks = 0; }, 2000);
+
+            if (secretClicks >= 5) {
+                secretClicks = 0;
+                const pass = prompt("Acceso Especial a Configuración. Ingresa la clave maestra:");
+                // La contraseña para la configuración oculta es estrictamente 1705
+                if (pass === '1705') {
+                    window.switchView('view-config');
+                } else {
+                    if (pass !== null) alert("Contraseña incorrecta.");
+                }
+            }
+        };
+
+        // --- RESTO DE LA APP ---
+
+        window.logout = function() {
+            currentGuest = null;
+            challengeAccepted = false;
+            window.pendingChallenges = []; 
+            document.getElementById('pending-challenges-text').classList.add('hidden');
+            document.getElementById('active-challenge-banner').classList.add('hidden');
+            
+            document.getElementById('challenge-action-container').classList.remove('hidden');
+            document.getElementById('next-challenge-container').classList.add('hidden');
+            
+            window.switchView('view-totem');
+        };
+
+        window.triggerCameraUpload = function() {
+            document.getElementById('camera-file-input').click();
+        };
+
+        window.triggerGalleryUpload = function() {
+            document.getElementById('gallery-file-input').click();
+        };
+
+        window.deleteGuest = async function(id) {
+            if(confirm("¿Estás seguro de que quieres eliminar a este invitado?")) {
+                try {
+                    await deleteDoc(doc(db, "invitados", id));
+                } catch (error) {
+                    console.error("Error eliminando invitado:", error);
+                    alert("Hubo un error al eliminar.");
+                }
+            }
+        };
+
+        window.handleAdminLogin = function(event) {
+            event.preventDefault();
+            const passwordInput = document.getElementById('admin-password-input');
+            const errorMsg = document.getElementById('admin-login-error');
+            
+            // Validamos contra la contraseña configurada en la BD
+            if (passwordInput.value === window.appConfig.adminPassword) {
+                passwordInput.value = '';
+                errorMsg.classList.add('hidden');
+                window.switchView('view-admin');
+            } else {
+                errorMsg.classList.remove('hidden');
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        };
+
+        // FUNCIONES DE RETOS
+        window.spinRoulette = function() {
+            const btn = document.getElementById('btn-spin');
+            const wheel = document.getElementById('roulette-wheel');
+            
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            
+            let retoTexto = RETOS_BODA[Math.floor(Math.random() * RETOS_BODA.length)];
+            window.selectedChallenge = retoTexto;
+
+            const randomExtraDeg = Math.floor(Math.random() * 360);
+            const totalDeg = 3600 + randomExtraDeg; 
+            wheel.style.transform = `rotate(${totalDeg}deg)`;
+
+            setTimeout(() => {
+                document.getElementById('modal-roulette').classList.add('hidden');
+                document.getElementById('modal-roulette').classList.remove('flex');
+                
+                const countdownModal = document.getElementById('modal-countdown');
+                const countdownText = document.getElementById('countdown-text');
+                
+                countdownModal.classList.remove('hidden');
+                countdownModal.classList.add('flex');
+
+                let count = 3;
+                countdownText.innerText = count;
+                countdownText.classList.remove('animate-pop');
+                void countdownText.offsetWidth; 
+                countdownText.classList.add('animate-pop');
+
+                const interval = setInterval(() => {
+                    count--;
+                    if (count > 0) {
+                        countdownText.innerText = count;
+                        countdownText.classList.remove('animate-pop');
+                        void countdownText.offsetWidth;
+                        countdownText.classList.add('animate-pop');
+                    } else {
+                        clearInterval(interval);
+                        countdownModal.classList.add('hidden');
+                        countdownModal.classList.remove('flex');
+                        
+                        const instructionModal = document.getElementById('modal-challenge-instruction');
+                        instructionModal.classList.remove('hidden');
+                        instructionModal.classList.add('flex');
+                        if (window.lucide) lucide.createIcons();
+                        
+                        document.getElementById('challenge-reveal-text').innerText = `"${window.selectedChallenge}"`;
+                        document.getElementById('active-challenge-text').innerText = `"${window.selectedChallenge}"`;
+                        
+                        setTimeout(() => {
+                            wheel.style.transition = 'none';
+                            wheel.style.transform = 'rotate(0deg)';
+                            btn.disabled = false;
+                            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                            setTimeout(() => wheel.style.transition = 'transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)', 50);
+                        }, 500);
+                    }
+                }, 1000);
+
+            }, 3000); 
+        };
+
+        window.skipRoulette = function() {
+            document.getElementById('modal-roulette').classList.add('hidden');
+            document.getElementById('modal-roulette').classList.remove('flex');
+            
+            challengeAccepted = false;
+            window.switchView('view-guest-dashboard');
+        };
+
+        window.showChallengeReveal = function() {
+            document.getElementById('modal-challenge-instruction').classList.add('hidden');
+            document.getElementById('modal-challenge-instruction').classList.remove('flex');
+            
+            const revealModal = document.getElementById('modal-challenge-reveal');
+            revealModal.classList.remove('hidden');
+            revealModal.classList.add('flex');
+        };
+
+        window.closeChallengeReveal = function() {
+            document.getElementById('modal-challenge-reveal').classList.add('hidden');
+            document.getElementById('modal-challenge-reveal').classList.remove('flex');
+            
+            challengeAccepted = true;
+            
+            document.getElementById('active-challenge-banner').classList.remove('hidden');
+            document.getElementById('challenge-action-container').classList.remove('hidden');
+            document.getElementById('next-challenge-container').classList.add('hidden');
+            
+            window.switchView('view-guest-dashboard');
+        };
+
+        window.completeChallenge = function() {
+            document.getElementById('challenge-action-container').classList.add('hidden');
+            document.getElementById('next-challenge-container').classList.remove('hidden');
+            if (window.lucide) lucide.createIcons();
+        };
+
+        window.declineNextChallenge = function() {
+            document.getElementById('modal-challenge-success').classList.add('hidden');
+            document.getElementById('modal-challenge-success').classList.remove('flex');
+        };
+
+        window.acceptNextChallenge = function() {
+            document.getElementById('modal-challenge-success').classList.add('hidden');
+            document.getElementById('modal-challenge-success').classList.remove('flex');
+            window.getNewChallenge();
+        };
+
+        window.getNewChallenge = function() {
+            if (window.pendingChallenges && window.pendingChallenges.length > 0) {
+                window.selectedChallenge = window.pendingChallenges.shift(); 
+                
+                if (window.pendingChallenges.length === 0) {
+                    document.getElementById('pending-challenges-text').classList.add('hidden');
+                } else {
+                    document.getElementById('pending-count').innerText = window.pendingChallenges.length;
+                }
+            } else {
+                window.selectedChallenge = RETOS_BODA[Math.floor(Math.random() * RETOS_BODA.length)];
+            }
+            
+            document.getElementById('active-challenge-text').innerText = `"${window.selectedChallenge}"`;
+            
+            document.getElementById('next-challenge-container').classList.add('hidden');
+            document.getElementById('challenge-action-container').classList.remove('hidden');
+        };
+
+        window.postponeChallenge = function() {
+            if (window.selectedChallenge) {
+                window.pendingChallenges.push(window.selectedChallenge);
+            }
+            
+            window.selectedChallenge = RETOS_BODA[Math.floor(Math.random() * RETOS_BODA.length)];
+            document.getElementById('active-challenge-text').innerText = `"${window.selectedChallenge}"`;
+            
+            document.getElementById('pending-challenges-text').classList.remove('hidden');
+            document.getElementById('pending-count').innerText = window.pendingChallenges.length;
+        };
+
+        // FUNCIONES DE FOTOS
+        window.openPhotoModal = function(url, guestName) {
+            currentPhotoUrl = url;
+            currentPhotoName = guestName;
+            document.getElementById('modal-image').src = url;
+            document.getElementById('modal-guest-name').innerText = `📸 Compartida por: ${guestName}`;
+            
+            const modal = document.getElementById('photo-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closePhotoModal = function() {
+            const modal = document.getElementById('photo-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            currentPhotoUrl = '';
+            currentPhotoName = '';
+            document.getElementById('modal-image').src = '';
+        };
+
+        window.downloadCurrentPhoto = function() {
+            if(!currentPhotoUrl) return;
+            const a = document.createElement('a');
+            a.href = currentPhotoUrl;
+            a.download = `Boda_${currentPhotoName}_${Date.now()}.jpg`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        };
+
+        window.downloadAllPhotosZip = async function() {
+            if (photos.length === 0) {
+                alert("No hay fotos para descargar aún.");
+                return;
+            }
+
+            const btn = document.querySelector('button[onclick="window.downloadAllPhotosZip()"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Comprimiendo...`;
+            btn.disabled = true;
+
+            try {
+                const zip = new JSZip();
+                const folder = zip.folder("Fotos_Boda");
+
+                photos.forEach((photo, index) => {
+                    const base64Data = photo.url.split(',')[1];
+                    const safeGuestName = (photo.guestName || 'Anonimo').replace(/[^a-zA-Z0-9]/g, '_');
+                    const fileName = `Foto_${index + 1}_${safeGuestName}.jpg`;
+                    
+                    folder.file(fileName, base64Data, {base64: true});
+                });
+
+                const content = await zip.generateAsync({type:"blob"});
+                
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(content);
+                link.download = `Fotos_Boda_${Date.now()}.zip`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+            } catch (error) {
+                console.error("Error al crear el archivo comprimido:", error);
+                alert("Hubo un error al comprimir las fotos.");
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                if (window.lucide) lucide.createIcons();
+            }
+        };
+
+        // 4. Lógica de Base de Datos
+        function cargarInvitados() {
+            onSnapshot(collection(db, "invitados"), (snapshot) => {
+                guests = [];
+                snapshot.forEach((docu) => {
+                    guests.push({ id: docu.id, ...docu.data() });
+                });
+                renderAdminList();
+            });
+        }
+
+        function cargarGaleria() {
+            onSnapshot(collection(db, "galeria"), (snapshot) => {
+                photos = [];
+                snapshot.forEach((docu) => {
+                    photos.push({ id: docu.id, ...docu.data() });
+                });
+                
+                photos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                
+                if (!document.getElementById('view-admin').classList.contains('hidden-view')) {
+                    renderAdminList();
+                    renderGallery();
+                }
+            });
+        }
+
+        async function handleAddGuest(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById('admin-input-name');
+            const tableInput = document.getElementById('admin-input-table');
+
+            if (!nameInput.value.trim() || !tableInput.value.trim()) {
+                alert("Por favor completa el nombre y la mesa para guardar al invitado.");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "invitados"), { 
+                    name: nameInput.value.trim(), 
+                    table: tableInput.value.trim() 
+                });
+                nameInput.value = '';
+                tableInput.value = '';
+            } catch (error) {
+                console.error("Error guardando invitado:", error);
+                alert("No se pudo guardar. Revisa tu conexión.");
+            }
+        }
+
+        function renderAdminList() {
+            const list = document.getElementById('admin-guest-list');
+            if (!list) return;
+            list.innerHTML = "";
+
+            if (guests.length === 0) {
+                list.innerHTML = `<li class="p-8 text-center text-stone-500">No hay invitados registrados aún.</li>`;
+                return;
+            }
+
+            const guestsWithCounts = guests.map(g => {
+                return {
+                    ...g,
+                    photoCount: photos.filter(p => p.guestId === g.id || (p.guestName && p.guestName.trim() === g.name)).length
+                };
+            }).sort((a, b) => b.photoCount - a.photoCount);
+
+            const maxPhotos = Math.max(...guestsWithCounts.map(g => g.photoCount));
+
+            guestsWithCounts.forEach(g => {
+                const li = document.createElement("li");
+                li.className = "flex justify-between items-center p-4 hover:bg-stone-50 transition-colors border-b border-stone-100 last:border-0";
+
+                const isWinner = g.photoCount > 0 && g.photoCount === maxPhotos;
+                const crownBadge = isWinner ? `<i data-lucide="crown" class="w-5 h-5 text-amber-500 fill-amber-500 animate-bounce"></i>` : '';
+                const photoBadge = `<span class="inline-flex items-center gap-1 px-2 py-0.5 ${isWinner ? 'bg-amber-100 text-amber-800' : 'bg-stone-200 text-stone-700'} text-[10px] rounded-full uppercase tracking-wide font-bold"><i data-lucide="camera" class="w-3 h-3"></i> ${g.photoCount} Fotos</span>`;
+
+                li.innerHTML = `
+                <div>
+                    <span class="font-medium text-stone-800 flex items-center gap-2">${g.name} ${crownBadge}</span>
+                    <div class="flex items-center gap-2 mt-1">
+                        <span class="text-sm font-bold text-amber-600">Mesa ${g.table}</span>
+                        ${photoBadge}
+                    </div>
+                </div>
+                <button onclick="window.deleteGuest('${g.id}')" class="text-red-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-colors" title="Eliminar">
+                    <i data-lucide="trash-2" class="w-5 h-5"></i>
+                </button>
+                `;
+                list.appendChild(li);
+            });
+
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
+
+        function renderDynamicQR() {
+            const currentUrl = window.location.href.split('?')[0]; 
+            const qrImg = document.getElementById('dynamic-qr-img');
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(currentUrl)}`;
+        }
+
+        function handleSearch() {
+            const searchInput = document.getElementById('search-input');
+            const query = searchInput.value.trim().toLowerCase();
+
+            if (query === '') return;
+
+            const found = guests.find(g => g.name.toLowerCase().includes(query));
+
+            if (found) {
+                currentGuest = found;
+                document.getElementById('guest-name-display').innerText = found.name;
+                document.getElementById('guest-table-display').innerText = found.table;
+                searchInput.value = ''; 
+                
+                const rouletteModal = document.getElementById('modal-roulette');
+                rouletteModal.classList.remove('hidden');
+                rouletteModal.classList.add('flex');
+
+            } else {
+                alert('Invitado no encontrado. Por favor, intenta de nuevo o contacta al organizador.');
+            }
+        }
+
+        window.handlePhotoUpload = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const isChallengePending = !document.getElementById('challenge-action-container').classList.contains('hidden');
+            let wasChallenge = false;
+
+            if (challengeAccepted && isChallengePending) {
+                wasChallenge = true;
+                window.completeChallenge(); 
+            }
+            
+            event.target.value = ''; 
+
+            if (wasChallenge) {
+                const successModal = document.getElementById('modal-challenge-success');
+                successModal.classList.remove('hidden');
+                successModal.classList.add('flex');
+                if (window.lucide) lucide.createIcons();
+            } else {
+                alert('¡Foto compartida con éxito! Gracias por capturar este momento.');
+            }
+
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+                const originalBase64 = reader.result;
+                const fileName = `${currentGuest ? currentGuest.name : 'Anónimo'}_${Date.now()}.jpg`;
+
+                if (GOOGLE_SCRIPT_URL !== '') {
+                    try {
+                        const base64Data = originalBase64.split(',')[1];
+                        fetch(GOOGLE_SCRIPT_URL, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            body: JSON.stringify({
+                                name: fileName,
+                                mimeType: file.type,
+                                data: base64Data,
+                                folderId: '1JUGN6O_x5iRlb92nc-W5G132VyFRcQ12'
+                            })
+                        });
+                    } catch (error) {
+                        console.error('No se pudo subir a Drive', error);
+                    }
+                }
+
+                const img = new Image();
+                img.src = originalBase64;
+                img.onload = async () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 800;
+                    let scaleSize = 1;
+                    
+                    if (img.width > MAX_WIDTH) {
+                        scaleSize = MAX_WIDTH / img.width;
+                    }
+                    
+                    canvas.width = img.width * scaleSize;
+                    canvas.height = img.height * scaleSize;
+                    
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
+
+                    try {
+                        await addDoc(collection(db, "galeria"), {
+                            url: compressedBase64,
+                            guestName: currentGuest ? currentGuest.name : 'Anónimo',
+                            guestId: currentGuest ? currentGuest.id : null,
+                            timestamp: Date.now()
+                        });
+                    } catch (e) {
+                        console.error("Error guardando foto en Firebase:", e);
+                    }
+                };
+            };
+            reader.readAsDataURL(file);
+        };
+
+        function renderGallery() {
+            const container = document.getElementById('admin-gallery-container');
+            const countSpan = document.getElementById('admin-photo-count');
+            if (!container) return;
+
+            container.innerHTML = '';
+            if(countSpan) countSpan.innerText = `${photos.length} Fotos Totales`;
+
+            if (photos.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full flex flex-col items-center justify-center text-stone-400 py-12">
+                        <i data-lucide="image" class="w-16 h-16 opacity-30 mb-4"></i>
+                        <p class="text-lg">Aún no hay fotos en vivo.</p>
+                        <p class="text-sm mt-1">Los invitados deben completar retos para que aparezcan aquí.</p>
+                    </div>
+                `;
+            } else {
+                photos.forEach(photo => {
+                    const item = document.createElement('div');
+                    item.className = 'relative aspect-square rounded-xl overflow-hidden shadow-sm group cursor-pointer border border-stone-200';
+                    item.onclick = () => window.openPhotoModal(photo.url, photo.guestName);
+                    
+                    item.innerHTML = `
+                        <img src="${photo.url}" alt="Momento del evento" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 pt-10">
+                            <p class="text-white text-xs font-medium truncate">📸 ${photo.guestName}</p>
+                        </div>
+                    `;
+                    container.appendChild(item);
+                });
+            }
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function initApp() {
+            if (window.lucide) lucide.createIcons();
+            
+            // Cargar datos en vivo
+            cargarConfiguracion(); 
+            cargarInvitados();
+            cargarGaleria(); 
+            
+            document.getElementById('btn-search').addEventListener('click', handleSearch);
+            document.getElementById('search-input').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') handleSearch();
+            });
+
+            document.getElementById('admin-form').addEventListener('submit', handleAddGuest);
+            document.getElementById('config-form').addEventListener('submit', window.handleSaveConfig);
+            
+            document.getElementById('camera-file-input').addEventListener('change', window.handlePhotoUpload);
+            document.getElementById('gallery-file-input').addEventListener('change', window.handlePhotoUpload);
+            
+            document.getElementById('admin-login-form').addEventListener('submit', window.handleAdminLogin);
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
+    </script>
+</body>
+</html>
