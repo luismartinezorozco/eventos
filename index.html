@@ -133,7 +133,7 @@
             <div class="bg-stone-50 rounded-2xl p-6 border border-stone-100 shadow-inner relative z-10">
                 <p id="challenge-reveal-text" class="text-2xl font-medium text-stone-800 italic">"Tomar una foto..."</p>
             </div>
-            <button onclick="window.closeChallengeReveal()" class="w-full bg-stone-900 text-white py-4 rounded-xl font-semibold text-lg hover:bg-stone-800 transition-colors shadow-lg mt-4 relative z-10">
+            <button id="btn-accept-challenge" onclick="window.closeChallengeReveal()" class="w-full bg-stone-900 text-white py-4 rounded-xl font-semibold text-lg hover:bg-stone-800 transition-colors shadow-lg mt-4 relative z-10">
                 ¡Aceptar Reto e ir a mi mesa!
             </button>
         </div>
@@ -266,7 +266,7 @@
 
         <div class="bg-white rounded-3xl p-8 text-center shadow-lg border border-stone-100 mb-6 relative overflow-hidden">
             <h2 class="text-3xl font-serif text-stone-800 mb-2">¡Hola, <span id="guest-name-display"></span>!</h2>
-            <p class="text-stone-500 mb-6">Nos alegra mucho que estés aquí.</p>
+            <p id="dashboard-subtitle" class="text-stone-500 mb-6">Nos alegra mucho que estés aquí.</p>
             
             <div class="inline-block bg-amber-50 border border-amber-200 rounded-2xl p-6 px-12">
                 <p id="table-label-text" class="text-sm text-amber-800 font-semibold uppercase tracking-widest mb-1">Tu mesa es la número</p>
@@ -325,7 +325,7 @@
         <div class="bg-stone-900 rounded-3xl overflow-hidden shadow-lg mb-6 flex flex-col">
             <div class="p-4 text-center border-b border-stone-800">
                 <h3 class="font-semibold text-lg text-white flex justify-center items-center gap-2">
-                    <i data-lucide="video" class="w-5 h-5 text-amber-500"></i> Mensaje de los Novios
+                    <i data-lucide="video" class="w-5 h-5 text-amber-500"></i> <span id="video-title-text">Mensaje de los Novios</span>
                 </h3>
                 <p class="text-stone-400 text-xs mt-1">Dale play a nuestro anuncio</p>
             </div>
@@ -551,6 +551,18 @@
                     <input id="cfg-table-label" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
                 </div>
                 <div>
+                    <label class="block text-sm font-semibold text-stone-700 mb-1">Texto Botón "¡Aceptar Reto..."</label>
+                    <input id="cfg-accept-btn" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-stone-700 mb-1">Título "Mensaje de los Novios"</label>
+                    <input id="cfg-video-title" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-stone-700 mb-1">Subtítulo del Dashboard (ej. les transmitió amor)</label>
+                    <input id="cfg-dashboard-subtitle" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
+                </div>
+                <div>
                     <label class="block text-sm font-semibold text-stone-700 mb-1">URL Imagen Fondo Ruleta</label>
                     <input id="cfg-roulette-bg" type="url" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
                 </div>
@@ -614,6 +626,9 @@
             searchBtnText: "Buscar mi Mesa",
             rouletteText: "Gira la ruleta para descubrir tu reto fotográfico en esta boda.",
             tableLabelText: "Tu mesa es la número",
+            acceptBtnText: "¡Aceptar Reto e ir a mi mesa!",
+            videoTitleText: "Mensaje de los Novios",
+            dashboardSubtitle: "Nos alegra mucho que estés aquí.",
             rouletteBg: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
             rouletteCenter: "https://image2url.com/r2/default/images/1773931962266-01b311d3-46f3-49f7-a83b-cf9dc1b67e7c.avif",
             videoLink: "https://drive.google.com/file/d/1pJXSVBktub3dYF72z1OJodXbgwYpvP4L/preview",
@@ -755,6 +770,15 @@
             const tableLabelEl = document.getElementById('table-label-text');
             if(tableLabelEl) tableLabelEl.innerText = window.appConfig.tableLabelText || "Tu mesa es la número";
 
+            const acceptBtnEl = document.getElementById('btn-accept-challenge');
+            if(acceptBtnEl) acceptBtnEl.innerText = window.appConfig.acceptBtnText || "¡Aceptar Reto e ir a mi mesa!";
+
+            const videoTitleEl = document.getElementById('video-title-text');
+            if(videoTitleEl) videoTitleEl.innerText = window.appConfig.videoTitleText || "Mensaje de los Novios";
+
+            const dashboardSubEl = document.getElementById('dashboard-subtitle');
+            if(dashboardSubEl) dashboardSubEl.innerText = window.appConfig.dashboardSubtitle || "Nos alegra mucho que estés aquí.";
+
             const rBgEl = document.getElementById('roulette-wheel');
             if(rBgEl) rBgEl.style.backgroundImage = `url('${window.appConfig.rouletteBg}')`;
 
@@ -770,6 +794,9 @@
             document.getElementById('cfg-search-btn').value = window.appConfig.searchBtnText || "Buscar mi Mesa";
             document.getElementById('cfg-roulette-text').value = window.appConfig.rouletteText || "Gira la ruleta para descubrir tu reto fotográfico en esta boda.";
             document.getElementById('cfg-table-label').value = window.appConfig.tableLabelText || "Tu mesa es la número";
+            document.getElementById('cfg-accept-btn').value = window.appConfig.acceptBtnText || "¡Aceptar Reto e ir a mi mesa!";
+            document.getElementById('cfg-video-title').value = window.appConfig.videoTitleText || "Mensaje de los Novios";
+            document.getElementById('cfg-dashboard-subtitle').value = window.appConfig.dashboardSubtitle || "Nos alegra mucho que estés aquí.";
             document.getElementById('cfg-roulette-bg').value = window.appConfig.rouletteBg;
             document.getElementById('cfg-roulette-center').value = window.appConfig.rouletteCenter;
             document.getElementById('cfg-video').value = window.appConfig.videoLink;
@@ -787,6 +814,9 @@
                 searchBtnText: document.getElementById('cfg-search-btn').value,
                 rouletteText: document.getElementById('cfg-roulette-text').value,
                 tableLabelText: document.getElementById('cfg-table-label').value,
+                acceptBtnText: document.getElementById('cfg-accept-btn').value,
+                videoTitleText: document.getElementById('cfg-video-title').value,
+                dashboardSubtitle: document.getElementById('cfg-dashboard-subtitle').value,
                 rouletteBg: document.getElementById('cfg-roulette-bg').value,
                 rouletteCenter: document.getElementById('cfg-roulette-center').value,
                 videoLink: document.getElementById('cfg-video').value,
