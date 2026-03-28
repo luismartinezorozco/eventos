@@ -329,14 +329,8 @@
                 </h3>
                 <p class="text-stone-400 text-xs mt-1">Dale play a nuestro anuncio</p>
             </div>
-            <div class="w-full bg-black flex justify-center items-center overflow-hidden rounded-b-3xl">
-                <iframe 
-                    id="novios-video"
-                    src="" 
-                    class="w-full h-[60vh] border-0" 
-                    allow="autoplay; fullscreen" 
-                    allowfullscreen>
-                </iframe>
+            <div id="video-wrapper" class="w-full bg-black flex justify-center items-center overflow-hidden rounded-b-3xl">
+                <!-- El video o iframe se inyecta dinámicamente aquí para soportar Bucle -->
             </div>
         </div>
 
@@ -570,10 +564,22 @@
                     <label class="block text-sm font-semibold text-stone-700 mb-1">URL Imagen Centro Ruleta</label>
                     <input id="cfg-roulette-center" type="url" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
                 </div>
-                <div>
-                    <label class="block text-sm font-semibold text-stone-700 mb-1">URL Video Novios (Ej. Google Drive preview)</label>
-                    <input id="cfg-video" type="url" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
+                
+                <!-- SECCIÓN MEJORADA DE VIDEO -->
+                <div class="bg-stone-50 p-5 rounded-2xl border border-stone-200 space-y-3">
+                    <div>
+                        <label class="block text-sm font-semibold text-stone-700 mb-1">URL Video Novios</label>
+                        <input id="cfg-video" type="url" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
+                        <p class="text-xs text-stone-500 mt-1.5 leading-relaxed">
+                            💡 <b>Recomendación:</b> Para que el bucle (loop) funcione perfectamente, usa enlaces de YouTube o un video directo terminado en <b>.mp4</b>. Google Drive no soporta bucles automáticos.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3 pt-2">
+                        <input id="cfg-video-loop" type="checkbox" class="w-5 h-5 rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer">
+                        <label for="cfg-video-loop" class="text-sm font-bold text-stone-700 cursor-pointer select-none">Reproducir video en bucle (Loop Infinito)</label>
+                    </div>
                 </div>
+                
                 <div>
                     <label class="block text-sm font-semibold text-stone-700 mb-1">Contraseña de Administrador (Panel Organización)</label>
                     <input id="cfg-admin-pass" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
@@ -632,6 +638,7 @@
             rouletteBg: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
             rouletteCenter: "https://image2url.com/r2/default/images/1773931962266-01b311d3-46f3-49f7-a83b-cf9dc1b67e7c.avif",
             videoLink: "https://drive.google.com/file/d/1pJXSVBktub3dYF72z1OJodXbgwYpvP4L/preview",
+            videoLoop: true, // Nuevo estado para el bucle
             adminPassword: "admin123",
             eventType: "boda" // Por defecto boda
         };
@@ -743,6 +750,34 @@
             if (window.lucide) lucide.createIcons();
         };
 
+        // --- SISTEMA DE RENDERIZADO DE VIDEO (INTELIGENTE) ---
+        function renderVideoPlayer() {
+            const videoWrapper = document.getElementById('video-wrapper');
+            if (!videoWrapper) return;
+            
+            const link = window.appConfig.videoLink || "";
+            const isLoop = window.appConfig.videoLoop !== false; // Bucle por defecto
+            const loopAttr = isLoop ? "loop" : "";
+            
+            // Caso 1: YouTube (Soporta Bucle mediante parámetros)
+            if (link.includes('youtube.com') || link.includes('youtu.be')) {
+                let ytLink = link;
+                const videoIdMatch = link.match(/(?:v=|youtu\.be\/|embed\/)([^&?]+)/);
+                if (videoIdMatch && videoIdMatch[1]) {
+                    ytLink = `https://www.youtube.com/embed/${videoIdMatch[1]}?autoplay=0${isLoop ? `&loop=1&playlist=${videoIdMatch[1]}` : ''}`;
+                }
+                videoWrapper.innerHTML = `<iframe src="${ytLink}" class="w-full h-[60vh] border-0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+            } 
+            // Caso 2: Video Directo (.mp4, .webm, etc) -> Usa etiqueta nativa con bucle real
+            else if (link.match(/\.(mp4|webm|ogg)$/i) || link.includes('uc?export=download')) {
+                videoWrapper.innerHTML = `<video src="${link}" class="w-full h-[60vh] object-cover" controls ${loopAttr} playsinline></video>`;
+            }
+            // Caso 3: Google Drive Preview u otro iframe genérico (NO soporta bucle automático)
+            else {
+                videoWrapper.innerHTML = `<iframe src="${link}" class="w-full h-[60vh] border-0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+            }
+        }
+
         // --- SISTEMA DE CONFIGURACIÓN DINÁMICA ---
         function cargarConfiguracion() {
             onSnapshot(doc(db, "configuracion", "general"), (docSnap) => {
@@ -785,9 +820,6 @@
             const rCenterEl = document.getElementById('roulette-center-img');
             if(rCenterEl) rCenterEl.src = window.appConfig.rouletteCenter;
 
-            const videoEl = document.getElementById('novios-video');
-            if(videoEl) videoEl.src = window.appConfig.videoLink;
-
             // Rellenar formulario de config
             document.getElementById('cfg-title').value = window.appConfig.title || "¡Bienvenidos!";
             document.getElementById('cfg-subtitle').value = window.appConfig.subtitle || "Encuentra tu mesa y únete a la celebración";
@@ -801,9 +833,15 @@
             document.getElementById('cfg-roulette-center').value = window.appConfig.rouletteCenter;
             document.getElementById('cfg-video').value = window.appConfig.videoLink;
             document.getElementById('cfg-admin-pass').value = window.appConfig.adminPassword;
+            
+            const loopCheckbox = document.getElementById('cfg-video-loop');
+            if(loopCheckbox) loopCheckbox.checked = window.appConfig.videoLoop !== false;
 
             const typeSelect = document.getElementById('admin-event-type');
             if (typeSelect) typeSelect.value = window.appConfig.eventType || 'boda';
+
+            // Actualizar reproductor de video
+            renderVideoPlayer();
         }
 
         window.handleSaveConfig = async function(event) {
@@ -820,6 +858,7 @@
                 rouletteBg: document.getElementById('cfg-roulette-bg').value,
                 rouletteCenter: document.getElementById('cfg-roulette-center').value,
                 videoLink: document.getElementById('cfg-video').value,
+                videoLoop: document.getElementById('cfg-video-loop').checked,
                 adminPassword: document.getElementById('cfg-admin-pass').value
             };
 
