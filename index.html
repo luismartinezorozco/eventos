@@ -417,34 +417,55 @@
                 </button>
             </div>
 
-            <!-- Contenido Principal: Formulario y Lista -->
+            <!-- Contenido Principal: Formularios y Lista -->
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- Formulario Izquierda -->
-                <div class="md:col-span-1 bg-stone-50 p-6 rounded-3xl border border-stone-200 h-fit shadow-md">
-                    <h3 class="font-semibold text-lg mb-4 text-stone-800">Agregar Invitado</h3>
-                    <form id="admin-form" class="space-y-4">
-                        <div>
-                            <label class="block text-sm text-stone-600 mb-1">Nombre Completo</label>
-                            <input 
-                                id="admin-input-name" 
-                                placeholder="Ej. Juan Pérez" 
-                                required
-                                class="w-full p-3 rounded-lg border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none transition-colors"
-                            >
-                        </div>
-                        <div>
-                            <label class="block text-sm text-stone-600 mb-1">Número/Nombre de Mesa</label>
-                            <input 
-                                id="admin-input-table" 
-                                placeholder="Ej. 12" 
-                                required
-                                class="w-full p-3 rounded-lg border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none transition-colors"
-                            >
-                        </div>
-                        <button type="submit" class="w-full bg-stone-800 text-white py-3 rounded-lg hover:bg-stone-900 transition-colors font-medium flex items-center justify-center mt-4 text-center mx-auto shadow-md active:scale-95">
-                            Guardar Invitado
+                <!-- Columna Izquierda (Controles) -->
+                <div class="md:col-span-1 flex flex-col gap-6">
+                    
+                    <!-- Formulario de Agregar Invitado -->
+                    <div class="bg-stone-50 p-6 rounded-3xl border border-stone-200 shadow-md">
+                        <h3 class="font-semibold text-lg mb-4 text-stone-800">Agregar Invitado</h3>
+                        <form id="admin-form" class="space-y-4">
+                            <div>
+                                <label class="block text-sm text-stone-600 mb-1">Nombre Completo</label>
+                                <input 
+                                    id="admin-input-name" 
+                                    placeholder="Ej. Juan Pérez" 
+                                    required
+                                    class="w-full p-3 rounded-lg border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none transition-colors"
+                                >
+                            </div>
+                            <div>
+                                <label class="block text-sm text-stone-600 mb-1">Número/Nombre de Mesa</label>
+                                <input 
+                                    id="admin-input-table" 
+                                    placeholder="Ej. 12" 
+                                    required
+                                    class="w-full p-3 rounded-lg border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none transition-colors"
+                                >
+                            </div>
+                            <button type="submit" class="w-full bg-stone-800 text-white py-3 rounded-lg hover:bg-stone-900 transition-colors font-medium flex items-center justify-center mt-4 text-center mx-auto shadow-md active:scale-95">
+                                Guardar Invitado
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Configuración de Tipo de Evento (Retos) -->
+                    <div class="bg-stone-50 p-6 rounded-3xl border border-stone-200 shadow-md">
+                        <h3 class="font-semibold text-lg mb-4 text-stone-800 flex items-center gap-2">
+                            <i data-lucide="party-popper" class="w-5 h-5 text-amber-600"></i> Tipo de Evento
+                        </h3>
+                        <p class="text-xs text-stone-500 mb-3">Cambia la lista de retos de la ruleta.</p>
+                        <select id="admin-event-type" class="w-full p-3 rounded-lg border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none transition-colors mb-4">
+                            <option value="boda">Boda (100 Retos)</option>
+                            <option value="cumpleanos">Cumpleaños (100 Retos)</option>
+                            <option value="cristiano">Encuentro / Cristiano (36 Retos)</option>
+                        </select>
+                        <button onclick="window.changeEventType()" class="w-full bg-amber-600 text-white py-3 rounded-lg hover:bg-amber-700 transition-colors font-medium flex items-center justify-center shadow-md active:scale-95">
+                            Actualizar Retos
                         </button>
-                    </form>
+                    </div>
+
                 </div>
 
                 <!-- Lista Derecha -->
@@ -593,31 +614,95 @@
             rouletteBg: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
             rouletteCenter: "https://image2url.com/r2/default/images/1773931962266-01b311d3-46f3-49f7-a83b-cf9dc1b67e7c.avif",
             videoLink: "https://drive.google.com/file/d/1pJXSVBktub3dYF72z1OJodXbgwYpvP4L/preview",
-            adminPassword: "admin123"
+            adminPassword: "admin123",
+            eventType: "boda" // Por defecto boda
         };
 
-        const RETOS_BODA = [
-            "Tómate una selfie con la novia.", "Tómate una selfie con el novio.", "Fotografía un beso apasionado (que no sea el tuyo).", "Captura una lágrima de felicidad.", "Toma una foto del centro de mesa más bonito.",
-            "Fotografía a alguien riendo a carcajadas.", "Capta a un niño haciendo una travesura.", "Toma una foto de tres generaciones juntas.", "Fotografía los zapatos más elegantes de la fiesta.", "Selfie con alguien que acabas de conocer.",
-            "Toma una foto brindando con tu bebida favorita.", "Captura el momento exacto en que alguien muerde el pastel.", "Fotografía a los novios tomados de la mano sin que se den cuenta.", "Tómate una foto con los padres de la novia.", "Tómate una foto con los padres del novio.",
-            "Consigue una foto grupal de toda tu mesa.", "Toma una foto artística de los anillos (si puedes).", "Fotografía el vestido de la novia en todo su esplendor.", "Selfie haciendo una mueca graciosa con tu acompañante.", "Captura a alguien abrazando a los novios.",
-            "Toma una foto de la decoración de luces.", "Fotografía a la pareja con más tiempo de casados.", "Consigue una foto con el DJ o la banda.", "Captura a alguien cantando a todo pulmón.", "Toma una foto de las flores más bellas del salón.",
-            "Selfie con la persona más alta de la fiesta.", "Fotografía a alguien disfrutando el banquete.", "Captura el peinado más espectacular.", "Toma una foto del ramo de la novia.", "Consigue una foto con el padrino o dama de honor.",
-            "Fotografía una pose de baile dramática.", "Captura a los novios mirándose a los ojos.", "Toma una foto de un grupo chocando las copas.", "Selfie con el bartender.", "Fotografía un detalle escondido de la decoración.",
-            "Capta la corbata o moño más llamativo.", "Toma una foto de las manos entrelazadas de los novios.", "Consigue una foto de alguien secándose una lágrima.", "Fotografía a la persona que más ha bailado.", "Selfie en la pista de baile vacía.",
-            "Toma una foto de una pareja bailando lento.", "Captura el momento en que sirven la comida.", "Fotografía a alguien arreglándose el maquillaje o traje.", "Consigue una foto grupal de solo hombres.", "Consigue una foto grupal de solo mujeres.",
-            "Toma una foto de las sombras de los invitados bailando.", "Selfie mostrando tu outfit completo.", "Capta a los novios en un momento de relajación.", "Fotografía el mejor paso de baile de la noche.", "Toma una foto de una bebida muy colorida.",
-            "Captura a alguien mirando su celular y sonriendo.", "Fotografía a alguien que se haya quitado los zapatos para bailar.", "Selfie con la persona de mayor edad en la fiesta.", "Toma una foto de alguien probando un postre.", "Fotografía el cielo o techo del lugar.",
-            "Consigue una foto de los novios con sus mejores amigos.", "Capta la expression de asombro de un invitado.", "Toma una foto de espaldas a los novios mientras miran al frente.", "Selfie usando algún accesorio de la fiesta.", "Fotografía a alguien levantando los brazos en la pista.",
-            "Capta el momento de partir el pastel.", "Toma una foto de las copas vacías después de un brindis.", "Fotografía a dos personas susurrándose algo.", "Selfie grupal más grande que puedas lograr.", "Toma una foto de los regalos o buzón de los novios.",
-            "Captura un abrazo súper apretado.", "Fotografía a alguien dando un discurso.", "Toma una foto de los novios llegando a la pista.", "Consigue una foto de una mirada cómplice.", "Selfie guiñando el ojo.",
-            "Fotografía a la persona con el mejor ritmo.", "Capta a un invitado durmiéndose (o casi).", "Toma una foto de un plato recién servido.", "Fotografía el menú de la boda de forma creativa.", "Selfie con alguien que lleve el mismo color que tú.",
-            "Captura a los novios bailando su primera canción.", "Toma una foto de un brindis desde el suelo (ángulo bajo).", "Fotografía la mesa de dulces antes de que se acaben.", "Consigue una foto de un niño bailando.", "Selfie con la iluminación más dramática del lugar.",
-            "Capta a alguien robándose un beso.", "Toma una foto de las sillas de los novios.", "Fotografía el momento de lanzar el ramo.", "Captura a la persona que atrapó el ramo.", "Selfie haciendo un corazón con las manos.",
-            "Fotografía a alguien brindando con agua.", "Toma una foto de los centros de mesa al final de la fiesta.", "Capta a alguien corriendo hacia la pista de baile.", "Consigue una foto de un apretón de manos emotivo.", "Selfie con los meseros (¡son los héroes!).",
-            "Toma una foto de un detalle del traje del novio.", "Fotografía a dos invitados que no se conocían hablando.", "Captura la silueta de los novios a contraluz.", "Selfie desenfocada pero divertida.", "Toma una foto del letrero de bienvenida.",
-            "Fotografía a alguien comiendo a escondidas.", "Capta a los invitados haciendo 'el trencito' o coreografía grupal.", "Toma una foto del reloj marcando la medianoche.", "Consigue una foto de un invitado muy elegante.", "Selfie final antes de irte de la fiesta."
-        ];
+        // DICCIONARIO MAESTRO DE RETOS POR TIPO DE EVENTO
+        const RETOS = {
+            boda: [
+                "Tómate una selfie con la novia.", "Tómate una selfie con el novio.", "Fotografía un beso apasionado (que no sea el tuyo).", "Captura una lágrima de felicidad.", "Toma una foto del centro de mesa más bonito.",
+                "Fotografía a alguien riendo a carcajadas.", "Capta a un niño haciendo una travesura.", "Toma una foto de tres generaciones juntas.", "Fotografía los zapatos más elegantes de la fiesta.", "Selfie con alguien que acabas de conocer.",
+                "Toma una foto brindando con tu bebida favorita.", "Captura el momento exacto en que alguien muerde el pastel.", "Fotografía a los novios tomados de la mano sin que se den cuenta.", "Tómate una foto con los padres de la novia.", "Tómate una foto con los padres del novio.",
+                "Consigue una foto grupal de toda tu mesa.", "Toma una foto artística de los anillos (si puedes).", "Fotografía el vestido de la novia en todo su esplendor.", "Selfie haciendo una mueca graciosa con tu acompañante.", "Captura a alguien abrazando a los novios.",
+                "Toma una foto de la decoración de luces.", "Fotografía a la pareja con más tiempo de casados.", "Consigue una foto con el DJ o la banda.", "Captura a alguien cantando a todo pulmón.", "Toma una foto de las flores más bellas del salón.",
+                "Selfie con la persona más alta de la fiesta.", "Fotografía a alguien disfrutando el banquete.", "Captura el peinado más espectacular.", "Toma una foto del ramo de la novia.", "Consigue una foto con el padrino o dama de honor.",
+                "Fotografía una pose de baile dramática.", "Captura a los novios mirándose a los ojos.", "Toma una foto de un grupo chocando las copas.", "Selfie con el bartender.", "Fotografía un detalle escondido de la decoración.",
+                "Capta la corbata o moño más llamativo.", "Toma una foto de las manos entrelazadas de los novios.", "Consigue una foto de alguien secándose una lágrima.", "Fotografía a la persona que más ha bailado.", "Selfie en la pista de baile vacía.",
+                "Toma una foto de una pareja bailando lento.", "Captura el momento en que sirven la comida.", "Fotografía a alguien arreglándose el maquillaje o traje.", "Consigue una foto grupal de solo hombres.", "Consigue una foto grupal de solo mujeres.",
+                "Toma una foto de las sombras de los invitados bailando.", "Selfie mostrando tu outfit completo.", "Capta a los novios en un momento de relajación.", "Fotografía el mejor paso de baile de la noche.", "Toma una foto de una bebida muy colorida.",
+                "Captura a alguien mirando su celular y sonriendo.", "Fotografía a alguien que se haya quitado los zapatos para bailar.", "Selfie con la persona de mayor edad en la fiesta.", "Toma una foto de alguien probando un postre.", "Fotografía el cielo o techo del lugar.",
+                "Consigue una foto de los novios con sus mejores amigos.", "Capta la expression de asombro de un invitado.", "Toma una foto de espaldas a los novios mientras miran al frente.", "Selfie usando algún accesorio de la fiesta.", "Fotografía a alguien levantando los brazos en la pista.",
+                "Capta el momento de partir el pastel.", "Toma una foto de las copas vacías después de un brindis.", "Fotografía a dos personas susurrándose algo.", "Selfie grupal más grande que puedas lograr.", "Toma una foto de los regalos o buzón de los novios.",
+                "Captura un abrazo súper apretado.", "Fotografía a alguien dando un discurso.", "Toma una foto de los novios llegando a la pista.", "Consigue una foto de una mirada cómplice.", "Selfie guiñando el ojo.",
+                "Fotografía a la persona con el mejor ritmo.", "Capta a un invitado durmiéndose (o casi).", "Toma una foto de un plato recién servido.", "Fotografía el menú de la boda de forma creativa.", "Selfie con alguien que lleve el mismo color que tú.",
+                "Captura a los novios bailando su primera canción.", "Toma una foto de un brindis desde el suelo (ángulo bajo).", "Fotografía la mesa de dulces antes de que se acaben.", "Consigue una foto de un niño bailando.", "Selfie con la iluminación más dramática del lugar.",
+                "Capta a alguien robándose un beso.", "Toma una foto de las sillas de los novios.", "Fotografía el momento de lanzar el ramo.", "Captura a la persona que atrapó el ramo.", "Selfie haciendo un corazón con las manos.",
+                "Fotografía a alguien brindando con agua.", "Toma una foto de los centros de mesa al final de la fiesta.", "Capta a alguien corriendo hacia la pista de baile.", "Consigue una foto de un apretón de manos emotivo.", "Selfie con los meseros (¡son los héroes!).",
+                "Toma una foto de un detalle del traje del novio.", "Fotografía a dos invitados que no se conocían hablando.", "Captura la silueta de los novios a contraluz.", "Selfie desenfocada pero divertida.", "Toma una foto del letrero de bienvenida.",
+                "Fotografía a alguien comiendo a escondidas.", "Capta a los invitados haciendo 'el trencito' o coreografía grupal.", "Toma una foto del reloj marcando la medianoche.", "Consigue una foto de un invitado muy elegante.", "Selfie final antes de irte de la fiesta."
+            ],
+            cumpleanos: [
+                "Tómate una selfie con el cumpleañero/a.", "Toma una foto del pastel de cumpleaños.", "Captura el momento exacto de soplar las velas.", "Toma una foto del regalo más original o grande.", "Selfie usando un gorrito de fiesta o accesorio.",
+                "Toma una foto de la mesa de dulces o bocadillos.", "Captura a alguien comiendo pastel felizmente.", "Toma una foto de un abrazo fuerte al cumpleañero/a.", "Selfie con la decoración de la fiesta de fondo.", "Toma una foto creativa a los globos.",
+                "Captura a alguien riendo a carcajadas.", "Toma una foto de un brindis en honor al cumpleañero/a.", "Selfie con el invitado más joven de la fiesta.", "Selfie con el invitado de mayor edad.", "Consigue una foto de grupo de tu mesa completa.",
+                "Captura un paso de baile divertido de algún invitado.", "Toma una foto artística de las bebidas preparadas.", "Selfie haciendo una mueca graciosa.", "Toma una foto del cumpleañero/a abriendo un regalo.", "Captura una cara de sorpresa auténtica.",
+                "Toma una foto de la comida principal del evento.", "Selfie con los padres del cumpleañero/a.", "Toma una foto a los amigos de la infancia del festejado.", "Captura a los invitados cantando 'Feliz Cumpleaños'.", "Toma una foto de un detalle oculto en la decoración.",
+                "Selfie con gafas de sol divertidas.", "Toma una foto infraganti de alguien robando un dulce.", "Captura un choque de copas entre amigos.", "Toma una foto a la tarjeta de invitación física.", "Selfie de cuerpo entero mostrando tu outfit de fiesta.",
+                "Toma una foto a los zapatos del cumpleañero/a.", "Captura infraganti a alguien llegando tarde.", "Toma una foto de un niño jugando o corriendo.", "Selfie con la persona que mejor baila en la fiesta.", "Toma una foto en el momento exacto de la piñata.",
+                "Captura a alguien sirviendo una bebida.", "Toma una foto a las luces o iluminación del lugar.", "Selfie con alguien que acabas de conocer hoy.", "Toma una foto de otra persona tomando una foto.", "Captura un momento de descanso o relajación en la fiesta.",
+                "Toma una foto de cerca a la sonrisa del cumpleañero/a.", "Selfie con los hermanos o familiares del festejado.", "Consigue una foto grupal haciendo una pose ridícula.", "Captura a alguien a punto de probar un bocado.", "Toma una foto elegante a los centros de mesa.",
+                "Selfie con el DJ o el encargado de poner la música.", "Toma una foto infraganti de alguien con la boca llena.", "Captura un abrazo grupal (de 3 o más personas).", "Toma una foto de los souvenirs o recuerdos de la fiesta.", "Selfie movida o desenfocada pero muy divertida.",
+                "Toma una foto del cumpleañero/a posando como modelo.", "Captura a dos personas hablándose al oído.", "Toma una foto a alguien mirando su celular y sonriendo.", "Selfie en medio de la pista de baile.", "Toma una foto de un postre que se vea delicioso.",
+                "Captura a alguien arreglándose el cabello o el maquillaje.", "Toma una foto de varias copas vacías juntas.", "Selfie haciendo el símbolo de paz con los dedos.", "Toma una foto de un detalle del betún del pastel.", "Captura a los invitados aplaudiendo al festejado.",
+                "Toma una foto artística de las sombras de los invitados.", "Selfie junto a un cartel o letrero de 'Feliz Cumpleaños'.", "Captura infraganti a alguien bostezando.", "Consigue una foto de alguien saltando en el aire.", "Toma una foto del cumpleañero/a sosteniendo su bebida.",
+                "Selfie con alguien que lleve ropa del mismo color que tú.", "Toma una foto de una conversación muy animada.", "Captura a alguien secándose el sudor de tanto bailar.", "Toma una foto a los platos completamente vacíos.", "Selfie mostrando la lengua a la cámara.",
+                "Toma una foto del cumpleañero/a abrazando a sus abuelos.", "Captura a alguien corriendo por la fiesta.", "Toma una foto de un peinado muy elaborado o extravagante.", "Selfie con el organizador principal de la fiesta.", "Toma una foto infraganti de alguien escondiéndose de la cámara.",
+                "Captura el momento de un beso en la mejilla al festejado.", "Toma una foto a las servilletas o vasos temáticos.", "Selfie en el lugar con la mejor iluminación del salón.", "Toma una foto de alguien cantando a todo pulmón.", "Captura a alguien haciendo trampa en un juego de fiesta.",
+                "Toma una foto que transmita toda la felicidad del cumpleañero/a.", "Selfie con un primo/a del festejado.", "Toma una foto de alguien dando un discurso o brindis emotivo.", "Captura a un invitado que parezca despistado.", "Toma una foto de todos los regalos apilados.",
+                "Selfie junto a tres personas más.", "Toma una foto a alguien usando un accesorio luminoso.", "Captura la silueta del cumpleañero/a a contraluz.", "Toma una foto de una corbata, moño o accesorio muy llamativo.", "Selfie tomada desde un ángulo muy alto (picado).",
+                "Toma una foto del cumpleañero/a con su mejor amigo/a.", "Captura a alguien mirando la comida con mucho deseo.", "Toma una foto de una flor o detalle natural del salón.", "Selfie con los ojos bien cerrados.", "Toma una foto de alguien ayudando a recoger o servir.",
+                "Captura a un invitado muy concentrado en algo.", "Toma una foto de una mano sosteniendo un dulce.", "Selfie apuntando la cámara hacia el cielo o el techo.", "Toma una foto de alguien levantando los brazos de alegría.", "Captura el último momento de la fiesta antes de irte."
+            ],
+            cristiano: [
+                "Selfie con tu sonrisa más linda.",
+                "Foto haciendo una pose divertida con 3 personas.",
+                "Foto con alguien que no conocías antes.",
+                "Foto haciendo corazón con las manos ❤️ en un espacio del evento que te guste.",
+                "Foto abrazando a alguien.",
+                "Selfie con tu nueva amiga del encuentro.",
+                "Foto actuando sorpresa 😱 con algún detalle del encuentro.",
+                "Foto mostrando algún regalo del encuentro.",
+                "Captura una sonrisa genuina.",
+                "Foto de alguien riéndose sin darse cuenta.",
+                "Captura un momento de emoción del encuentro.",
+                "Foto de una mirada especial entre amigas.",
+                "Foto de un gesto de cariño.",
+                "Captura una risa contagiosa en grupo.",
+                "Toma una foto de un grupo compartiendo juntas.",
+                "Captura un momento de unión.",
+                "Captura una reacción al ver la pantalla.",
+                "Foto de alguien disfrutando la actividad.",
+                "Captura detalles bonitos de este encuentro (decoración, sorpresas).",
+                "Una toma creativa del lugar.",
+                "Captura un detalle pequeño pero significativo.",
+                "Captura una reacción emotiva.",
+                "Toma una foto de un momento espontáneo e irrepetible.",
+                "Una foto que represente el evento.",
+                "Una imagen que transmita alegría.",
+                "Captura la mejor foto del evento 📸✨.",
+                "Toma una foto de un gesto pequeño pero significativo.",
+                "Captura una reacción auténtica.",
+                "Foto con alguien que acaban de conocer.",
+                "Consigue una foto grupal creativa.",
+                "Dile a alguien por qué crees que es valiosa (aunque la acabes de conocer) y luego tómense una Foto juntas.",
+                "Foto de algo del evento que les transmitió amor.",
+                "Capturar un detalle pequeño pero hermoso.",
+                "Foto de una frase del evento que les haya impactado.",
+                "Captura algo del evento que les haya gustado mucho.",
+                "Foto divertida y creativa con un grupo de mujeres."
+            ]
+        };
 
         window.switchView = function(viewId) {
             document.querySelectorAll('.view').forEach(el => {
@@ -633,6 +718,9 @@
             } else if (viewId === 'view-admin') {
                 renderAdminList();
                 renderGallery(); 
+                // Asegurar que el select del panel de admin tenga el valor actual
+                const typeSelect = document.getElementById('admin-event-type');
+                if (typeSelect) typeSelect.value = window.appConfig.eventType || 'boda';
             }
             if (window.lucide) lucide.createIcons();
         };
@@ -683,6 +771,9 @@
             document.getElementById('cfg-roulette-center').value = window.appConfig.rouletteCenter;
             document.getElementById('cfg-video').value = window.appConfig.videoLink;
             document.getElementById('cfg-admin-pass').value = window.appConfig.adminPassword;
+
+            const typeSelect = document.getElementById('admin-event-type');
+            if (typeSelect) typeSelect.value = window.appConfig.eventType || 'boda';
         }
 
         window.handleSaveConfig = async function(event) {
@@ -700,12 +791,23 @@
             };
 
             try {
-                await setDoc(doc(db, "configuracion", "general"), newConfig);
+                await setDoc(doc(db, "configuracion", "general"), newConfig, { merge: true });
                 alert("¡Configuración actualizada en vivo!");
                 window.switchView('view-totem');
             } catch (error) {
                 console.error("Error guardando config:", error);
                 alert("Error al guardar la configuración.");
+            }
+        };
+
+        window.changeEventType = async function() {
+            const newType = document.getElementById('admin-event-type').value;
+            try {
+                await setDoc(doc(db, "configuracion", "general"), { eventType: newType }, { merge: true });
+                alert("¡El tipo de evento y la lista de retos se han actualizado exitosamente!");
+            } catch (error) {
+                console.error("Error cambiando tipo de evento:", error);
+                alert("Hubo un error al actualizar los retos.");
             }
         };
 
@@ -806,7 +908,11 @@
             btn.disabled = true;
             btn.classList.add('opacity-50', 'cursor-not-allowed');
             
-            let retoTexto = RETOS_BODA[Math.floor(Math.random() * RETOS_BODA.length)];
+            // Elegir un reto de la lista configurada actualmente
+            const type = window.appConfig.eventType || 'boda';
+            const currentRetosList = RETOS[type] || RETOS['boda'];
+            
+            let retoTexto = currentRetosList[Math.floor(Math.random() * currentRetosList.length)];
             window.selectedChallenge = retoTexto;
 
             const randomExtraDeg = Math.floor(Math.random() * 360);
@@ -910,6 +1016,9 @@
         };
 
         window.getNewChallenge = function() {
+            const type = window.appConfig.eventType || 'boda';
+            const currentRetosList = RETOS[type] || RETOS['boda'];
+
             if (window.pendingChallenges && window.pendingChallenges.length > 0) {
                 window.selectedChallenge = window.pendingChallenges.shift(); 
                 
@@ -919,7 +1028,7 @@
                     document.getElementById('pending-count').innerText = window.pendingChallenges.length;
                 }
             } else {
-                window.selectedChallenge = RETOS_BODA[Math.floor(Math.random() * RETOS_BODA.length)];
+                window.selectedChallenge = currentRetosList[Math.floor(Math.random() * currentRetosList.length)];
             }
             
             document.getElementById('active-challenge-text').innerText = `"${window.selectedChallenge}"`;
@@ -933,7 +1042,10 @@
                 window.pendingChallenges.push(window.selectedChallenge);
             }
             
-            window.selectedChallenge = RETOS_BODA[Math.floor(Math.random() * RETOS_BODA.length)];
+            const type = window.appConfig.eventType || 'boda';
+            const currentRetosList = RETOS[type] || RETOS['boda'];
+
+            window.selectedChallenge = currentRetosList[Math.floor(Math.random() * currentRetosList.length)];
             document.getElementById('active-challenge-text').innerText = `"${window.selectedChallenge}"`;
             
             document.getElementById('pending-challenges-text').classList.remove('hidden');
