@@ -53,9 +53,9 @@
          MODAL DE VIDEO DE BIENVENIDA (FULLSCREEN)
          ========================================== -->
     <div id="modal-welcome-video" class="fixed inset-0 bg-black z-[9999] hidden flex-col items-center justify-center">
-        <!-- Botón flotante para volver -->
-        <button onclick="window.closeWelcomeVideo()" class="absolute top-6 left-6 md:top-8 md:left-8 text-white px-5 py-3 bg-black/50 hover:bg-black/70 rounded-full transition-colors z-50 backdrop-blur-md shadow-2xl border border-white/10 flex items-center gap-2 font-medium tracking-wide" title="Volver al inicio">
-            <i data-lucide="arrow-left" class="w-5 h-5"></i> Volver al inicio
+        <!-- Botón flotante ocultable (solo icono) -->
+        <button id="welcome-video-close-btn" onclick="window.closeWelcomeVideo()" class="absolute top-6 left-6 md:top-8 md:left-8 text-white p-4 bg-black/50 hover:bg-black/80 rounded-full transition-all duration-500 z-50 backdrop-blur-md shadow-2xl border border-white/20 flex items-center justify-center transform translate-y-0 opacity-100" title="Volver al inicio">
+            <i data-lucide="arrow-left" class="w-7 h-7"></i>
         </button>
         
         <div id="video-wrapper" class="w-full h-full flex justify-center items-center bg-black">
@@ -756,6 +756,25 @@
         };
 
         // --- SISTEMA DE RENDERIZADO Y CONTROL DE VIDEO ---
+        window.videoBtnTimeout = null;
+
+        window.resetVideoBtnTimer = function() {
+            const btn = document.getElementById('welcome-video-close-btn');
+            if (!btn) return;
+            
+            // Mostrar botón con animación
+            btn.classList.remove('opacity-0', '-translate-y-4', 'pointer-events-none');
+            btn.classList.add('opacity-100', 'translate-y-0');
+            
+            clearTimeout(window.videoBtnTimeout);
+            
+            // Ocultar después de 3 segundos de inactividad
+            window.videoBtnTimeout = setTimeout(() => {
+                btn.classList.remove('opacity-100', 'translate-y-0');
+                btn.classList.add('opacity-0', '-translate-y-4', 'pointer-events-none');
+            }, 3000);
+        };
+
         window.openWelcomeVideo = function() {
             const modal = document.getElementById('modal-welcome-video');
             const videoWrapper = document.getElementById('video-wrapper');
@@ -783,6 +802,9 @@
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             if (window.lucide) lucide.createIcons();
+            
+            // Iniciar el temporizador para ocultar el botón al abrir
+            window.resetVideoBtnTimer();
         };
 
         window.closeWelcomeVideo = function() {
@@ -1519,6 +1541,18 @@
             document.getElementById('gallery-file-input').addEventListener('change', window.handlePhotoUpload);
             
             document.getElementById('admin-login-form').addEventListener('submit', window.handleAdminLogin);
+            
+            // Detectar interacción para mostrar el botón de video si está oculto
+            document.addEventListener('mousemove', () => {
+                if (!document.getElementById('modal-welcome-video').classList.contains('hidden')) {
+                    window.resetVideoBtnTimer();
+                }
+            });
+            document.addEventListener('touchstart', () => {
+                if (!document.getElementById('modal-welcome-video').classList.contains('hidden')) {
+                    window.resetVideoBtnTimer();
+                }
+            });
         }
 
         if (document.readyState === 'loading') {
