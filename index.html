@@ -50,19 +50,16 @@
     </div>
 
     <!-- ==========================================
-         MODAL DE VIDEO DE BIENVENIDA
+         MODAL DE VIDEO DE BIENVENIDA (FULLSCREEN)
          ========================================== -->
-    <div id="modal-welcome-video" class="fixed inset-0 bg-stone-900/95 z-[120] hidden flex-col items-center justify-center p-4 backdrop-blur-md">
-        <button onclick="window.closeWelcomeVideo()" class="absolute top-6 right-6 text-white p-3 bg-white/10 rounded-full hover:bg-white/20 transition-colors z-50 backdrop-blur-sm shadow-lg border border-stone-700" title="Cerrar Video">
-            <i data-lucide="x" class="w-7 h-7"></i>
+    <div id="modal-welcome-video" class="fixed inset-0 bg-black z-[9999] hidden flex-col items-center justify-center">
+        <!-- Botón flotante para volver -->
+        <button onclick="window.closeWelcomeVideo()" class="absolute top-6 left-6 md:top-8 md:left-8 text-white px-5 py-3 bg-black/50 hover:bg-black/70 rounded-full transition-colors z-50 backdrop-blur-md shadow-2xl border border-white/10 flex items-center gap-2 font-medium tracking-wide" title="Volver al inicio">
+            <i data-lucide="arrow-left" class="w-5 h-5"></i> Volver al inicio
         </button>
-        <div class="w-full max-w-4xl bg-black rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] relative border border-stone-800">
-            <div class="absolute top-0 left-0 w-full bg-gradient-to-b from-black/80 to-transparent p-4 z-10 pointer-events-none">
-                <h3 id="modal-video-title" class="text-white font-serif text-xl md:text-2xl drop-shadow-md text-center font-medium tracking-wide">Mensaje de los Novios</h3>
-            </div>
-            <div id="video-wrapper" class="w-full aspect-video flex justify-center items-center bg-stone-900">
-                <!-- Video inyectado dinámicamente al abrir -->
-            </div>
+        
+        <div id="video-wrapper" class="w-full h-full flex justify-center items-center bg-black">
+            <!-- Video inyectado dinámicamente al abrir ocupando el 100% -->
         </div>
     </div>
 
@@ -763,9 +760,6 @@
             const modal = document.getElementById('modal-welcome-video');
             const videoWrapper = document.getElementById('video-wrapper');
             
-            const titleEl = document.getElementById('modal-video-title');
-            if(titleEl) titleEl.innerText = window.appConfig.videoTitleText || "Mensaje de los Novios";
-
             if (videoWrapper) {
                 const link = window.appConfig.videoLink || "";
                 const isLoop = window.appConfig.videoLoop !== false;
@@ -775,14 +769,14 @@
                     let ytLink = link;
                     const videoIdMatch = link.match(/(?:v=|youtu\.be\/|embed\/)([^&?]+)/);
                     if (videoIdMatch && videoIdMatch[1]) {
-                        // Reproduce automático al abrir (autoplay=1)
+                        // Reproduce automático al abrir (autoplay=1) y toma el 100%
                         ytLink = `https://www.youtube.com/embed/${videoIdMatch[1]}?autoplay=1${isLoop ? `&loop=1&playlist=${videoIdMatch[1]}` : ''}`;
                     }
-                    videoWrapper.innerHTML = `<iframe src="${ytLink}" class="w-full aspect-video border-0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+                    videoWrapper.innerHTML = `<iframe src="${ytLink}" class="w-full h-full border-0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
                 } else if (link.match(/\.(mp4|webm|ogg)$/i) || link.includes('uc?export=download')) {
-                    videoWrapper.innerHTML = `<video src="${link}" class="w-full aspect-video object-contain" controls autoplay ${loopAttr} playsinline></video>`;
+                    videoWrapper.innerHTML = `<video src="${link}" class="w-full h-full object-contain" controls autoplay ${loopAttr} playsinline></video>`;
                 } else {
-                    videoWrapper.innerHTML = `<iframe src="${link}" class="w-full aspect-video border-0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+                    videoWrapper.innerHTML = `<iframe src="${link}" class="w-full h-full border-0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
                 }
             }
 
