@@ -50,6 +50,23 @@
     </div>
 
     <!-- ==========================================
+         MODAL DE VIDEO DE BIENVENIDA
+         ========================================== -->
+    <div id="modal-welcome-video" class="fixed inset-0 bg-stone-900/95 z-[120] hidden flex-col items-center justify-center p-4 backdrop-blur-md">
+        <button onclick="window.closeWelcomeVideo()" class="absolute top-6 right-6 text-white p-3 bg-white/10 rounded-full hover:bg-white/20 transition-colors z-50 backdrop-blur-sm shadow-lg border border-stone-700" title="Cerrar Video">
+            <i data-lucide="x" class="w-7 h-7"></i>
+        </button>
+        <div class="w-full max-w-4xl bg-black rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] relative border border-stone-800">
+            <div class="absolute top-0 left-0 w-full bg-gradient-to-b from-black/80 to-transparent p-4 z-10 pointer-events-none">
+                <h3 id="modal-video-title" class="text-white font-serif text-xl md:text-2xl drop-shadow-md text-center font-medium tracking-wide">Mensaje de los Novios</h3>
+            </div>
+            <div id="video-wrapper" class="w-full aspect-video flex justify-center items-center bg-stone-900">
+                <!-- Video inyectado dinámicamente al abrir -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
          DINÁMICA DE RETOS (RULETA, CONTEO, REVELACIÓN Y ÉXITO)
          ========================================== -->
     
@@ -169,9 +186,13 @@
          ========================================== -->
     <div id="view-totem" class="view min-h-screen bg-gradient-to-br from-stone-100 to-stone-300 flex flex-col items-center justify-center p-6">
         <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center space-y-8 border border-stone-200">
-            <div class="space-y-2">
+            <div class="space-y-2 flex flex-col items-center">
                 <h1 id="totem-title" class="text-4xl font-serif text-amber-700">¡Bienvenidos!</h1>
-                <p id="totem-subtitle" class="text-stone-500">Encuentra tu mesa y únete a la celebración</p>
+                <p id="totem-subtitle" class="text-stone-500 mb-2">Encuentra tu mesa y únete a la celebración</p>
+                <button onclick="window.openWelcomeVideo()" class="mt-4 inline-flex items-center justify-center gap-2 bg-stone-900 text-amber-400 px-6 py-3 rounded-full font-medium hover:bg-stone-800 transition-colors shadow-md active:scale-95">
+                    <i data-lucide="play-circle" class="w-5 h-5"></i>
+                    <span id="totem-video-btn-text">Mensaje de los Novios</span>
+                </button>
             </div>
 
             <div class="space-y-4">
@@ -318,19 +339,6 @@
                         </button>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- SECCIÓN DE VIDEO DE LOS NOVIOS ACTUALIZADA -->
-        <div class="bg-stone-900 rounded-3xl overflow-hidden shadow-lg mb-6 flex flex-col">
-            <div class="p-4 text-center border-b border-stone-800">
-                <h3 class="font-semibold text-lg text-white flex justify-center items-center gap-2">
-                    <i data-lucide="video" class="w-5 h-5 text-amber-500"></i> <span id="video-title-text">Mensaje de los Novios</span>
-                </h3>
-                <p class="text-stone-400 text-xs mt-1">Dale play a nuestro anuncio</p>
-            </div>
-            <div id="video-wrapper" class="w-full bg-black flex justify-center items-center overflow-hidden rounded-b-3xl">
-                <!-- El video o iframe se inyecta dinámicamente aquí para soportar Bucle -->
             </div>
         </div>
 
@@ -750,33 +758,50 @@
             if (window.lucide) lucide.createIcons();
         };
 
-        // --- SISTEMA DE RENDERIZADO DE VIDEO (INTELIGENTE) ---
-        function renderVideoPlayer() {
+        // --- SISTEMA DE RENDERIZADO Y CONTROL DE VIDEO ---
+        window.openWelcomeVideo = function() {
+            const modal = document.getElementById('modal-welcome-video');
             const videoWrapper = document.getElementById('video-wrapper');
-            if (!videoWrapper) return;
             
-            const link = window.appConfig.videoLink || "";
-            const isLoop = window.appConfig.videoLoop !== false; // Bucle por defecto
-            const loopAttr = isLoop ? "loop" : "";
-            
-            // Caso 1: YouTube (Soporta Bucle mediante parámetros)
-            if (link.includes('youtube.com') || link.includes('youtu.be')) {
-                let ytLink = link;
-                const videoIdMatch = link.match(/(?:v=|youtu\.be\/|embed\/)([^&?]+)/);
-                if (videoIdMatch && videoIdMatch[1]) {
-                    ytLink = `https://www.youtube.com/embed/${videoIdMatch[1]}?autoplay=0${isLoop ? `&loop=1&playlist=${videoIdMatch[1]}` : ''}`;
+            const titleEl = document.getElementById('modal-video-title');
+            if(titleEl) titleEl.innerText = window.appConfig.videoTitleText || "Mensaje de los Novios";
+
+            if (videoWrapper) {
+                const link = window.appConfig.videoLink || "";
+                const isLoop = window.appConfig.videoLoop !== false;
+                const loopAttr = isLoop ? "loop" : "";
+                
+                if (link.includes('youtube.com') || link.includes('youtu.be')) {
+                    let ytLink = link;
+                    const videoIdMatch = link.match(/(?:v=|youtu\.be\/|embed\/)([^&?]+)/);
+                    if (videoIdMatch && videoIdMatch[1]) {
+                        // Reproduce automático al abrir (autoplay=1)
+                        ytLink = `https://www.youtube.com/embed/${videoIdMatch[1]}?autoplay=1${isLoop ? `&loop=1&playlist=${videoIdMatch[1]}` : ''}`;
+                    }
+                    videoWrapper.innerHTML = `<iframe src="${ytLink}" class="w-full aspect-video border-0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+                } else if (link.match(/\.(mp4|webm|ogg)$/i) || link.includes('uc?export=download')) {
+                    videoWrapper.innerHTML = `<video src="${link}" class="w-full aspect-video object-contain" controls autoplay ${loopAttr} playsinline></video>`;
+                } else {
+                    videoWrapper.innerHTML = `<iframe src="${link}" class="w-full aspect-video border-0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
                 }
-                videoWrapper.innerHTML = `<iframe src="${ytLink}" class="w-full h-[60vh] border-0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
-            } 
-            // Caso 2: Video Directo (.mp4, .webm, etc) -> Usa etiqueta nativa con bucle real
-            else if (link.match(/\.(mp4|webm|ogg)$/i) || link.includes('uc?export=download')) {
-                videoWrapper.innerHTML = `<video src="${link}" class="w-full h-[60vh] object-cover" controls ${loopAttr} playsinline></video>`;
             }
-            // Caso 3: Google Drive Preview u otro iframe genérico (NO soporta bucle automático)
-            else {
-                videoWrapper.innerHTML = `<iframe src="${link}" class="w-full h-[60vh] border-0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            if (window.lucide) lucide.createIcons();
+        };
+
+        window.closeWelcomeVideo = function() {
+            const modal = document.getElementById('modal-welcome-video');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            
+            // Destruir el iframe/video para evitar que el audio siga sonando al cerrar
+            const videoWrapper = document.getElementById('video-wrapper');
+            if (videoWrapper) {
+                videoWrapper.innerHTML = '';
             }
-        }
+        };
 
         // --- SISTEMA DE CONFIGURACIÓN DINÁMICA ---
         function cargarConfiguracion() {
@@ -808,8 +833,8 @@
             const acceptBtnEl = document.getElementById('btn-accept-challenge');
             if(acceptBtnEl) acceptBtnEl.innerText = window.appConfig.acceptBtnText || "¡Aceptar Reto e ir a mi mesa!";
 
-            const videoTitleEl = document.getElementById('video-title-text');
-            if(videoTitleEl) videoTitleEl.innerText = window.appConfig.videoTitleText || "Mensaje de los Novios";
+            const totemVideoBtnEl = document.getElementById('totem-video-btn-text');
+            if(totemVideoBtnEl) totemVideoBtnEl.innerText = window.appConfig.videoTitleText || "Mensaje de los Novios";
 
             const dashboardSubEl = document.getElementById('dashboard-subtitle');
             if(dashboardSubEl) dashboardSubEl.innerText = window.appConfig.dashboardSubtitle || "Nos alegra mucho que estés aquí.";
@@ -839,9 +864,6 @@
 
             const typeSelect = document.getElementById('admin-event-type');
             if (typeSelect) typeSelect.value = window.appConfig.eventType || 'boda';
-
-            // Actualizar reproductor de video
-            renderVideoPlayer();
         }
 
         window.handleSaveConfig = async function(event) {
