@@ -65,6 +65,7 @@
             <symbol id="icon-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
             <symbol id="icon-crown" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"/></symbol>
             <symbol id="icon-loader-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></symbol>
+            <symbol id="icon-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></symbol>
         </defs>
     </svg>
 
@@ -223,7 +224,7 @@
     <!-- ==========================================
          VISTA 1: TÓTEM (ENTRADA PRINCIPAL) FULL RESPONSIVE
          ========================================== -->
-    <div id="view-totem" class="view min-h-screen w-full flex flex-col justify-between items-center px-6 py-8 md:py-12 lg:py-16 overflow-y-auto relative z-10">
+    <div id="view-totem" class="view min-h-screen w-full flex flex-col justify-between items-center px-6 py-8 md:py-12 lg:py-16 relative z-10">
         
         <!-- Spacer para centrar el contenido principal verticalmente -->
         <div class="w-full flex-grow flex flex-col items-center justify-center max-w-2xl lg:max-w-4xl 2xl:max-w-6xl space-y-10 lg:space-y-16 2xl:space-y-24 my-8">
@@ -243,7 +244,7 @@
             <!-- Sección de Búsqueda -->
             <div class="w-full space-y-4 lg:space-y-6 2xl:space-y-8 pt-4 lg:pt-8 2xl:px-12">
                 <div class="relative text-left">
-                    <svg class="absolute left-6 top-1/2 transform -translate-y-1/2 text-stone-400 w-7 h-7 lg:w-9 lg:h-9 2xl:w-12 2xl:h-12"><use href="#icon-search"></use></svg>
+                    <svg class="absolute left-6 top-1/2 transform -translate-y-1/2 text-stone-400 w-7 h-7 lg:w-9 lg:h-9 2xl:w-12 2xl:h-12 pointer-events-none"><use href="#icon-search"></use></svg>
                     <input
                         type="text"
                         id="search-input"
@@ -297,7 +298,7 @@
     <!-- ==========================================
          VISTA 1.5: MOSTRAR CÓDIGO QR PANTALLA COMPLETA
          ========================================== -->
-    <div id="view-show-qr" class="view hidden-view min-h-screen w-full flex flex-col items-center justify-center p-6 relative z-10 overflow-y-auto">
+    <div id="view-show-qr" class="view hidden-view min-h-screen w-full flex flex-col items-center justify-center p-6 relative z-10">
         <button 
             onclick="window.switchView('view-totem')"
             class="absolute top-8 right-8 lg:top-12 lg:right-12 2xl:top-16 2xl:right-16 text-stone-800 p-3 lg:p-5 2xl:p-6 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm"
@@ -331,7 +332,7 @@
     <!-- ==========================================
          VISTA 2: DASHBOARD DEL INVITADO PANTALLA COMPLETA
          ========================================== -->
-    <div id="view-guest-dashboard" class="view hidden-view min-h-screen w-full flex flex-col px-6 py-12 lg:py-16 2xl:py-24 max-w-3xl lg:max-w-5xl 2xl:max-w-7xl mx-auto space-y-12 lg:space-y-16 2xl:space-y-20 relative z-10 overflow-y-auto">
+    <div id="view-guest-dashboard" class="view hidden-view min-h-screen w-full flex flex-col px-6 py-12 lg:py-16 2xl:py-24 max-w-3xl lg:max-w-5xl 2xl:max-w-7xl mx-auto space-y-12 lg:space-y-16 2xl:space-y-20 relative z-10">
         
         <!-- Header/Logout -->
         <div class="flex justify-between items-center w-full">
@@ -463,7 +464,7 @@
     <!-- ==========================================
          VISTA 4: PANEL DE ADMINISTRACIÓN (TIPO APP)
          ========================================== -->
-    <div id="view-admin" class="view hidden-view min-h-screen w-full p-6 md:p-12 lg:p-16 2xl:p-24 relative z-10 overflow-y-auto">
+    <div id="view-admin" class="view hidden-view min-h-screen w-full p-6 md:p-12 lg:p-16 2xl:p-24 relative z-10">
         <div class="max-w-7xl 2xl:max-w-[100rem] mx-auto space-y-8 lg:space-y-12 2xl:space-y-16 mt-4">
             
             <!-- Header Glassmorphism -->
