@@ -26,7 +26,13 @@
         }
     </style>
 </head>
-<body class="bg-stone-100 text-stone-800 font-sans antialiased">
+<body class="text-stone-800 font-sans antialiased relative">
+
+    <!-- FONDO GLOBAL INMERSIVO (Tipo App) -->
+    <div class="fixed inset-0 w-full h-full pointer-events-none z-[-1] bg-gradient-to-br from-amber-50 via-stone-100 to-stone-200">
+        <div class="absolute -top-24 -left-24 w-96 h-96 bg-amber-200/40 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-0 w-[30rem] h-[30rem] bg-stone-300/50 rounded-full blur-3xl"></div>
+    </div>
 
     <!-- INPUTS GLOBAL DE ARCHIVOS (Ocultos) -->
     <input type="file" id="camera-file-input" accept="image/*" capture="environment" class="hidden">
@@ -69,9 +75,9 @@
     
     <!-- 1. Modal de Ruleta -->
     <div id="modal-roulette" class="fixed inset-0 bg-stone-900/90 backdrop-blur-sm z-[100] hidden flex-col items-center justify-center p-4">
-        <div class="max-w-sm w-full bg-white rounded-3xl shadow-2xl p-8 text-center space-y-6">
+        <div class="max-w-sm w-full bg-white/90 backdrop-blur-xl border border-white/50 rounded-[2rem] shadow-2xl p-8 text-center space-y-6">
             <h2 class="text-3xl font-serif text-stone-800">¡Misión Sorpresa!</h2>
-            <p id="roulette-desc-text" class="text-stone-500 text-sm">Gira la ruleta para descubrir tu reto fotográfico en esta boda.</p>
+            <p id="roulette-desc-text" class="text-stone-600 text-sm">Gira la ruleta para descubrir tu reto fotográfico en esta boda.</p>
 
             <div class="relative w-64 h-64 mx-auto my-10">
                 <!-- Puntero Corregido (Apuntando hacia abajo a la ruleta) -->
@@ -82,7 +88,7 @@
                 <div id="roulette-wheel" class="w-full h-full rounded-full border-8 border-stone-900 shadow-[0_0_25px_rgba(0,0,0,0.5)] relative overflow-hidden bg-cover bg-center" 
                      style="transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1);">
                     
-                    <!-- Capa de divisiones (8 segmentos pares) con conic-gradient para dar efecto de ruleta -->
+                    <!-- Capa de divisiones -->
                     <div class="absolute inset-0" style="background: conic-gradient(rgba(0,0,0,0.4) 0 45deg, rgba(255,255,255,0.15) 45deg 90deg, rgba(0,0,0,0.4) 90deg 135deg, rgba(255,255,255,0.15) 135deg 180deg, rgba(0,0,0,0.4) 180deg 225deg, rgba(255,255,255,0.15) 225deg 270deg, rgba(0,0,0,0.4) 270deg 315deg, rgba(255,255,255,0.15) 315deg 360deg);"></div>
 
                     <!-- Decoración interna -->
@@ -96,7 +102,7 @@
                         <div class="w-full h-1 bg-stone-900/80 absolute transform rotate-135"></div>
                     </div>
 
-                    <!-- Centro de la ruleta (Imagen Personalizada adaptada) -->
+                    <!-- Centro de la ruleta -->
                     <div class="absolute inset-0 flex items-center justify-center z-20">
                         <div class="w-24 h-24 bg-white rounded-full shadow-[0_0_15px_rgba(0,0,0,0.7)] border-[4px] border-amber-500 flex items-center justify-center p-1">
                             <img id="roulette-center-img" src="" alt="Centro" class="w-full h-full object-contain rounded-full" onerror="this.src='https://via.placeholder.com/150/f59e0b/ffffff?text=Boda'" />
@@ -109,7 +115,7 @@
                 <i data-lucide="dices" class="w-6 h-6"></i>
                 ¡GIRAR RULETA!
             </button>
-            <button onclick="window.skipRoulette()" class="text-stone-400 text-sm underline mt-2 hover:text-stone-600 transition-colors">
+            <button onclick="window.skipRoulette()" class="text-stone-500 text-sm underline mt-2 hover:text-stone-800 transition-colors">
                 Saltar reto e ir a mi mesa
             </button>
         </div>
@@ -124,8 +130,8 @@
     </div>
 
     <!-- 2.5 Modal de Instrucción antes del reto -->
-    <div id="modal-challenge-instruction" class="fixed inset-0 bg-stone-900/95 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
-        <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center space-y-6 relative overflow-hidden animate-pop">
+    <div id="modal-challenge-instruction" class="fixed inset-0 bg-stone-900/90 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white/90 backdrop-blur-xl border border-white/50 rounded-[2rem] shadow-2xl p-8 text-center space-y-6 relative overflow-hidden animate-pop">
             <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-2">
                 <i data-lucide="info" class="w-10 h-10 text-amber-600"></i>
             </div>
@@ -138,13 +144,13 @@
     </div>
 
     <!-- 3. Revelación del reto -->
-    <div id="modal-challenge-reveal" class="fixed inset-0 bg-stone-900/95 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
-        <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center space-y-6 relative overflow-hidden">
+    <div id="modal-challenge-reveal" class="fixed inset-0 bg-stone-900/90 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white/95 backdrop-blur-xl border border-white/50 rounded-[2rem] shadow-2xl p-8 text-center space-y-6 relative overflow-hidden">
             <div class="absolute -top-10 -left-10 w-32 h-32 bg-amber-100 rounded-full opacity-50 blur-2xl"></div>
             <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-amber-200 rounded-full opacity-50 blur-2xl"></div>
             
             <h2 class="text-2xl font-serif text-amber-600 uppercase tracking-widest relative z-10">Tu Reto Es:</h2>
-            <div class="bg-stone-50 rounded-2xl p-6 border border-stone-100 shadow-inner relative z-10">
+            <div class="bg-white/60 rounded-2xl p-6 border border-white shadow-inner relative z-10">
                 <p id="challenge-reveal-text" class="text-2xl font-medium text-stone-800 italic">"Tomar una foto..."</p>
             </div>
             <button id="btn-accept-challenge" onclick="window.closeChallengeReveal()" class="w-full bg-stone-900 text-white py-4 rounded-xl font-semibold text-lg hover:bg-stone-800 transition-colors shadow-lg mt-4 relative z-10">
@@ -154,21 +160,21 @@
     </div>
 
     <!-- 4. Modal de Éxito y Nuevo Reto -->
-    <div id="modal-challenge-success" class="fixed inset-0 bg-stone-900/90 backdrop-blur-sm z-[110] hidden flex-col items-center justify-center p-4">
-        <div class="max-w-sm w-full bg-white rounded-3xl shadow-2xl p-8 text-center space-y-6 animate-pop">
+    <div id="modal-challenge-success" class="fixed inset-0 bg-stone-900/90 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
+        <div class="max-w-sm w-full bg-white/95 backdrop-blur-xl border border-white/50 rounded-[2rem] shadow-2xl p-8 text-center space-y-6 animate-pop">
             <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
                 <i data-lucide="check-circle" class="w-10 h-10 text-green-600"></i>
             </div>
             <h2 class="text-3xl font-serif text-stone-800">¡Reto Verificado!</h2>
-            <p class="text-stone-500 text-lg">Tu foto se está subiendo a la galería de los novios.</p>
+            <p class="text-stone-600 text-lg">Tu foto se está subiendo a la galería de los novios.</p>
 
-            <div class="bg-amber-50 rounded-2xl p-4 border border-amber-200 mt-4">
+            <div class="bg-amber-50/80 rounded-2xl p-4 border border-amber-200 mt-4 backdrop-blur-sm">
                 <p class="text-amber-800 font-semibold mb-1 flex items-center justify-center gap-2"><i data-lucide="gift" class="w-5 h-5"></i> ¡Sigue así!</p>
                 <p class="text-sm text-amber-700">¿Aceptas el siguiente reto para ganar más oportunidades?</p>
             </div>
 
             <div class="grid grid-cols-2 gap-4 pt-2">
-                <button onclick="window.declineNextChallenge()" class="w-full bg-stone-200 text-stone-700 py-3 rounded-xl font-semibold hover:bg-stone-300 transition-colors shadow-sm">
+                <button onclick="window.declineNextChallenge()" class="w-full bg-white/50 border border-white text-stone-700 py-3 rounded-xl font-semibold hover:bg-white/80 transition-colors shadow-sm">
                     No acepto
                 </button>
                 <button onclick="window.acceptNextChallenge()" class="w-full bg-amber-600 text-white py-3 rounded-xl font-semibold hover:bg-amber-700 transition-colors shadow-lg flex items-center justify-center gap-1">
@@ -179,218 +185,236 @@
     </div>
 
     <!-- ==========================================
-         VISTA 1: TÓTEM (ENTRADA PRINCIPAL)
+         VISTA 1: TÓTEM (ENTRADA PRINCIPAL) PANTALLA COMPLETA
          ========================================== -->
-    <div id="view-totem" class="view min-h-screen bg-gradient-to-br from-stone-100 to-stone-300 flex flex-col items-center justify-center p-6">
-        <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center space-y-8 border border-stone-200">
-            <div class="space-y-2 flex flex-col items-center">
-                <h1 id="totem-title" class="text-4xl font-serif text-amber-700">¡Bienvenidos!</h1>
-                <p id="totem-subtitle" class="text-stone-500 mb-2">Encuentra tu mesa y únete a la celebración</p>
-                <button onclick="window.openWelcomeVideo()" class="mt-4 inline-flex items-center justify-center gap-2 bg-stone-900 text-amber-400 px-6 py-3 rounded-full font-medium hover:bg-stone-800 transition-colors shadow-md active:scale-95">
-                    <i data-lucide="play-circle" class="w-5 h-5"></i>
-                    <span id="totem-video-btn-text">Mensaje de los Novios</span>
-                </button>
+    <div id="view-totem" class="view min-h-screen w-full flex flex-col items-center justify-center px-6 pt-12 pb-28 md:pb-32 relative z-10">
+        
+        <!-- Contenedor Principal -->
+        <div class="w-full max-w-2xl flex flex-col items-center justify-center space-y-10">
+            
+            <!-- Títulos -->
+            <div class="space-y-4 text-center">
+                <h1 id="totem-title" class="text-6xl md:text-7xl font-serif text-amber-700 tracking-tight drop-shadow-sm">¡Bienvenidas!</h1>
+                <p id="totem-subtitle" class="text-xl md:text-2xl text-stone-600">Encuentra tu puesto y únete a la celebración</p>
             </div>
 
-            <div class="space-y-4">
+            <!-- Botón de Video -->
+            <button onclick="window.openWelcomeVideo()" class="inline-flex items-center justify-center gap-3 bg-stone-900 text-amber-400 px-8 py-4 rounded-full font-medium hover:bg-stone-800 transition-colors shadow-xl active:scale-95 text-lg">
+                <i data-lucide="play-circle" class="w-6 h-6"></i>
+                <span id="totem-video-btn-text">Mensaje de poder</span>
+            </button>
+
+            <!-- Sección de Búsqueda -->
+            <div class="w-full space-y-4 pt-4">
                 <div class="relative text-left">
-                    <i data-lucide="search" class="absolute left-4 top-4 text-stone-400 w-6 h-6"></i>
+                    <i data-lucide="search" class="absolute left-6 top-5 text-stone-400 w-7 h-7"></i>
                     <input
                         type="text"
                         id="search-input"
-                        placeholder="Ingresa tu nombre o apellido..."
-                        class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-stone-200 focus:border-amber-500 focus:ring-0 text-lg transition-colors outline-none"
+                        placeholder="Escribe tu nombre..."
+                        class="w-full pl-16 pr-6 py-5 rounded-2xl border-2 border-white/50 bg-white/60 backdrop-blur-md focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-500/20 text-xl transition-all shadow-sm outline-none"
                     />
                 </div>
                 <button 
                     id="btn-search"
-                    class="w-full bg-stone-800 text-white py-4 rounded-xl font-semibold text-lg hover:bg-stone-900 transition-colors shadow-lg active:scale-95"
+                    class="w-full bg-amber-600 text-white py-5 rounded-2xl font-semibold text-xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95"
                 >
-                    Buscar mi Mesa
+                    Buscar mi puesto
                 </button>
             </div>
 
-            <div class="relative flex items-center py-2">
-                <div class="flex-grow border-t border-stone-300"></div>
+            <!-- Separador -->
+            <div class="w-full relative flex items-center py-4">
+                <div class="flex-grow border-t-2 border-stone-300/60"></div>
                 <!-- Texto con acción oculta -->
                 <span 
-                    class="flex-shrink-0 mx-4 text-stone-400 text-sm cursor-pointer select-none" 
+                    class="flex-shrink-0 mx-6 text-stone-500 font-medium cursor-pointer select-none text-lg hover:text-stone-600 transition-colors" 
                     onclick="window.handleSecretClick()" 
                     title="Doble tap secreto">
                     O usa tu celular
                 </span>
-                <div class="flex-grow border-t border-stone-300"></div>
+                <div class="flex-grow border-t-2 border-stone-300/60"></div>
             </div>
 
+            <!-- Botón QR -->
             <button 
                 onclick="window.switchView('view-show-qr')"
-                class="w-full bg-white border-2 border-stone-800 text-stone-800 py-4 rounded-xl font-semibold text-lg hover:bg-stone-50 transition-colors flex items-center justify-center gap-2 active:scale-95"
+                class="w-full bg-white/50 backdrop-blur-md border-2 border-amber-200/50 text-amber-800 py-5 rounded-2xl font-semibold text-xl hover:bg-white/80 transition-all flex items-center justify-center gap-3 active:scale-95 shadow-sm"
             >
-                <i data-lucide="qr-code" class="w-6 h-6"></i>
+                <i data-lucide="qr-code" class="w-7 h-7"></i>
                 Mostrar Código QR
             </button>
         </div>
 
+        <!-- Botón Administrador Inferior -->
         <button 
             onclick="window.switchView('view-admin-login')"
-            class="mt-8 text-stone-400 hover:text-stone-600 flex items-center gap-2 text-sm transition-colors p-2"
+            class="absolute bottom-4 md:bottom-8 text-stone-400 hover:text-stone-600 flex items-center gap-2 text-sm transition-colors p-2"
         >
             <i data-lucide="users" class="w-4 h-4"></i> Acceso Organizador
         </button>
     </div>
 
     <!-- ==========================================
-         VISTA 1.5: MOSTRAR CÓDIGO QR
+         VISTA 1.5: MOSTRAR CÓDIGO QR PANTALLA COMPLETA
          ========================================== -->
-    <div id="view-show-qr" class="view hidden-view min-h-screen bg-stone-900 flex flex-col items-center justify-center p-6 relative">
+    <div id="view-show-qr" class="view hidden-view min-h-screen w-full flex flex-col items-center justify-center p-6 relative z-10">
         <button 
             onclick="window.switchView('view-totem')"
-            class="absolute top-8 right-8 text-white p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+            class="absolute top-8 right-8 text-stone-800 p-3 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm"
         >
             <i data-lucide="x" class="w-7 h-7"></i>
         </button>
 
-        <div class="text-center mb-10 max-w-md">
-            <h2 class="text-3xl font-serif text-white mb-4">Escanea con tu celular</h2>
-            <p class="text-stone-400 text-lg">Abre la cámara de tu teléfono y apunta a este código para acceder a la plataforma web.</p>
-        </div>
+        <div class="w-full max-w-md flex flex-col items-center justify-center space-y-10 text-center">
+            <div class="space-y-4">
+                <h2 class="text-4xl md:text-5xl font-serif text-amber-700 drop-shadow-sm">Escanea con tu celular</h2>
+                <p class="text-stone-600 text-xl">Abre la cámara de tu teléfono y apunta a este código para acceder a tu plataforma.</p>
+            </div>
 
-        <div class="bg-white p-8 rounded-3xl shadow-[0_0_50px_rgba(245,158,11,0.2)]">
-            <img 
-                id="dynamic-qr-img"
-                src="" 
-                alt="Código QR del Evento" 
-                class="w-64 h-64 md:w-80 md:h-80"
-            />
+            <div class="bg-white/60 backdrop-blur-md p-8 rounded-[2rem] border-2 border-white/50 shadow-xl inline-block">
+                <div class="bg-white p-4 rounded-3xl shadow-sm">
+                    <img 
+                        id="dynamic-qr-img"
+                        src="" 
+                        alt="Código QR del Evento" 
+                        class="w-64 h-64 md:w-80 md:h-80 mix-blend-multiply"
+                    />
+                </div>
+            </div>
+            
+            <p class="text-stone-500 font-medium tracking-wide text-center text-xl uppercase">
+                App de Eventos
+            </p>
         </div>
-        
-        <p class="mt-8 text-amber-500 font-medium tracking-wide text-center text-xl">
-            App de Eventos y Bodas
-        </p>
     </div>
 
     <!-- ==========================================
-         VISTA 2: DASHBOARD DEL INVITADO
+         VISTA 2: DASHBOARD DEL INVITADO PANTALLA COMPLETA
          ========================================== -->
-    <div id="view-guest-dashboard" class="view hidden-view min-h-screen bg-stone-50 flex flex-col p-4 sm:p-6 md:max-w-2xl md:mx-auto">
-        <div class="flex justify-between items-center mb-6">
-            <button onclick="window.logout()" class="p-2 bg-white rounded-full shadow hover:bg-stone-100 transition-colors text-stone-600">
-                <i data-lucide="home" class="w-6 h-6"></i>
+    <div id="view-guest-dashboard" class="view hidden-view min-h-screen w-full flex flex-col px-6 py-12 md:max-w-3xl md:mx-auto space-y-12 relative z-10">
+        
+        <!-- Header/Logout -->
+        <div class="flex justify-between items-center w-full">
+            <button onclick="window.logout()" class="p-3 bg-white/50 backdrop-blur-md border border-white/50 rounded-full shadow-sm hover:bg-white/80 transition-colors text-stone-700">
+                <i data-lucide="arrow-left" class="w-6 h-6"></i>
             </button>
-            <div class="p-2 bg-transparent">
-               <!-- Botón de galería removido -->
-            </div>
+            <div class="p-2 bg-transparent"></div>
         </div>
 
-        <div class="bg-white rounded-3xl p-8 text-center shadow-lg border border-stone-100 mb-6 relative overflow-hidden">
-            <h2 class="text-3xl font-serif text-stone-800 mb-2">¡Hola, <span id="guest-name-display"></span>!</h2>
-            <p id="dashboard-subtitle" class="text-stone-500 mb-6">Nos alegra mucho que estés aquí.</p>
+        <!-- Saludo -->
+        <div class="text-center space-y-2">
+            <h2 class="text-5xl md:text-6xl font-serif text-amber-700 tracking-tight drop-shadow-sm">¡Hola, <span id="guest-name-display"></span>!</h2>
+            <p id="dashboard-subtitle" class="text-xl text-stone-600">Nos alegra mucho que estés aquí.</p>
+        </div>
             
-            <div class="inline-block bg-amber-50 border border-amber-200 rounded-2xl p-6 px-12">
-                <p id="table-label-text" class="text-sm text-amber-800 font-semibold uppercase tracking-widest mb-1">Tu mesa es la número</p>
-                <p id="guest-table-display" class="text-6xl font-serif text-amber-600">--</p>
-            </div>
+        <!-- Número de Mesa Glassmorphism -->
+        <div class="w-full bg-white/60 backdrop-blur-md border-2 border-white/50 rounded-[2.5rem] p-10 text-center shadow-sm">
+            <p id="table-label-text" class="text-sm md:text-base text-stone-500 font-bold uppercase tracking-widest mb-2">Tu mesa es la número</p>
+            <p id="guest-table-display" class="text-8xl font-serif text-amber-600 drop-shadow-sm">--</p>
+        </div>
             
-            <!-- Banner de Reto Activo Mejorado -->
-            <div id="active-challenge-banner" class="hidden mt-6 pt-6 border-t border-stone-100">
-                <div class="bg-amber-50 rounded-2xl p-5 border border-amber-200 shadow-sm">
-                    <p class="text-xs font-bold uppercase tracking-widest text-amber-600 mb-3 flex items-center justify-center gap-1">
-                        <i data-lucide="star" class="w-4 h-4"></i> Tu Reto Activo
-                    </p>
-                    <p id="active-challenge-text" class="text-stone-800 italic font-medium text-lg mb-4">...</p>
-                    
-                    <p class="text-xs text-amber-700 mb-5 font-medium px-2 bg-amber-100/50 py-2 rounded-lg">
-                        🎁 ¡Sube la foto para completar el reto y gana oportunidades para un premio sorpresa!
-                    </p>
-                    
-                    <!-- Contenedor para completar reto con fotos -->
-                    <div id="challenge-action-container" class="space-y-3">
-                        <div class="grid grid-cols-2 gap-3">
-                            <button onclick="window.triggerCameraUpload()" class="w-full bg-amber-600 text-white py-3 rounded-xl font-semibold hover:bg-amber-700 transition-colors flex flex-col items-center justify-center gap-2 active:scale-95 shadow-md">
-                                <i data-lucide="camera" class="w-6 h-6"></i>
-                                <span class="text-xs">Tomar Foto</span>
-                            </button>
-                            <button onclick="window.triggerGalleryUpload()" class="w-full bg-stone-800 text-white py-3 rounded-xl font-semibold hover:bg-stone-900 transition-colors flex flex-col items-center justify-center gap-2 active:scale-95 shadow-md">
-                                <i data-lucide="image" class="w-6 h-6"></i>
-                                <span class="text-xs">Subir Galería</span>
-                            </button>
-                        </div>
-                        <button onclick="window.postponeChallenge()" class="w-full bg-stone-200 text-stone-700 py-2.5 rounded-xl font-semibold hover:bg-stone-300 transition-colors shadow-sm flex items-center justify-center gap-2 text-sm active:scale-95">
-                            <i data-lucide="clock" class="w-4 h-4"></i>
-                            Posponer y pedir otro
+        <!-- Banner de Reto Activo -->
+        <div id="active-challenge-banner" class="hidden w-full">
+            <div class="bg-amber-50/70 backdrop-blur-md border-2 border-amber-200/50 rounded-[2rem] p-8 shadow-sm text-center">
+                <p class="text-sm font-bold uppercase tracking-widest text-amber-600 mb-4 flex items-center justify-center gap-2">
+                    <i data-lucide="star" class="w-5 h-5"></i> Tu Reto Activo
+                </p>
+                <p id="active-challenge-text" class="text-stone-800 italic font-medium text-2xl md:text-3xl mb-6">...</p>
+                
+                <p class="text-sm text-amber-800 mb-8 font-medium px-4 bg-amber-100/50 py-3 rounded-xl inline-block border border-amber-200/50">
+                    🎁 Sube la foto para completarlo y gana oportunidades para un premio.
+                </p>
+                
+                <!-- Contenedor para completar reto con fotos -->
+                <div id="challenge-action-container" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="window.triggerCameraUpload()" class="w-full bg-amber-600 text-white py-4 rounded-2xl font-semibold text-lg hover:bg-amber-700 transition-colors flex flex-col items-center justify-center gap-2 active:scale-95 shadow-md">
+                            <i data-lucide="camera" class="w-7 h-7"></i>
+                            <span>Tomar Foto</span>
+                        </button>
+                        <button onclick="window.triggerGalleryUpload()" class="w-full bg-stone-800 text-white py-4 rounded-2xl font-semibold text-lg hover:bg-stone-900 transition-colors flex flex-col items-center justify-center gap-2 active:scale-95 shadow-md">
+                            <i data-lucide="image" class="w-7 h-7"></i>
+                            <span>Subir Galería</span>
                         </button>
                     </div>
+                    <button onclick="window.postponeChallenge()" class="w-full bg-white/50 backdrop-blur-sm border border-white text-stone-700 py-4 rounded-2xl font-semibold text-lg hover:bg-white/80 transition-colors shadow-sm flex items-center justify-center gap-2 active:scale-95">
+                        <i data-lucide="clock" class="w-5 h-5"></i>
+                        Posponer y pedir otro
+                    </button>
+                </div>
 
-                    <p id="pending-challenges-text" class="text-xs text-stone-500 mt-3 hidden text-center font-medium">
-                        Tienes <span id="pending-count" class="text-amber-600 font-bold">0</span> retos pendientes.
+                <p id="pending-challenges-text" class="text-sm text-stone-500 mt-4 hidden text-center font-medium">
+                    Tienes <span id="pending-count" class="text-amber-600 font-bold">0</span> retos pendientes.
+                </p>
+                
+                <!-- Contenedor para pedir otro reto (oculto inicialmente) -->
+                <div id="next-challenge-container" class="hidden space-y-4 mt-6">
+                    <p class="text-lg font-bold text-green-600 flex items-center justify-center gap-2">
+                        <i data-lucide="party-popper" class="w-6 h-6"></i> ¡Reto superado excelente!
                     </p>
-                    
-                    <!-- Contenedor para pedir otro reto (oculto inicialmente) -->
-                    <div id="next-challenge-container" class="hidden space-y-3 mt-4">
-                        <p class="text-sm font-bold text-green-600 flex items-center justify-center gap-1">
-                            <i data-lucide="party-popper" class="w-5 h-5"></i> ¡Reto superado excelente!
-                        </p>
-                        <button onclick="window.getNewChallenge()" class="w-full bg-amber-500 text-stone-900 py-3 rounded-xl font-semibold hover:bg-amber-400 transition-colors shadow-md flex items-center justify-center gap-2 text-sm active:scale-95">
-                            <i data-lucide="shuffle" class="w-5 h-5"></i>
-                            ¡Dame otro reto!
-                        </button>
-                    </div>
+                    <button onclick="window.getNewChallenge()" class="w-full bg-amber-500 text-stone-900 py-4 rounded-2xl font-semibold text-lg hover:bg-amber-400 transition-colors shadow-md flex items-center justify-center gap-2 active:scale-95">
+                        <i data-lucide="shuffle" class="w-6 h-6"></i>
+                        ¡Dame otro reto!
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- Sección estándar de fotos (si no hay reto activo, se sigue mostrando) -->
-        <div class="bg-white rounded-3xl p-6 text-center shadow-lg border border-stone-100">
-            <h3 class="font-semibold text-stone-800 mb-2">Ayúdanos a capturar el momento</h3>
-            <p class="text-stone-500 text-sm mb-4">Sube las fotos y videos que tomes hoy a nuestra galería compartida.</p>
+        <!-- Sección estándar de fotos (si no hay reto activo) -->
+        <div class="w-full bg-white/60 backdrop-blur-md rounded-[2.5rem] border border-white/50 p-8 text-center shadow-sm">
+            <h3 class="font-serif text-2xl text-stone-800 mb-2">Ayúdanos a capturar el momento</h3>
+            <p class="text-stone-600 text-lg mb-6">Sube las fotos y videos que tomes hoy a nuestra galería compartida.</p>
             
             <div class="grid grid-cols-2 gap-4">
                 <button 
                     onclick="window.triggerCameraUpload()"
-                    class="w-full bg-amber-600 text-white py-4 rounded-xl font-semibold hover:bg-amber-700 transition-colors flex flex-col items-center justify-center gap-2 active:scale-95 shadow-md"
+                    class="w-full bg-amber-600 text-white py-5 rounded-2xl font-semibold text-lg hover:bg-amber-700 transition-colors flex flex-col items-center justify-center gap-2 active:scale-95 shadow-md"
                 >
-                    <i data-lucide="camera" class="w-7 h-7"></i>
-                    <span class="text-sm">Tomar Foto</span>
+                    <i data-lucide="camera" class="w-8 h-8"></i>
+                    <span>Tomar Foto</span>
                 </button>
                 <button 
                     onclick="window.triggerGalleryUpload()"
-                    class="w-full bg-stone-800 text-white py-4 rounded-xl font-semibold hover:bg-stone-900 transition-colors flex flex-col items-center justify-center gap-2 active:scale-95 shadow-md"
+                    class="w-full bg-stone-800 text-white py-5 rounded-2xl font-semibold text-lg hover:bg-stone-900 transition-colors flex flex-col items-center justify-center gap-2 active:scale-95 shadow-md"
                 >
-                    <i data-lucide="image" class="w-7 h-7"></i>
-                    <span class="text-sm">Subir de Galería</span>
+                    <i data-lucide="image" class="w-8 h-8"></i>
+                    <span>Subir Galería</span>
                 </button>
             </div>
         </div>
     </div>
 
     <!-- ==========================================
-         VISTA 3: LOGIN DE ADMINISTRADOR
+         VISTA 3: LOGIN DE ADMINISTRADOR PANTALLA COMPLETA
          ========================================== -->
-    <div id="view-admin-login" class="view hidden-view min-h-screen bg-stone-900 flex flex-col items-center justify-center p-6 relative">
+    <div id="view-admin-login" class="view hidden-view min-h-screen w-full flex flex-col items-center justify-center p-6 relative z-10">
         <button 
             onclick="window.switchView('view-totem')"
-            class="absolute top-8 right-8 text-white p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+            class="absolute top-8 right-8 text-stone-800 p-3 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm"
         >
             <i data-lucide="x" class="w-7 h-7"></i>
         </button>
 
-        <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center space-y-6">
-            <div class="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i data-lucide="lock" class="w-8 h-8 text-stone-600"></i>
+        <div class="w-full max-w-md flex flex-col items-center justify-center space-y-8 text-center">
+            <div class="w-20 h-20 bg-white/60 backdrop-blur-md border border-white/50 rounded-full flex items-center justify-center shadow-sm">
+                <i data-lucide="lock" class="w-10 h-10 text-stone-600"></i>
             </div>
-            <h2 class="text-3xl font-serif text-stone-800">Acceso Privado</h2>
-            <p class="text-stone-500">Ingresa la contraseña del organizador para continuar.</p>
+            <div class="space-y-2">
+                <h2 class="text-4xl font-serif text-amber-700 drop-shadow-sm">Acceso Privado</h2>
+                <p class="text-stone-600 text-lg">Ingresa la contraseña del organizador.</p>
+            </div>
             
-            <form id="admin-login-form" class="space-y-4">
+            <form id="admin-login-form" class="space-y-4 w-full pt-4">
                 <input 
                     type="password" 
                     id="admin-password-input"
                     placeholder="Contraseña" 
-                    class="w-full p-4 rounded-xl border-2 border-stone-200 focus:border-amber-500 focus:ring-0 text-lg transition-colors outline-none text-center tracking-widest"
+                    class="w-full p-5 rounded-2xl border-2 border-white/50 bg-white/60 backdrop-blur-md focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-500/20 text-2xl transition-all outline-none text-center tracking-widest shadow-sm"
                     required
                 >
                 <p id="admin-login-error" class="text-red-500 text-sm hidden font-medium">Contraseña incorrecta. Inténtalo de nuevo.</p>
-                <button type="submit" class="w-full bg-amber-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-amber-700 transition-colors shadow-lg active:scale-95">
+                <button type="submit" class="w-full bg-amber-600 text-white py-5 rounded-2xl font-semibold text-xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95 mt-2">
                     Entrar al Panel
                 </button>
             </form>
@@ -398,21 +422,21 @@
     </div>
 
     <!-- ==========================================
-         VISTA 4: PANEL DE ADMINISTRACIÓN (Con Galería Integrada)
+         VISTA 4: PANEL DE ADMINISTRACIÓN (TIPO APP)
          ========================================== -->
-    <div id="view-admin" class="view hidden-view min-h-screen bg-stone-100 p-6 md:p-12">
+    <div id="view-admin" class="view hidden-view min-h-screen w-full p-6 md:p-12 relative z-10">
         <div class="max-w-6xl mx-auto space-y-8 mt-4">
             
-            <!-- Header -->
-            <div class="bg-stone-900 p-6 rounded-3xl shadow-xl text-white flex justify-between items-center gap-3">
+            <!-- Header Glassmorphism -->
+            <div class="bg-white/60 backdrop-blur-xl border border-white/50 p-6 rounded-3xl shadow-sm text-stone-800 flex justify-between items-center gap-3">
                 <div class="flex items-center gap-3">
-                    <i data-lucide="users" class="w-8 h-8 text-amber-500"></i>
+                    <i data-lucide="users" class="w-8 h-8 text-amber-600"></i>
                     <div>
-                        <h1 class="text-2xl font-bold font-serif">Panel de Organización</h1>
+                        <h1 class="text-3xl font-bold font-serif text-amber-700">Panel de Organización</h1>
                     </div>
                 </div>
-                <button onclick="window.switchView('view-totem')" class="px-4 py-2 bg-stone-700 rounded-lg hover:bg-stone-600 transition-colors text-sm font-medium flex items-center gap-2">
-                    <i data-lucide="log-out" class="w-4 h-4"></i> Salir
+                <button onclick="window.switchView('view-totem')" class="px-5 py-3 bg-white/60 border border-white text-stone-700 rounded-xl hover:bg-white transition-colors text-sm font-semibold flex items-center gap-2 shadow-sm active:scale-95">
+                    <i data-lucide="log-out" class="w-5 h-5"></i> Salir
                 </button>
             </div>
 
@@ -422,45 +446,45 @@
                 <div class="md:col-span-1 flex flex-col gap-6">
                     
                     <!-- Formulario de Agregar Invitado -->
-                    <div class="bg-stone-50 p-6 rounded-3xl border border-stone-200 shadow-md">
-                        <h3 class="font-semibold text-lg mb-4 text-stone-800">Agregar Invitado</h3>
+                    <div class="bg-white/60 backdrop-blur-xl border border-white/50 p-6 rounded-3xl shadow-sm">
+                        <h3 class="font-serif text-2xl mb-4 text-stone-800">Agregar Invitado</h3>
                         <form id="admin-form" class="space-y-4">
                             <div>
-                                <label class="block text-sm text-stone-600 mb-1">Nombre Completo</label>
+                                <label class="block text-sm font-semibold text-stone-600 mb-1">Nombre Completo</label>
                                 <input 
                                     id="admin-input-name" 
                                     placeholder="Ej. Juan Pérez" 
                                     required
-                                    class="w-full p-3 rounded-lg border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none transition-colors"
+                                    class="w-full p-4 rounded-xl border-2 border-white bg-white/50 focus:bg-white focus:border-amber-400 focus:ring-0 outline-none transition-colors text-lg"
                                 >
                             </div>
                             <div>
-                                <label class="block text-sm text-stone-600 mb-1">Número/Nombre de Mesa</label>
+                                <label class="block text-sm font-semibold text-stone-600 mb-1">Número/Nombre de Mesa</label>
                                 <input 
                                     id="admin-input-table" 
                                     placeholder="Ej. 12" 
                                     required
-                                    class="w-full p-3 rounded-lg border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none transition-colors"
+                                    class="w-full p-4 rounded-xl border-2 border-white bg-white/50 focus:bg-white focus:border-amber-400 focus:ring-0 outline-none transition-colors text-lg"
                                 >
                             </div>
-                            <button type="submit" class="w-full bg-stone-800 text-white py-3 rounded-lg hover:bg-stone-900 transition-colors font-medium flex items-center justify-center mt-4 text-center mx-auto shadow-md active:scale-95">
+                            <button type="submit" class="w-full bg-stone-800 text-white py-4 rounded-xl hover:bg-stone-900 transition-colors font-semibold text-lg flex items-center justify-center mt-4 text-center shadow-md active:scale-95">
                                 Guardar Invitado
                             </button>
                         </form>
                     </div>
 
                     <!-- Configuración de Tipo de Evento (Retos) -->
-                    <div class="bg-stone-50 p-6 rounded-3xl border border-stone-200 shadow-md">
-                        <h3 class="font-semibold text-lg mb-4 text-stone-800 flex items-center gap-2">
-                            <i data-lucide="party-popper" class="w-5 h-5 text-amber-600"></i> Tipo de Evento
+                    <div class="bg-white/60 backdrop-blur-xl border border-white/50 p-6 rounded-3xl shadow-sm">
+                        <h3 class="font-serif text-2xl mb-2 text-stone-800 flex items-center gap-2">
+                            <i data-lucide="party-popper" class="w-6 h-6 text-amber-600"></i> Tipo de Evento
                         </h3>
-                        <p class="text-xs text-stone-500 mb-3">Cambia la lista de retos de la ruleta.</p>
-                        <select id="admin-event-type" class="w-full p-3 rounded-lg border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none transition-colors mb-4">
+                        <p class="text-sm text-stone-500 mb-4">Cambia la lista de retos de la ruleta.</p>
+                        <select id="admin-event-type" class="w-full p-4 rounded-xl border-2 border-white bg-white/50 focus:bg-white focus:border-amber-400 focus:ring-0 outline-none transition-colors text-lg mb-4 font-medium text-stone-700">
                             <option value="boda">Boda (100 Retos)</option>
                             <option value="cumpleanos">Cumpleaños (100 Retos)</option>
                             <option value="cristiano">Encuentro / Cristiano (36 Retos)</option>
                         </select>
-                        <button onclick="window.changeEventType()" class="w-full bg-amber-600 text-white py-3 rounded-lg hover:bg-amber-700 transition-colors font-medium flex items-center justify-center shadow-md active:scale-95">
+                        <button onclick="window.changeEventType()" class="w-full bg-amber-600 text-white py-4 rounded-xl hover:bg-amber-700 transition-colors font-semibold text-lg flex items-center justify-center shadow-md active:scale-95">
                             Actualizar Retos
                         </button>
                     </div>
@@ -468,45 +492,45 @@
                 </div>
 
                 <!-- Lista Derecha -->
-                <div class="md:col-span-2">
+                <div class="md:col-span-2 flex flex-col">
                     <div class="flex justify-between items-center mb-4 px-2">
-                        <h3 class="font-semibold text-lg text-stone-800 flex items-center gap-2"><i data-lucide="list-ordered" class="w-5 h-5 text-amber-600"></i> Tabla de Posiciones</h3>
+                        <h3 class="font-serif text-2xl text-stone-800 flex items-center gap-2"><i data-lucide="list-ordered" class="w-6 h-6 text-amber-600"></i> Tabla de Posiciones</h3>
                         <div class="flex items-center gap-3">
-                            <span class="text-sm text-stone-500 hidden sm:inline">Actualizado en vivo</span>
-                            <button onclick="window.deleteAllGuests()" class="text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1" title="Eliminar todos los invitados">
+                            <span class="text-sm text-stone-500 font-medium hidden sm:inline">Actualizado en vivo</span>
+                            <button onclick="window.deleteAllGuests()" class="text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 border border-red-200 px-4 py-2 rounded-xl text-sm font-semibold transition-colors flex items-center gap-2 shadow-sm" title="Eliminar todos los invitados">
                                 <i data-lucide="trash-2" class="w-4 h-4"></i> Borrar Todos
                             </button>
                         </div>
                     </div>
                     
-                    <div class="bg-white rounded-3xl border border-stone-200 overflow-hidden shadow-md">
+                    <div class="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl overflow-hidden shadow-sm flex-grow">
                         <!-- La lista se genera aquí con JS -->
-                        <ul id="admin-guest-list" class="divide-y divide-stone-100 flex flex-col min-h-[200px]">
+                        <ul id="admin-guest-list" class="divide-y divide-white/40 flex flex-col min-h-[200px]">
                         </ul>
                     </div>
                 </div>
             </div>
 
             <!-- SECCIÓN: GALERÍA INTEGRADA PARA EL ADMINISTRADOR -->
-            <div class="bg-white rounded-3xl border border-stone-200 overflow-hidden shadow-md p-6 md:p-8">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+            <div class="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl overflow-hidden shadow-sm p-6 md:p-8 mt-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                     <div>
-                        <h3 class="font-semibold text-2xl text-stone-800 flex items-center gap-2"><i data-lucide="image" class="w-6 h-6 text-amber-600"></i> Galería de Fotos del Evento</h3>
-                        <p class="text-sm text-stone-500 mt-1">Todas las fotos capturadas por los invitados aparecerán aquí.</p>
+                        <h3 class="font-serif text-3xl text-stone-800 flex items-center gap-2"><i data-lucide="image" class="w-8 h-8 text-amber-600"></i> Galería de Fotos</h3>
+                        <p class="text-base text-stone-600 mt-1">Todas las fotos capturadas por los invitados aparecerán aquí.</p>
                     </div>
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <span class="bg-amber-100 text-amber-800 font-bold px-4 py-2 rounded-full text-sm" id="admin-photo-count">0 Fotos Totales</span>
-                        <button onclick="window.downloadAllPhotosZip()" class="bg-stone-800 text-white px-4 py-2 rounded-full text-sm hover:bg-stone-900 transition-colors flex items-center gap-2 shadow-md active:scale-95" title="Descargar todas en ZIP">
-                            <i data-lucide="folder-down" class="w-4 h-4"></i> <span class="hidden sm:inline">Descargar Todas</span><span class="sm:hidden">ZIP</span>
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <span class="bg-amber-100/80 backdrop-blur border border-amber-200 text-amber-800 font-bold px-5 py-3 rounded-xl text-base shadow-sm" id="admin-photo-count">0 Fotos Totales</span>
+                        <button onclick="window.downloadAllPhotosZip()" class="bg-stone-800 text-white px-5 py-3 rounded-xl text-base font-semibold hover:bg-stone-900 transition-colors flex items-center gap-2 shadow-md active:scale-95" title="Descargar todas en ZIP">
+                            <i data-lucide="folder-down" class="w-5 h-5"></i> <span class="hidden sm:inline">Descargar ZIP</span>
                         </button>
-                        <button onclick="window.deleteAllPhotos()" class="bg-red-50 text-red-600 px-4 py-2 rounded-full text-sm hover:bg-red-100 transition-colors flex items-center gap-2 shadow-sm active:scale-95 border border-red-100 font-medium" title="Eliminar todas las fotos">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i> <span class="hidden sm:inline">Borrar Todas</span><span class="sm:hidden">Borrar</span>
+                        <button onclick="window.deleteAllPhotos()" class="bg-red-100/80 text-red-700 border border-red-200 px-5 py-3 rounded-xl text-base font-semibold hover:bg-red-200 transition-colors flex items-center gap-2 shadow-sm active:scale-95" title="Eliminar todas las fotos">
+                            <i data-lucide="trash-2" class="w-5 h-5"></i> <span class="hidden sm:inline">Vaciar Galería</span>
                         </button>
                     </div>
                 </div>
                 
                 <!-- Contenedor Dinámico de Fotos en Admin -->
-                <div id="admin-gallery-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <div id="admin-gallery-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
                     <!-- Las fotos se inyectarán aquí mediante JS -->
                 </div>
             </div>
@@ -515,83 +539,93 @@
     </div>
 
     <!-- ==========================================
-         VISTA 5: CONFIGURACIÓN OCULTA
+         VISTA 5: CONFIGURACIÓN OCULTA PANTALLA COMPLETA
          ========================================== -->
-    <div id="view-config" class="view hidden-view min-h-screen bg-stone-900 flex flex-col items-center justify-center p-6 relative">
-        <button onclick="window.switchView('view-totem')" class="absolute top-8 right-8 text-white p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
+    <div id="view-config" class="view hidden-view min-h-screen w-full flex flex-col items-center justify-center py-12 px-6 relative z-10 overflow-y-auto">
+        <button onclick="window.switchView('view-totem')" class="fixed top-8 right-8 text-stone-800 p-3 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm z-50">
             <i data-lucide="x" class="w-7 h-7"></i>
         </button>
 
-        <div class="max-w-2xl w-full bg-white rounded-3xl shadow-2xl p-8 space-y-6 max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center gap-3 border-b border-stone-200 pb-4">
-                <i data-lucide="settings" class="w-8 h-8 text-amber-600"></i>
-                <h2 class="text-3xl font-serif text-stone-800">Panel de Configuración General</h2>
+        <div class="w-full max-w-3xl flex flex-col space-y-8">
+            <div class="flex flex-col items-center gap-4 border-b-2 border-stone-300/50 pb-6 text-center">
+                <div class="w-20 h-20 bg-white/60 backdrop-blur-md border border-white/50 rounded-full flex items-center justify-center shadow-sm">
+                    <i data-lucide="settings" class="w-10 h-10 text-amber-600"></i>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-serif text-amber-700 drop-shadow-sm">Configuración General</h2>
+                <p class="text-lg text-stone-600">Personaliza la experiencia visual y los textos del evento.</p>
             </div>
             
-            <form id="config-form" class="space-y-5">
-                <div>
-                    <label class="block text-sm font-semibold text-stone-700 mb-1">Título de Bienvenida</label>
-                    <input id="cfg-title" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
+            <form id="config-form" class="space-y-6 bg-white/60 backdrop-blur-xl border border-white/50 p-8 md:p-10 rounded-[2.5rem] shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-stone-700 mb-2 uppercase tracking-wide">Título Principal</label>
+                        <input id="cfg-title" type="text" class="w-full p-4 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg transition-colors" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-stone-700 mb-2 uppercase tracking-wide">Subtítulo</label>
+                        <input id="cfg-subtitle" type="text" class="w-full p-4 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg transition-colors" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-stone-700 mb-2 uppercase tracking-wide">Botón de Búsqueda</label>
+                        <input id="cfg-search-btn" type="text" class="w-full p-4 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg transition-colors" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-stone-700 mb-2 uppercase tracking-wide">Descripción Ruleta</label>
+                        <input id="cfg-roulette-text" type="text" class="w-full p-4 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg transition-colors" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-stone-700 mb-2 uppercase tracking-wide">Etiqueta de Mesa</label>
+                        <input id="cfg-table-label" type="text" class="w-full p-4 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg transition-colors" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-stone-700 mb-2 uppercase tracking-wide">Botón Aceptar Reto</label>
+                        <input id="cfg-accept-btn" type="text" class="w-full p-4 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg transition-colors" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-stone-700 mb-2 uppercase tracking-wide">Título Menú Video</label>
+                        <input id="cfg-video-title" type="text" class="w-full p-4 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg transition-colors" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-stone-700 mb-2 uppercase tracking-wide">Subtítulo Invitado</label>
+                        <input id="cfg-dashboard-subtitle" type="text" class="w-full p-4 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg transition-colors" required>
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-semibold text-stone-700 mb-1">Subtítulo</label>
-                    <input id="cfg-subtitle" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-stone-700 mb-1">Texto Botón de Búsqueda</label>
-                    <input id="cfg-search-btn" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-stone-700 mb-1">Texto Descripción Ruleta</label>
-                    <input id="cfg-roulette-text" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-stone-700 mb-1">Texto Etiqueta de Mesa</label>
-                    <input id="cfg-table-label" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-stone-700 mb-1">Texto Botón "¡Aceptar Reto..."</label>
-                    <input id="cfg-accept-btn" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-stone-700 mb-1">Título "Mensaje de los Novios"</label>
-                    <input id="cfg-video-title" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-stone-700 mb-1">Subtítulo del Dashboard (ej. les transmitió amor)</label>
-                    <input id="cfg-dashboard-subtitle" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-stone-700 mb-1">URL Imagen Fondo Ruleta</label>
-                    <input id="cfg-roulette-bg" type="url" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-stone-700 mb-1">URL Imagen Centro Ruleta</label>
-                    <input id="cfg-roulette-center" type="url" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
+
+                <hr class="border-stone-300/40 my-8">
+
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-bold text-stone-700 mb-2 uppercase tracking-wide">URL Fondo Ruleta</label>
+                        <input id="cfg-roulette-bg" type="url" class="w-full p-4 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg transition-colors" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-stone-700 mb-2 uppercase tracking-wide">URL Centro Ruleta</label>
+                        <input id="cfg-roulette-center" type="url" class="w-full p-4 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg transition-colors" required>
+                    </div>
                 </div>
                 
                 <!-- SECCIÓN MEJORADA DE VIDEO -->
-                <div class="bg-stone-50 p-5 rounded-2xl border border-stone-200 space-y-3">
+                <div class="bg-white/80 p-6 rounded-2xl border-2 border-amber-200/50 shadow-inner space-y-4 mt-6">
                     <div>
-                        <label class="block text-sm font-semibold text-stone-700 mb-1">URL Video Novios</label>
-                        <input id="cfg-video" type="url" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
-                        <p class="text-xs text-stone-500 mt-1.5 leading-relaxed">
-                            💡 <b>Recomendación:</b> Para que el bucle (loop) funcione perfectamente, usa enlaces de YouTube o un video directo terminado en <b>.mp4</b>. Google Drive no soporta bucles automáticos.
+                        <label class="block text-sm font-bold text-stone-800 mb-2 uppercase tracking-wide">URL Video Principal</label>
+                        <input id="cfg-video" type="url" class="w-full p-4 rounded-xl border-2 border-white bg-white focus:bg-white focus:border-amber-500 outline-none text-lg transition-colors" required>
+                        <p class="text-sm text-stone-500 mt-2 leading-relaxed">
+                            💡 Para usar Bucle (Loop), prefiere YouTube o enlaces `.mp4`. Google Drive restringe funciones nativas.
                         </p>
                     </div>
                     <div class="flex items-center gap-3 pt-2">
-                        <input id="cfg-video-loop" type="checkbox" class="w-5 h-5 rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer">
-                        <label for="cfg-video-loop" class="text-sm font-bold text-stone-700 cursor-pointer select-none">Reproducir video en bucle (Loop Infinito)</label>
+                        <input id="cfg-video-loop" type="checkbox" class="w-6 h-6 rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer">
+                        <label for="cfg-video-loop" class="text-base font-bold text-stone-800 cursor-pointer select-none">Reproducir en Bucle Infinito</label>
                     </div>
                 </div>
                 
-                <div>
-                    <label class="block text-sm font-semibold text-stone-700 mb-1">Contraseña de Administrador (Panel Organización)</label>
-                    <input id="cfg-admin-pass" type="text" class="w-full p-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-0 outline-none" required>
+                <div class="pt-4">
+                    <label class="block text-sm font-bold text-stone-700 mb-2 uppercase tracking-wide">Contraseña Admin</label>
+                    <input id="cfg-admin-pass" type="text" class="w-full p-4 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg transition-colors text-center tracking-widest font-mono" required>
                 </div>
                 
-                <button type="submit" class="w-full bg-amber-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-amber-700 transition-colors shadow-lg active:scale-95 flex justify-center items-center gap-2 mt-4">
-                    <i data-lucide="save" class="w-5 h-5"></i> Guardar Cambios
+                <button type="submit" class="w-full bg-stone-900 text-amber-400 py-5 rounded-2xl font-bold text-xl hover:bg-stone-800 transition-colors shadow-xl active:scale-95 flex justify-center items-center gap-3 mt-8">
+                    <i data-lucide="save" class="w-6 h-6"></i> GUARDAR CONFIGURACIÓN
                 </button>
             </form>
         </div>
@@ -632,13 +666,13 @@
 
         // ESTADO DE CONFIGURACIÓN GLOBAL (Valores por defecto)
         window.appConfig = {
-            title: "¡Bienvenidos!",
-            subtitle: "Encuentra tu mesa y únete a la celebración",
-            searchBtnText: "Buscar mi Mesa",
+            title: "¡Bienvenidas!",
+            subtitle: "Encuentra tu puesto y únete a la celebración",
+            searchBtnText: "Buscar mi puesto",
             rouletteText: "Gira la ruleta para descubrir tu reto fotográfico en esta boda.",
             tableLabelText: "Tu mesa es la número",
             acceptBtnText: "¡Aceptar Reto e ir a mi mesa!",
-            videoTitleText: "Mensaje de los Novios",
+            videoTitleText: "Mensaje de poder",
             dashboardSubtitle: "Nos alegra mucho que estés aquí.",
             rouletteBg: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
             rouletteCenter: "https://image2url.com/r2/default/images/1773931962266-01b311d3-46f3-49f7-a83b-cf9dc1b67e7c.avif",
@@ -832,13 +866,13 @@
         function aplicarConfiguracion() {
             // Aplicar al DOM
             const titleEl = document.getElementById('totem-title');
-            if(titleEl) titleEl.innerText = window.appConfig.title || "¡Bienvenidos!";
+            if(titleEl) titleEl.innerText = window.appConfig.title || "¡Bienvenidas!";
 
             const subtitleEl = document.getElementById('totem-subtitle');
-            if(subtitleEl) subtitleEl.innerText = window.appConfig.subtitle || "Encuentra tu mesa y únete a la celebración";
+            if(subtitleEl) subtitleEl.innerText = window.appConfig.subtitle || "Encuentra tu puesto y únete a la celebración";
 
             const searchBtnEl = document.getElementById('btn-search');
-            if(searchBtnEl) searchBtnEl.innerText = window.appConfig.searchBtnText || "Buscar mi Mesa";
+            if(searchBtnEl) searchBtnEl.innerText = window.appConfig.searchBtnText || "Buscar mi puesto";
 
             const rouletteDescEl = document.getElementById('roulette-desc-text');
             if(rouletteDescEl) rouletteDescEl.innerText = window.appConfig.rouletteText || "Gira la ruleta para descubrir tu reto fotográfico en esta boda.";
@@ -850,7 +884,7 @@
             if(acceptBtnEl) acceptBtnEl.innerText = window.appConfig.acceptBtnText || "¡Aceptar Reto e ir a mi mesa!";
 
             const totemVideoBtnEl = document.getElementById('totem-video-btn-text');
-            if(totemVideoBtnEl) totemVideoBtnEl.innerText = window.appConfig.videoTitleText || "Mensaje de los Novios";
+            if(totemVideoBtnEl) totemVideoBtnEl.innerText = window.appConfig.videoTitleText || "Mensaje de poder";
 
             const dashboardSubEl = document.getElementById('dashboard-subtitle');
             if(dashboardSubEl) dashboardSubEl.innerText = window.appConfig.dashboardSubtitle || "Nos alegra mucho que estés aquí.";
@@ -862,13 +896,13 @@
             if(rCenterEl) rCenterEl.src = window.appConfig.rouletteCenter;
 
             // Rellenar formulario de config
-            document.getElementById('cfg-title').value = window.appConfig.title || "¡Bienvenidos!";
-            document.getElementById('cfg-subtitle').value = window.appConfig.subtitle || "Encuentra tu mesa y únete a la celebración";
-            document.getElementById('cfg-search-btn').value = window.appConfig.searchBtnText || "Buscar mi Mesa";
+            document.getElementById('cfg-title').value = window.appConfig.title || "¡Bienvenidas!";
+            document.getElementById('cfg-subtitle').value = window.appConfig.subtitle || "Encuentra tu puesto y únete a la celebración";
+            document.getElementById('cfg-search-btn').value = window.appConfig.searchBtnText || "Buscar mi puesto";
             document.getElementById('cfg-roulette-text').value = window.appConfig.rouletteText || "Gira la ruleta para descubrir tu reto fotográfico en esta boda.";
             document.getElementById('cfg-table-label').value = window.appConfig.tableLabelText || "Tu mesa es la número";
             document.getElementById('cfg-accept-btn').value = window.appConfig.acceptBtnText || "¡Aceptar Reto e ir a mi mesa!";
-            document.getElementById('cfg-video-title').value = window.appConfig.videoTitleText || "Mensaje de los Novios";
+            document.getElementById('cfg-video-title').value = window.appConfig.videoTitleText || "Mensaje de poder";
             document.getElementById('cfg-dashboard-subtitle').value = window.appConfig.dashboardSubtitle || "Nos alegra mucho que estés aquí.";
             document.getElementById('cfg-roulette-bg').value = window.appConfig.rouletteBg;
             document.getElementById('cfg-roulette-center').value = window.appConfig.rouletteCenter;
@@ -1330,7 +1364,7 @@
             list.innerHTML = "";
 
             if (guests.length === 0) {
-                list.innerHTML = `<li class="p-8 text-center text-stone-500">No hay invitados registrados aún.</li>`;
+                list.innerHTML = `<li class="p-8 text-center text-stone-500 font-medium">No hay invitados registrados aún.</li>`;
                 return;
             }
 
@@ -1345,21 +1379,21 @@
 
             guestsWithCounts.forEach(g => {
                 const li = document.createElement("li");
-                li.className = "flex justify-between items-center p-4 hover:bg-stone-50 transition-colors border-b border-stone-100 last:border-0";
+                li.className = "flex justify-between items-center p-4 hover:bg-white/40 transition-colors";
 
                 const isWinner = g.photoCount > 0 && g.photoCount === maxPhotos;
                 const crownBadge = isWinner ? `<i data-lucide="crown" class="w-5 h-5 text-amber-500 fill-amber-500 animate-bounce"></i>` : '';
-                const photoBadge = `<span class="inline-flex items-center gap-1 px-2 py-0.5 ${isWinner ? 'bg-amber-100 text-amber-800' : 'bg-stone-200 text-stone-700'} text-[10px] rounded-full uppercase tracking-wide font-bold"><i data-lucide="camera" class="w-3 h-3"></i> ${g.photoCount} Fotos</span>`;
+                const photoBadge = `<span class="inline-flex items-center gap-1 px-3 py-1 ${isWinner ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-white/50 text-stone-700 border border-white'} text-xs rounded-full uppercase tracking-wide font-bold shadow-sm"><i data-lucide="camera" class="w-3 h-3"></i> ${g.photoCount}</span>`;
 
                 li.innerHTML = `
                 <div>
-                    <span class="font-medium text-stone-800 flex items-center gap-2">${g.name} ${crownBadge}</span>
-                    <div class="flex items-center gap-2 mt-1">
-                        <span class="text-sm font-bold text-amber-600">Mesa ${g.table}</span>
+                    <span class="font-bold text-stone-800 flex items-center gap-2 text-lg">${g.name} ${crownBadge}</span>
+                    <div class="flex items-center gap-3 mt-1.5">
+                        <span class="text-sm font-bold text-amber-600 bg-white/50 px-2 py-0.5 rounded border border-white">Mesa ${g.table}</span>
                         ${photoBadge}
                     </div>
                 </div>
-                <button onclick="window.deleteGuest('${g.id}')" class="text-red-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-colors" title="Eliminar">
+                <button onclick="window.deleteGuest('${g.id}')" class="text-red-400 hover:text-red-600 bg-white/50 hover:bg-white p-3 rounded-xl border border-transparent hover:border-red-100 transition-all shadow-sm" title="Eliminar">
                     <i data-lucide="trash-2" class="w-5 h-5"></i>
                 </button>
                 `;
@@ -1491,27 +1525,27 @@
 
             if (photos.length === 0) {
                 container.innerHTML = `
-                    <div class="col-span-full flex flex-col items-center justify-center text-stone-400 py-12">
-                        <i data-lucide="image" class="w-16 h-16 opacity-30 mb-4"></i>
-                        <p class="text-lg">Aún no hay fotos en vivo.</p>
+                    <div class="col-span-full flex flex-col items-center justify-center text-stone-500 py-12 bg-white/40 rounded-2xl border border-white border-dashed">
+                        <i data-lucide="image" class="w-16 h-16 opacity-40 mb-4"></i>
+                        <p class="text-lg font-medium">Aún no hay fotos en vivo.</p>
                         <p class="text-sm mt-1">Los invitados deben completar retos para que aparezcan aquí.</p>
                     </div>
                 `;
             } else {
                 photos.forEach(photo => {
                     const item = document.createElement('div');
-                    item.className = 'relative aspect-square rounded-xl overflow-hidden shadow-sm group cursor-pointer border border-stone-200';
+                    item.className = 'relative aspect-square rounded-2xl overflow-hidden shadow-sm group cursor-pointer border-[3px] border-white/80 hover:border-amber-400 transition-all';
                     item.onclick = () => window.openPhotoModal(photo.url, photo.guestName, photo.challenge);
                     
-                    const challengeText = photo.challenge ? `<p class="text-amber-400 text-[10px] truncate mt-0.5" title="${photo.challenge.replace(/"/g, '&quot;')}">🎯 ${photo.challenge}</p>` : '';
+                    const challengeText = photo.challenge ? `<p class="text-amber-300 text-[10px] md:text-xs truncate mt-1 drop-shadow-md font-medium" title="${photo.challenge.replace(/"/g, '&quot;')}">🎯 ${photo.challenge}</p>` : '';
 
                     item.innerHTML = `
                         <img src="${photo.url}" alt="Momento del evento" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        <button onclick="event.stopPropagation(); window.deletePhoto('${photo.id}')" class="absolute top-2 right-2 bg-red-500/80 hover:bg-red-600 text-white p-1.5 rounded-lg backdrop-blur-sm transition-colors z-10" title="Eliminar Foto">
+                        <button onclick="event.stopPropagation(); window.deletePhoto('${photo.id}')" class="absolute top-3 right-3 bg-red-500/90 hover:bg-red-600 text-white p-2 rounded-xl backdrop-blur-md transition-colors z-10 shadow-lg border border-red-400/50" title="Eliminar Foto">
                             <i data-lucide="trash-2" class="w-4 h-4"></i>
                         </button>
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 pt-10 pointer-events-none">
-                            <p class="text-white text-xs font-medium truncate">📸 ${photo.guestName}</p>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 pt-12 pointer-events-none">
+                            <p class="text-white text-sm md:text-base font-bold truncate drop-shadow-md">📸 ${photo.guestName}</p>
                             ${challengeText}
                         </div>
                     `;
