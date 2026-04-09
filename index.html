@@ -3,1626 +3,292 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App de Eventos y Bodas</title>
-    <!-- Tailwind CSS -->
+    <title>404 - Perdidos en el Espacio</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- JSZip para descargar todas las fotos -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Oculta los elementos visuales base hasta que se decida qué vista mostrar */
-        .hidden-view {
-            display: none !important;
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            overflow-x: hidden;
         }
-        /* Animación para el conteo regresivo y modales */
-        @keyframes pop-in {
-            0% { transform: scale(0.5); opacity: 0; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
+        /* Efecto de estrellas de fondo */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
         }
-        .animate-pop {
-            animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        .social-btn {
+            transition: all 0.3s ease;
         }
-        /* Scrollbar personalizado para TVs/Desktop */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(214, 211, 209, 0.5); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(168, 162, 158, 0.8); }
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        #gameCanvas {
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            background: linear-gradient(to bottom, #0f172a, #1e1b4b);
+            touch-action: none; /* Previene el scroll al jugar en móvil */
+        }
+        
+        /* Animación de flotación suave */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
     </style>
 </head>
-<body class="text-stone-800 font-sans antialiased relative min-h-screen">
+<body class="min-h-screen flex flex-col items-center justify-center p-4 relative">
 
-    <!-- ==========================================
-         OPTIMIZACIÓN DE ICONOS (SVG SPRITE SHEET NATIVO)
-         Carga instantánea sin scripts externos.
-         ========================================== -->
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-        <defs>
-            <symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
-            <symbol id="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
-            <symbol id="icon-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
-            <symbol id="icon-triangle" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/></symbol>
-            <symbol id="icon-dices" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="12" height="12" x="2" y="10" rx="2" ry="2"/><path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6"/><path d="M6 18h.01"/><path d="M10 14h.01"/><path d="M15 6h.01"/><path d="M18 9h.01"/></symbol>
-            <symbol id="icon-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
-            <symbol id="icon-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></symbol>
-            <symbol id="icon-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect width="20" height="5" x="2" y="7"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></symbol>
-            <symbol id="icon-shuffle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></symbol>
-            <symbol id="icon-play-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></symbol>
-            <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
-            <symbol id="icon-qr-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></symbol>
-            <symbol id="icon-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
-            <symbol id="icon-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
-            <symbol id="icon-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
-            <symbol id="icon-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></symbol>
-            <symbol id="icon-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></symbol>
-            <symbol id="icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
-            <symbol id="icon-party-popper" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12v0c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11v0c-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98v0C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></symbol>
-            <symbol id="icon-video" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></symbol>
-            <symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
-            <symbol id="icon-log-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></symbol>
-            <symbol id="icon-list-ordered" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></symbol>
-            <symbol id="icon-trash-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></symbol>
-            <symbol id="icon-folder-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/><path d="M12 10v6"/><path d="m15 13-3 3-3-3"/></symbol>
-            <symbol id="icon-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
-            <symbol id="icon-crown" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"/></symbol>
-            <symbol id="icon-loader-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></symbol>
-            <symbol id="icon-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></symbol>
-        </defs>
-    </svg>
+    <!-- Fondo de estrellas generado por canvas secundario -->
+    <canvas id="bgCanvas" class="stars"></canvas>
 
-    <!-- FONDO GLOBAL INMERSIVO (Tipo App) -->
-    <div class="fixed inset-0 w-full h-full pointer-events-none z-[-1] bg-gradient-to-br from-amber-50 via-stone-100 to-stone-200">
-        <div class="absolute -top-24 -left-24 w-96 h-96 bg-amber-200/40 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 right-0 w-[30rem] h-[30rem] bg-stone-300/50 rounded-full blur-3xl"></div>
-    </div>
-
-    <!-- INPUTS GLOBAL DE ARCHIVOS (Ocultos) -->
-    <input type="file" id="camera-file-input" accept="image/*" capture="environment" class="hidden">
-    <input type="file" id="gallery-file-input" accept="image/*" class="hidden">
-
-    <!-- ==========================================
-         MODAL PARA VER Y DESCARGAR FOTOS
-         ========================================== -->
-    <div id="photo-modal" class="fixed inset-0 bg-black/95 z-[100] hidden flex-col items-center justify-center p-4">
-        <div class="absolute top-6 right-6 flex gap-4 z-50">
-            <button onclick="window.downloadCurrentPhoto()" class="text-stone-900 bg-amber-500 hover:bg-amber-400 p-3 lg:p-4 rounded-full transition-colors shadow-lg" title="Descargar foto">
-                <svg class="w-6 h-6 lg:w-8 lg:h-8"><use href="#icon-download"></use></svg>
-            </button>
-            <button onclick="window.closePhotoModal()" class="text-white bg-white/20 hover:bg-white/30 p-3 lg:p-4 rounded-full transition-colors shadow-lg backdrop-blur-md" title="Cerrar">
-                <svg class="w-6 h-6 lg:w-8 lg:h-8"><use href="#icon-x"></use></svg>
-            </button>
-        </div>
-        <img id="modal-image" src="" alt="Foto en grande" class="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl">
-        <p id="modal-guest-name" class="text-stone-300 mt-6 text-lg lg:text-2xl 2xl:text-3xl font-medium tracking-wide"></p>
-        <p id="modal-challenge-name" class="text-amber-400 mt-2 text-sm md:text-base lg:text-xl 2xl:text-2xl font-medium tracking-wide hidden text-center max-w-lg lg:max-w-3xl px-4 italic"></p>
-    </div>
-
-    <!-- ==========================================
-         MODAL DE VIDEO DE BIENVENIDA (FULLSCREEN)
-         ========================================== -->
-    <div id="modal-welcome-video" class="fixed inset-0 bg-black z-[9999] hidden flex-col items-center justify-center">
-        <!-- Botón flotante ocultable (solo icono) -->
-        <button id="welcome-video-close-btn" onclick="window.closeWelcomeVideo()" class="absolute top-6 left-6 md:top-8 md:left-8 text-white p-4 lg:p-6 bg-black/50 hover:bg-black/80 rounded-full transition-all duration-500 z-50 backdrop-blur-md shadow-2xl border border-white/20 flex items-center justify-center transform translate-y-0 opacity-100" title="Volver al inicio">
-            <svg class="w-7 h-7 lg:w-10 lg:h-10"><use href="#icon-arrow-left"></use></svg>
-        </button>
+    <div class="max-w-4xl w-full text-center z-10 flex flex-col items-center">
         
-        <div id="video-wrapper" class="w-full h-full flex justify-center items-center bg-black">
-            <!-- Video inyectado dinámicamente al abrir ocupando el 100% -->
-        </div>
-    </div>
-
-    <!-- ==========================================
-         DINÁMICA DE RETOS (RULETA, CONTEO, REVELACIÓN Y ÉXITO)
-         ========================================== -->
-    
-    <!-- 1. Modal de Ruleta -->
-    <div id="modal-roulette" class="fixed inset-0 bg-stone-900/90 backdrop-blur-sm z-[100] hidden flex-col items-center justify-center p-4">
-        <div class="max-w-sm md:max-w-md lg:max-w-xl 2xl:max-w-3xl w-full bg-white/90 backdrop-blur-xl border border-white/50 rounded-[2rem] shadow-2xl p-8 lg:p-12 2xl:p-16 text-center space-y-6 lg:space-y-10">
-            <h2 class="text-3xl md:text-4xl lg:text-5xl 2xl:text-6xl font-serif text-stone-800">¡Misión Sorpresa!</h2>
-            <p id="roulette-desc-text" class="text-stone-600 text-sm md:text-base lg:text-xl 2xl:text-2xl">Gira la ruleta para descubrir tu reto fotográfico en esta boda.</p>
-
-            <div class="relative w-[60vw] h-[60vw] max-w-[250px] max-h-[250px] md:max-w-[320px] md:max-h-[320px] lg:max-w-[450px] lg:max-h-[450px] 2xl:max-w-[600px] 2xl:max-h-[600px] mx-auto my-6 lg:my-12">
-                <!-- Puntero Corregido -->
-                <div class="absolute -top-6 md:-top-8 lg:-top-10 2xl:-top-14 left-1/2 transform -translate-x-1/2 z-30 text-amber-600 drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]">
-                    <svg class="w-10 h-10 md:w-14 md:h-14 lg:w-16 lg:h-16 2xl:w-24 2xl:h-24 rotate-180"><use href="#icon-triangle"></use></svg>
-                </div>
-                <!-- Ruleta Visual -->
-                <div id="roulette-wheel" class="w-full h-full rounded-full border-8 lg:border-[12px] 2xl:border-[16px] border-stone-900 shadow-[0_0_25px_rgba(0,0,0,0.5)] relative overflow-hidden bg-cover bg-center" 
-                     style="transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1);">
-                    <!-- Capa de divisiones -->
-                    <div class="absolute inset-0" style="background: conic-gradient(rgba(0,0,0,0.4) 0 45deg, rgba(255,255,255,0.15) 45deg 90deg, rgba(0,0,0,0.4) 90deg 135deg, rgba(255,255,255,0.15) 135deg 180deg, rgba(0,0,0,0.4) 180deg 225deg, rgba(255,255,255,0.15) 225deg 270deg, rgba(0,0,0,0.4) 270deg 315deg, rgba(255,255,255,0.15) 315deg 360deg);"></div>
-                    <!-- Decoración interna -->
-                    <div class="absolute inset-1.5 md:inset-2 lg:inset-3 rounded-full border-[3px] md:border-[4px] lg:border-[6px] border-amber-500/50 z-10"></div>
-                    <!-- Líneas divisorias -->
-                    <div class="absolute inset-0 flex items-center justify-center z-10">
-                        <div class="w-full h-1 lg:h-1.5 2xl:h-2 bg-stone-900/80 absolute transform rotate-0"></div>
-                        <div class="w-full h-1 lg:h-1.5 2xl:h-2 bg-stone-900/80 absolute transform rotate-45"></div>
-                        <div class="w-full h-1 lg:h-1.5 2xl:h-2 bg-stone-900/80 absolute transform rotate-90"></div>
-                        <div class="w-full h-1 lg:h-1.5 2xl:h-2 bg-stone-900/80 absolute transform rotate-135"></div>
-                    </div>
-                    <!-- Centro de la ruleta -->
-                    <div class="absolute inset-0 flex items-center justify-center z-20">
-                        <div class="w-20 h-20 md:w-28 md:h-28 lg:w-40 lg:h-40 2xl:w-56 2xl:h-56 bg-white rounded-full shadow-[0_0_15px_rgba(0,0,0,0.7)] border-[4px] lg:border-[6px] 2xl:border-[8px] border-amber-500 flex items-center justify-center p-1 md:p-2">
-                            <img id="roulette-center-img" src="" alt="Centro" class="w-full h-full object-contain rounded-full" onerror="this.src='https://via.placeholder.com/150/f59e0b/ffffff?text=Boda'" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <button id="btn-spin" onclick="window.spinRoulette()" class="w-full bg-amber-600 text-white py-4 md:py-5 lg:py-6 2xl:py-8 rounded-xl lg:rounded-2xl font-semibold text-xl lg:text-2xl 2xl:text-4xl hover:bg-amber-700 transition-colors shadow-xl active:scale-95 flex items-center justify-center gap-2 lg:gap-4">
-                <svg class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-12 2xl:h-12"><use href="#icon-dices"></use></svg>
-                ¡GIRAR RULETA!
-            </button>
-            <button onclick="window.skipRoulette()" class="text-stone-500 text-sm md:text-base lg:text-xl 2xl:text-2xl underline mt-2 hover:text-stone-800 transition-colors">
-                Saltar reto e ir a mi mesa
-            </button>
-        </div>
-    </div>
-
-    <!-- 2. Modal de Conteo (3, 2, 1) -->
-    <div id="modal-countdown" class="fixed inset-0 bg-amber-600/95 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
-        <div class="text-center flex flex-col items-center justify-center w-full">
-            <h3 class="text-white text-xl md:text-3xl lg:text-5xl font-medium mb-4 lg:mb-8 uppercase tracking-widest opacity-80">Preparando reto...</h3>
-            <span id="countdown-text" class="text-9xl md:text-[12rem] lg:text-[16rem] 2xl:text-[24rem] font-black text-white drop-shadow-2xl font-serif mx-auto flex items-center justify-center">3</span>
-        </div>
-    </div>
-
-    <!-- 2.5 Modal de Instrucción antes del reto -->
-    <div id="modal-challenge-instruction" class="fixed inset-0 bg-stone-900/90 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
-        <div class="max-w-md md:max-w-lg lg:max-w-2xl 2xl:max-w-4xl w-full bg-white/90 backdrop-blur-xl border border-white/50 rounded-[2rem] lg:rounded-[3rem] shadow-2xl p-8 lg:p-12 2xl:p-16 text-center space-y-6 lg:space-y-10 relative overflow-hidden animate-pop">
-            <div class="w-20 h-20 lg:w-32 lg:h-32 2xl:w-40 2xl:h-40 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-2 lg:mb-6">
-                <svg class="w-10 h-10 lg:w-16 lg:h-16 2xl:w-20 2xl:h-20 text-amber-600"><use href="#icon-info"></use></svg>
-            </div>
-            <h2 class="text-2xl md:text-3xl lg:text-5xl 2xl:text-6xl font-serif text-stone-800">¡Atención!</h2>
-            <p class="text-stone-600 text-lg md:text-xl lg:text-2xl 2xl:text-4xl">Sube la foto a nuestra galería cuando lo consigas y demuestra que eres el mejor invitado.</p>
-            <button onclick="window.showChallengeReveal()" class="w-full bg-amber-600 text-white py-4 lg:py-6 2xl:py-8 rounded-xl lg:rounded-2xl font-semibold text-lg lg:text-2xl 2xl:text-4xl hover:bg-amber-700 transition-colors shadow-lg mt-4 lg:mt-8 relative z-10">
-                Siguiente
-            </button>
-        </div>
-    </div>
-
-    <!-- 3. Revelación del reto -->
-    <div id="modal-challenge-reveal" class="fixed inset-0 bg-stone-900/90 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
-        <div class="max-w-md md:max-w-lg lg:max-w-3xl 2xl:max-w-5xl w-full bg-white/95 backdrop-blur-xl border border-white/50 rounded-[2rem] lg:rounded-[3rem] shadow-2xl p-8 lg:p-16 2xl:p-24 text-center space-y-6 lg:space-y-10 relative overflow-hidden">
-            <div class="absolute -top-10 -left-10 w-32 h-32 lg:w-64 lg:h-64 bg-amber-100 rounded-full opacity-50 blur-2xl"></div>
-            <div class="absolute -bottom-10 -right-10 w-32 h-32 lg:w-64 lg:h-64 bg-amber-200 rounded-full opacity-50 blur-2xl"></div>
-            
-            <h2 class="text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl font-serif text-amber-600 uppercase tracking-widest relative z-10">Tu Reto Es:</h2>
-            <div class="bg-white/60 rounded-2xl lg:rounded-[2rem] p-6 lg:p-12 2xl:p-16 border border-white shadow-inner relative z-10">
-                <p id="challenge-reveal-text" class="text-2xl md:text-3xl lg:text-5xl 2xl:text-7xl font-medium text-stone-800 italic leading-relaxed">"Tomar una foto..."</p>
-            </div>
-            <button id="btn-accept-challenge" onclick="window.closeChallengeReveal()" class="w-full bg-stone-900 text-white py-4 lg:py-6 2xl:py-8 rounded-xl lg:rounded-2xl font-semibold text-lg lg:text-2xl 2xl:text-4xl hover:bg-stone-800 transition-colors shadow-lg mt-4 lg:mt-8 relative z-10">
-                ¡Aceptar Reto e ir a mi mesa!
-            </button>
-        </div>
-    </div>
-
-    <!-- 4. Modal de Éxito y Nuevo Reto -->
-    <div id="modal-challenge-success" class="fixed inset-0 bg-stone-900/90 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
-        <div class="max-w-sm md:max-w-md lg:max-w-xl 2xl:max-w-3xl w-full bg-white/95 backdrop-blur-xl border border-white/50 rounded-[2rem] lg:rounded-[3rem] shadow-2xl p-8 lg:p-12 2xl:p-16 text-center space-y-6 lg:space-y-8 animate-pop">
-            <div class="w-20 h-20 lg:w-32 lg:h-32 2xl:w-40 2xl:h-40 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                <svg class="w-10 h-10 lg:w-16 lg:h-16 2xl:w-20 2xl:h-20 text-green-600"><use href="#icon-check-circle"></use></svg>
-            </div>
-            <h2 class="text-3xl md:text-4xl lg:text-5xl 2xl:text-6xl font-serif text-stone-800">¡Reto Verificado!</h2>
-            <p class="text-stone-600 text-lg md:text-xl lg:text-2xl 2xl:text-3xl">Tu foto se está subiendo a la galería.</p>
-
-            <div class="bg-amber-50/80 rounded-2xl lg:rounded-3xl p-4 lg:p-8 border border-amber-200 mt-4 lg:mt-8 backdrop-blur-sm">
-                <p class="text-amber-800 font-semibold mb-2 lg:mb-4 lg:text-xl 2xl:text-3xl flex items-center justify-center gap-2"><svg class="w-5 h-5 lg:w-8 lg:h-8"><use href="#icon-gift"></use></svg> ¡Sigue así!</p>
-                <p class="text-sm md:text-base lg:text-xl 2xl:text-2xl text-amber-700">¿Aceptas el siguiente reto para ganar más oportunidades?</p>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4 lg:gap-6 pt-2 lg:pt-6">
-                <button onclick="window.declineNextChallenge()" class="w-full bg-white/50 border border-white text-stone-700 py-3 lg:py-5 2xl:py-6 rounded-xl lg:rounded-2xl font-semibold lg:text-xl 2xl:text-2xl hover:bg-white/80 transition-colors shadow-sm">
-                    No acepto
-                </button>
-                <button onclick="window.acceptNextChallenge()" class="w-full bg-amber-600 text-white py-3 lg:py-5 2xl:py-6 rounded-xl lg:rounded-2xl font-semibold lg:text-xl 2xl:text-2xl hover:bg-amber-700 transition-colors shadow-lg flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4 lg:w-6 lg:h-6"><use href="#icon-shuffle"></use></svg> ¡Sí, acepto!
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         VISTA 1: TÓTEM (ENTRADA PRINCIPAL) FULL RESPONSIVE
-         ========================================== -->
-    <div id="view-totem" class="view min-h-screen w-full flex flex-col justify-between items-center px-6 py-8 md:py-12 lg:py-16 relative z-10">
-        
-        <!-- Spacer para centrar el contenido principal verticalmente -->
-        <div class="w-full flex-grow flex flex-col items-center justify-center max-w-2xl lg:max-w-4xl 2xl:max-w-6xl space-y-10 lg:space-y-16 2xl:space-y-24 my-8">
-            
-            <!-- Títulos -->
-            <div class="space-y-4 lg:space-y-6 2xl:space-y-10 text-center w-full px-4">
-                <h1 id="totem-title" class="text-6xl md:text-7xl lg:text-8xl 2xl:text-[8rem] font-serif text-amber-700 tracking-tight drop-shadow-sm leading-tight">¡Bienvenidas!</h1>
-                <p id="totem-subtitle" class="text-xl md:text-2xl lg:text-3xl 2xl:text-5xl text-stone-600 font-medium">Encuentra tu puesto y únete a la celebración</p>
-            </div>
-
-            <!-- Botón de Video -->
-            <button onclick="window.openWelcomeVideo()" class="inline-flex items-center justify-center gap-3 lg:gap-4 2xl:gap-6 bg-stone-900 text-amber-400 px-8 py-4 lg:px-12 lg:py-6 2xl:px-16 2xl:py-8 rounded-full font-medium hover:bg-stone-800 transition-colors shadow-xl active:scale-95 text-lg lg:text-2xl 2xl:text-4xl">
-                <svg class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-12 2xl:h-12"><use href="#icon-play-circle"></use></svg>
-                <span id="totem-video-btn-text">Mensaje de poder</span>
-            </button>
-
-            <!-- Sección de Búsqueda -->
-            <div class="w-full space-y-4 lg:space-y-6 2xl:space-y-8 pt-4 lg:pt-8 2xl:px-12">
-                <div class="relative text-left">
-                    <svg class="absolute left-6 top-1/2 transform -translate-y-1/2 text-stone-400 w-7 h-7 lg:w-9 lg:h-9 2xl:w-12 2xl:h-12 pointer-events-none"><use href="#icon-search"></use></svg>
-                    <input
-                        type="text"
-                        id="search-input"
-                        placeholder="Escribe tu nombre..."
-                        class="w-full pl-16 lg:pl-20 2xl:pl-28 pr-6 py-5 lg:py-7 2xl:py-10 rounded-2xl lg:rounded-3xl border-2 border-white/50 bg-white/60 backdrop-blur-md focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-500/20 text-xl lg:text-3xl 2xl:text-5xl transition-all shadow-sm outline-none"
-                    />
-                </div>
-                <button 
-                    id="btn-search"
-                    class="w-full bg-amber-600 text-white py-5 lg:py-7 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-xl lg:text-3xl 2xl:text-5xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95"
-                >
-                    Buscar mi puesto
-                </button>
-            </div>
-
-            <!-- Separador -->
-            <div class="w-full relative flex items-center py-4 lg:py-8 2xl:py-12 2xl:px-12">
-                <div class="flex-grow border-t-2 border-stone-300/60"></div>
-                <span 
-                    class="flex-shrink-0 mx-6 text-stone-500 font-medium cursor-pointer select-none text-lg lg:text-2xl 2xl:text-4xl hover:text-stone-600 transition-colors" 
-                    onclick="window.handleSecretClick()" 
-                    title="Doble tap secreto">
-                    O usa tu celular
-                </span>
-                <div class="flex-grow border-t-2 border-stone-300/60"></div>
-            </div>
-
-            <!-- Botón QR -->
-            <div class="w-full 2xl:px-12">
-                <button 
-                    onclick="window.switchView('view-show-qr')"
-                    class="w-full bg-white/50 backdrop-blur-md border-2 border-amber-200/50 text-amber-800 py-5 lg:py-7 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-xl lg:text-3xl 2xl:text-5xl hover:bg-white/80 transition-all flex items-center justify-center gap-3 lg:gap-5 2xl:gap-8 active:scale-95 shadow-sm"
-                >
-                    <svg class="w-7 h-7 lg:w-10 lg:h-10 2xl:w-14 2xl:h-14"><use href="#icon-qr-code"></use></svg>
-                    Mostrar Código QR
-                </button>
-            </div>
-        </div>
-
-        <!-- Botón Administrador Footer Relativo (Soluciona el problema de superposición) -->
-        <div class="w-full flex justify-center mt-6 lg:mt-10 flex-shrink-0">
-            <button 
-                onclick="window.switchView('view-admin-login')"
-                class="text-stone-400 hover:text-stone-600 flex items-center gap-2 text-sm lg:text-lg 2xl:text-2xl transition-colors p-4 rounded-full hover:bg-stone-200/50"
-            >
-                <svg class="w-4 h-4 lg:w-6 lg:h-6 2xl:w-8 2xl:h-8"><use href="#icon-users"></use></svg> Acceso Organizador
-            </button>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         VISTA 1.5: MOSTRAR CÓDIGO QR PANTALLA COMPLETA
-         ========================================== -->
-    <div id="view-show-qr" class="view hidden-view min-h-screen w-full flex flex-col items-center justify-center p-6 relative z-10">
-        <button 
-            onclick="window.switchView('view-totem')"
-            class="absolute top-8 right-8 lg:top-12 lg:right-12 2xl:top-16 2xl:right-16 text-stone-800 p-3 lg:p-5 2xl:p-6 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm"
-        >
-            <svg class="w-7 h-7 lg:w-10 lg:h-10 2xl:w-14 2xl:h-14"><use href="#icon-x"></use></svg>
-        </button>
-
-        <div class="w-full max-w-md lg:max-w-2xl 2xl:max-w-4xl flex flex-col items-center justify-center space-y-10 lg:space-y-16 2xl:space-y-24 text-center my-auto">
-            <div class="space-y-4 lg:space-y-8">
-                <h2 class="text-4xl md:text-5xl lg:text-7xl 2xl:text-8xl font-serif text-amber-700 drop-shadow-sm">Escanea con tu celular</h2>
-                <p class="text-stone-600 text-xl lg:text-3xl 2xl:text-4xl">Abre la cámara de tu teléfono y apunta a este código para acceder a tu plataforma.</p>
-            </div>
-
-            <div class="bg-white/60 backdrop-blur-md p-8 lg:p-12 2xl:p-16 rounded-[2rem] lg:rounded-[3rem] 2xl:rounded-[4rem] border-2 border-white/50 shadow-xl inline-block">
-                <div class="bg-white p-4 lg:p-8 2xl:p-12 rounded-3xl lg:rounded-[2.5rem] 2xl:rounded-[3rem] shadow-sm">
-                    <img 
-                        id="dynamic-qr-img"
-                        src="" 
-                        alt="Código QR del Evento" 
-                        class="w-64 h-64 md:w-80 md:h-80 lg:w-[24rem] lg:h-[24rem] 2xl:w-[36rem] 2xl:h-[36rem] mix-blend-multiply"
-                    />
-                </div>
-            </div>
-            
-            <p class="text-stone-500 font-medium tracking-wide text-center text-xl lg:text-3xl 2xl:text-5xl uppercase">
-                App de Eventos
+        <!-- Cabecera -->
+        <div class="floating mb-4">
+            <h1 class="text-6xl md:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-2">404</h1>
+            <h2 class="text-2xl md:text-3xl font-semibold mb-4 text-gray-300">¡Houston, tenemos un problema!</h2>
+            <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-6">
+                La página que buscas ha sido abducida o se perdió en un agujero negro. 
+                Mientras nuestros ingenieros la rescatan, <strong>¡intenta sobrevivir esquivando asteroides!</strong>
             </p>
         </div>
-    </div>
 
-    <!-- ==========================================
-         VISTA 2: DASHBOARD DEL INVITADO PANTALLA COMPLETA
-         ========================================== -->
-    <div id="view-guest-dashboard" class="view hidden-view min-h-screen w-full flex flex-col px-6 py-12 lg:py-16 2xl:py-24 max-w-3xl lg:max-w-5xl 2xl:max-w-7xl mx-auto space-y-12 lg:space-y-16 2xl:space-y-20 relative z-10">
-        
-        <!-- Header/Logout -->
-        <div class="flex justify-between items-center w-full">
-            <button onclick="window.logout()" class="p-3 lg:p-5 2xl:p-6 bg-white/50 backdrop-blur-md border border-white/50 rounded-full shadow-sm hover:bg-white/80 transition-colors text-stone-700">
-                <svg class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-12 2xl:h-12"><use href="#icon-arrow-left"></use></svg>
-            </button>
-            <div class="p-2 bg-transparent"></div>
+        <!-- Sección de Contacto -->
+        <div class="w-full max-w-md bg-gray-800/50 backdrop-blur-md p-6 rounded-2xl border border-gray-700 shadow-2xl mb-10">
+            <h3 class="text-xl font-semibold mb-4 text-gray-200">¿Necesitas ayuda para volver a la Tierra?</h3>
+            <p class="text-gray-400 mb-6 text-sm">Comunícate con Control de Misión en nuestras redes:</p>
+            
+            <div class="flex flex-col gap-4">
+                <!-- Redes Sociales (Instagram, Tiktok, etc) -->
+                <a href="https://instagram.com/equalsby" target="_blank" class="social-btn flex items-center justify-center gap-3 w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-medium">
+                    <i class="fa-solid fa-at text-xl"></i>
+                    <span>Síguenos como <strong>@equalsby</strong></span>
+                </a>
+                
+                <!-- WhatsApp -->
+                <a href="https://wa.me/573021192800?text=¡Hola!%20Me%20perdí%20en%20su%20página%20404%20y%20necesito%20ayuda." target="_blank" class="social-btn flex items-center justify-center gap-3 w-full bg-[#25D366] text-white py-3 px-6 rounded-xl font-medium">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i>
+                    <span>WhatsApp: <strong>302 119 2800</strong></span>
+                </a>
+            </div>
         </div>
 
-        <!-- Saludo -->
-        <div class="text-center space-y-2 lg:space-y-6">
-            <h2 class="text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl font-serif text-amber-700 tracking-tight drop-shadow-sm">¡Hola, <span id="guest-name-display"></span>!</h2>
-            <p id="dashboard-subtitle" class="text-xl lg:text-3xl 2xl:text-4xl text-stone-600">Nos alegra mucho que estés aquí.</p>
-        </div>
-            
-        <!-- Número de Mesa Glassmorphism -->
-        <div class="w-full bg-white/60 backdrop-blur-md border-2 border-white/50 rounded-[2.5rem] lg:rounded-[3rem] p-10 lg:p-16 2xl:p-20 text-center shadow-sm">
-            <p id="table-label-text" class="text-sm md:text-base lg:text-xl 2xl:text-3xl text-stone-500 font-bold uppercase tracking-widest mb-2 lg:mb-6">Tu mesa es la número</p>
-            <p id="guest-table-display" class="text-8xl md:text-9xl lg:text-[10rem] 2xl:text-[14rem] font-serif text-amber-600 drop-shadow-sm leading-none">--</p>
-        </div>
-            
-        <!-- Banner de Reto Activo -->
-        <div id="active-challenge-banner" class="hidden w-full">
-            <div class="bg-amber-50/70 backdrop-blur-md border-2 border-amber-200/50 rounded-[2rem] lg:rounded-[3rem] p-8 lg:p-12 2xl:p-16 shadow-sm text-center">
-                <p class="text-sm lg:text-xl 2xl:text-2xl font-bold uppercase tracking-widest text-amber-600 mb-4 lg:mb-8 flex items-center justify-center gap-2 lg:gap-4">
-                    <svg class="w-5 h-5 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10"><use href="#icon-star"></use></svg> Tu Reto Activo
-                </p>
-                <p id="active-challenge-text" class="text-stone-800 italic font-medium text-2xl md:text-3xl lg:text-5xl 2xl:text-6xl mb-6 lg:mb-10 leading-relaxed">...</p>
-                
-                <p class="text-sm lg:text-lg 2xl:text-2xl text-amber-800 mb-8 lg:mb-12 font-medium px-4 lg:px-8 py-3 lg:py-5 rounded-xl lg:rounded-2xl inline-block border border-amber-200/50">
-                    🎁 Sube la foto para completarlo y gana oportunidades para un premio.
-                </p>
-                
-                <!-- Contenedor para completar reto con fotos -->
-                <div id="challenge-action-container" class="space-y-4 lg:space-y-6 2xl:space-y-8">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 2xl:gap-8">
-                        <button onclick="window.triggerCameraUpload()" class="w-full bg-amber-600 text-white py-4 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl font-semibold text-lg lg:text-2xl 2xl:text-3xl hover:bg-amber-700 transition-colors flex md:flex-col items-center justify-center gap-2 lg:gap-4 active:scale-95 shadow-md">
-                            <svg class="w-7 h-7 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-camera"></use></svg>
-                            <span>Tomar Foto</span>
-                        </button>
-                        <button onclick="window.triggerGalleryUpload()" class="w-full bg-stone-800 text-white py-4 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl font-semibold text-lg lg:text-2xl 2xl:text-3xl hover:bg-stone-900 transition-colors flex md:flex-col items-center justify-center gap-2 lg:gap-4 active:scale-95 shadow-md">
-                            <svg class="w-7 h-7 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-image"></use></svg>
-                            <span>Subir Galería</span>
-                        </button>
-                    </div>
-                    <button onclick="window.postponeChallenge()" class="w-full bg-white/50 backdrop-blur-sm border border-white text-stone-700 py-4 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl font-semibold text-lg lg:text-2xl 2xl:text-3xl hover:bg-white/80 transition-colors shadow-sm flex items-center justify-center gap-2 lg:gap-4 active:scale-95">
-                        <svg class="w-5 h-5 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10"><use href="#icon-clock"></use></svg>
-                        Posponer y pedir otro
+        <!-- Contenedor del Juego -->
+        <div class="relative mb-10 w-full flex justify-center">
+            <div class="relative">
+                <canvas id="gameCanvas" width="350" height="400" class="border border-purple-500/30 max-w-full"></canvas>
+                <!-- Menú superpuesto del juego -->
+                <div id="gameOverlay" class="absolute inset-0 flex flex-col items-center justify-center bg-black/70 rounded-xl rounded-xl">
+                    <p id="gameOverText" class="text-3xl font-bold text-red-500 mb-2 hidden">¡Nave Destruida!</p>
+                    <p id="scoreText" class="text-xl text-white mb-6">Haz clic o toca para empezar</p>
+                    <button id="startBtn" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full shadow-lg transition transform hover:scale-105">
+                        Iniciar Misión
                     </button>
                 </div>
-
-                <p id="pending-challenges-text" class="text-sm lg:text-lg 2xl:text-xl text-stone-500 mt-4 lg:mt-8 hidden text-center font-medium">
-                    Tienes <span id="pending-count" class="text-amber-600 font-bold">0</span> retos pendientes.
-                </p>
-                
-                <!-- Contenedor para pedir otro reto (oculto inicialmente) -->
-                <div id="next-challenge-container" class="hidden space-y-4 lg:space-y-8 mt-6 lg:mt-10">
-                    <p class="text-lg lg:text-2xl 2xl:text-3xl font-bold text-green-600 flex items-center justify-center gap-2 lg:gap-4">
-                        <svg class="w-6 h-6 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-party-popper"></use></svg> ¡Reto superado excelente!
-                    </p>
-                    <button onclick="window.getNewChallenge()" class="w-full bg-amber-500 text-stone-900 py-4 lg:py-8 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-lg lg:text-3xl 2xl:text-4xl hover:bg-amber-400 transition-colors shadow-md flex items-center justify-center gap-2 lg:gap-4 active:scale-95">
-                        <svg class="w-6 h-6 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-shuffle"></use></svg>
-                        ¡Dame otro reto!
-                    </button>
+                <!-- Puntuación en vivo -->
+                <div class="absolute top-2 left-4 text-white font-bold text-lg pointer-events-none">
+                    Puntos: <span id="liveScore">0</span>
                 </div>
             </div>
         </div>
-
-        <!-- Sección estándar de fotos (si no hay reto activo) -->
-        <div class="w-full bg-white/60 backdrop-blur-md rounded-[2.5rem] lg:rounded-[3rem] border border-white/50 p-8 lg:p-12 2xl:p-16 text-center shadow-sm">
-            <h3 class="font-serif text-2xl lg:text-4xl 2xl:text-5xl text-stone-800 mb-2 lg:mb-6">Ayúdanos a capturar el momento</h3>
-            <p class="text-stone-600 text-lg lg:text-2xl 2xl:text-3xl mb-6 lg:mb-10">Sube las fotos y videos que tomes hoy a nuestra galería compartida.</p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 2xl:gap-8">
-                <button 
-                    onclick="window.triggerCameraUpload()"
-                    class="w-full bg-amber-600 text-white py-5 lg:py-8 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-lg lg:text-3xl 2xl:text-4xl hover:bg-amber-700 transition-colors flex items-center justify-center gap-3 lg:gap-5 active:scale-95 shadow-md"
-                >
-                    <svg class="w-8 h-8 lg:w-12 lg:h-12 2xl:w-16 2xl:h-16"><use href="#icon-camera"></use></svg>
-                    <span>Tomar Foto</span>
-                </button>
-                <button 
-                    onclick="window.triggerGalleryUpload()"
-                    class="w-full bg-stone-800 text-white py-5 lg:py-8 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-lg lg:text-3xl 2xl:text-4xl hover:bg-stone-900 transition-colors flex items-center justify-center gap-3 lg:gap-5 active:scale-95 shadow-md"
-                >
-                    <svg class="w-8 h-8 lg:w-12 lg:h-12 2xl:w-16 2xl:h-16"><use href="#icon-image"></use></svg>
-                    <span>Subir Galería</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         VISTA 3: LOGIN DE ADMINISTRADOR PANTALLA COMPLETA
-         ========================================== -->
-    <div id="view-admin-login" class="view hidden-view min-h-screen w-full flex flex-col items-center justify-center p-6 relative z-10">
-        <button 
-            onclick="window.switchView('view-totem')"
-            class="absolute top-8 right-8 lg:top-12 lg:right-12 2xl:top-16 2xl:right-16 text-stone-800 p-3 lg:p-5 2xl:p-6 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm"
-        >
-            <svg class="w-7 h-7 lg:w-10 lg:h-10 2xl:w-14 2xl:h-14"><use href="#icon-x"></use></svg>
-        </button>
-
-        <div class="w-full max-w-md lg:max-w-xl 2xl:max-w-2xl flex flex-col items-center justify-center space-y-8 lg:space-y-12 2xl:space-y-16 text-center">
-            <div class="w-20 h-20 lg:w-32 lg:h-32 2xl:w-40 2xl:h-40 bg-white/60 backdrop-blur-md border border-white/50 rounded-full flex items-center justify-center shadow-sm">
-                <svg class="w-10 h-10 lg:w-16 lg:h-16 2xl:w-20 2xl:h-20 text-stone-600"><use href="#icon-lock"></use></svg>
-            </div>
-            <div class="space-y-2 lg:space-y-6">
-                <h2 class="text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-serif text-amber-700 drop-shadow-sm">Acceso Privado</h2>
-                <p class="text-stone-600 text-lg lg:text-2xl 2xl:text-3xl">Ingresa la contraseña del organizador.</p>
-            </div>
-            
-            <form id="admin-login-form" class="space-y-4 lg:space-y-8 w-full pt-4 lg:pt-8">
-                <input 
-                    type="password" 
-                    id="admin-password-input"
-                    placeholder="Contraseña" 
-                    class="w-full p-5 lg:p-8 2xl:p-10 rounded-2xl lg:rounded-3xl border-2 border-white/50 bg-white/60 backdrop-blur-md focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-500/20 text-2xl lg:text-4xl 2xl:text-5xl transition-all outline-none text-center tracking-widest shadow-sm"
-                    required
-                >
-                <p id="admin-login-error" class="text-red-500 text-sm lg:text-lg 2xl:text-xl hidden font-medium">Contraseña incorrecta. Inténtalo de nuevo.</p>
-                <button type="submit" class="w-full bg-amber-600 text-white py-5 lg:py-8 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-xl lg:text-3xl 2xl:text-4xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95 mt-2 lg:mt-6">
-                    Entrar al Panel
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         VISTA 4: PANEL DE ADMINISTRACIÓN (TIPO APP)
-         ========================================== -->
-    <div id="view-admin" class="view hidden-view min-h-screen w-full p-6 md:p-12 lg:p-16 2xl:p-24 relative z-10">
-        <div class="max-w-7xl 2xl:max-w-[100rem] mx-auto space-y-8 lg:space-y-12 2xl:space-y-16 mt-4">
-            
-            <!-- Header Glassmorphism -->
-            <div class="bg-white/60 backdrop-blur-xl border border-white/50 p-6 lg:p-8 2xl:p-10 rounded-3xl lg:rounded-[2.5rem] shadow-sm text-stone-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 lg:gap-6">
-                <div class="flex items-center gap-3 lg:gap-6">
-                    <svg class="w-8 h-8 lg:w-12 lg:h-12 2xl:w-16 2xl:h-16 text-amber-600"><use href="#icon-users"></use></svg>
-                    <div>
-                        <h1 class="text-3xl lg:text-4xl 2xl:text-6xl font-bold font-serif text-amber-700">Panel de Organización</h1>
-                    </div>
-                </div>
-                <button onclick="window.switchView('view-totem')" class="px-5 py-3 lg:px-8 lg:py-4 2xl:px-10 2xl:py-5 bg-white/60 border border-white text-stone-700 rounded-xl lg:rounded-2xl hover:bg-white transition-colors text-sm lg:text-xl 2xl:text-2xl font-semibold flex items-center gap-2 lg:gap-4 shadow-sm active:scale-95 w-full md:w-auto justify-center">
-                    <svg class="w-5 h-5 lg:w-6 lg:h-6 2xl:w-8 2xl:h-8"><use href="#icon-log-out"></use></svg> Salir al Inicio
-                </button>
-            </div>
-
-            <!-- Contenido Principal: Formularios y Lista -->
-            <div class="grid lg:grid-cols-3 gap-8 lg:gap-12 2xl:gap-16">
-                <!-- Columna Izquierda (Controles) -->
-                <div class="lg:col-span-1 flex flex-col gap-6 lg:gap-10 2xl:gap-12">
-                    
-                    <!-- Formulario de Agregar Invitado -->
-                    <div class="bg-white/60 backdrop-blur-xl border border-white/50 p-6 lg:p-10 2xl:p-12 rounded-3xl lg:rounded-[2.5rem] shadow-sm">
-                        <h3 class="font-serif text-2xl lg:text-3xl 2xl:text-4xl mb-4 lg:mb-8 text-stone-800">Agregar Invitado</h3>
-                        <form id="admin-form" class="space-y-4 lg:space-y-6 2xl:space-y-8">
-                            <div>
-                                <label class="block text-sm lg:text-lg 2xl:text-xl font-semibold text-stone-600 mb-1 lg:mb-3">Nombre Completo</label>
-                                <input 
-                                    id="admin-input-name" 
-                                    placeholder="Ej. Juan Pérez" 
-                                    required
-                                    class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white bg-white/50 focus:bg-white focus:border-amber-400 focus:ring-0 outline-none transition-colors text-lg lg:text-xl 2xl:text-2xl"
-                                >
-                            </div>
-                            <div>
-                                <label class="block text-sm lg:text-lg 2xl:text-xl font-semibold text-stone-600 mb-1 lg:mb-3">Número/Nombre de Mesa</label>
-                                <input 
-                                    id="admin-input-table" 
-                                    placeholder="Ej. 12" 
-                                    required
-                                    class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white bg-white/50 focus:bg-white focus:border-amber-400 focus:ring-0 outline-none transition-colors text-lg lg:text-xl 2xl:text-2xl"
-                                >
-                            </div>
-                            <button type="submit" class="w-full bg-stone-800 text-white py-4 lg:py-6 2xl:py-8 rounded-xl lg:rounded-2xl hover:bg-stone-900 transition-colors font-semibold text-lg lg:text-2xl 2xl:text-3xl flex items-center justify-center mt-4 lg:mt-8 text-center shadow-md active:scale-95">
-                                Guardar Invitado
-                            </button>
-                        </form>
-                    </div>
-
-                    <!-- Configuración de Tipo de Evento (Retos) -->
-                    <div class="bg-white/60 backdrop-blur-xl border border-white/50 p-6 lg:p-10 2xl:p-12 rounded-3xl lg:rounded-[2.5rem] shadow-sm">
-                        <h3 class="font-serif text-2xl lg:text-3xl 2xl:text-4xl mb-2 lg:mb-6 text-stone-800 flex items-center gap-2 lg:gap-4">
-                            <svg class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10 text-amber-600"><use href="#icon-party-popper"></use></svg> Tipo de Evento
-                        </h3>
-                        <p class="text-sm lg:text-lg 2xl:text-xl text-stone-500 mb-4 lg:mb-8">Cambia la lista de retos de la ruleta.</p>
-                        <select id="admin-event-type" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white bg-white/50 focus:bg-white focus:border-amber-400 focus:ring-0 outline-none transition-colors text-lg lg:text-xl 2xl:text-2xl mb-4 lg:mb-8 font-medium text-stone-700">
-                            <option value="boda">Boda (100 Retos)</option>
-                            <option value="cumpleanos">Cumpleaños (100 Retos)</option>
-                            <option value="cristiano">Encuentro / Cristiano (36 Retos)</option>
-                        </select>
-                        <button onclick="window.changeEventType()" class="w-full bg-amber-600 text-white py-4 lg:py-6 2xl:py-8 rounded-xl lg:rounded-2xl hover:bg-amber-700 transition-colors font-semibold text-lg lg:text-2xl 2xl:text-3xl flex items-center justify-center shadow-md active:scale-95">
-                            Actualizar Retos
-                        </button>
-                    </div>
-
-                </div>
-
-                <!-- Lista Derecha -->
-                <div class="lg:col-span-2 flex flex-col">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 lg:mb-8 px-2 gap-4">
-                        <h3 class="font-serif text-2xl lg:text-3xl 2xl:text-4xl text-stone-800 flex items-center gap-2 lg:gap-4"><svg class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10 text-amber-600"><use href="#icon-list-ordered"></use></svg> Tabla de Posiciones</h3>
-                        <div class="flex items-center gap-3 lg:gap-5 w-full sm:w-auto">
-                            <span class="text-sm lg:text-lg 2xl:text-xl text-stone-500 font-medium hidden md:inline">Actualizado en vivo</span>
-                            <button onclick="window.deleteAllGuests()" class="flex-grow sm:flex-grow-0 justify-center text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 border border-red-200 px-4 py-2 lg:px-6 lg:py-4 2xl:px-8 2xl:py-5 rounded-xl lg:rounded-2xl text-sm lg:text-lg 2xl:text-xl font-semibold transition-colors flex items-center gap-2 shadow-sm" title="Eliminar todos los invitados">
-                                <svg class="w-4 h-4 lg:w-5 lg:h-5 2xl:w-6 2xl:h-6"><use href="#icon-trash-2"></use></svg> Borrar Todos
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl lg:rounded-[2.5rem] overflow-hidden shadow-sm flex-grow">
-                        <!-- La lista se genera aquí con JS -->
-                        <ul id="admin-guest-list" class="divide-y divide-white/40 flex flex-col min-h-[300px] lg:min-h-[500px] 2xl:min-h-[700px] max-h-[60vh] lg:max-h-[800px] 2xl:max-h-[1000px] overflow-y-auto p-2 lg:p-4">
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SECCIÓN: GALERÍA INTEGRADA PARA EL ADMINISTRADOR -->
-            <div class="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl lg:rounded-[3rem] overflow-hidden shadow-sm p-6 md:p-8 lg:p-12 2xl:p-16 mt-8 lg:mt-16 2xl:mt-24">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 lg:gap-8 mb-8 lg:mb-12">
-                    <div>
-                        <h3 class="font-serif text-3xl lg:text-4xl 2xl:text-5xl text-stone-800 flex items-center gap-2 lg:gap-4"><svg class="w-8 h-8 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12 text-amber-600"><use href="#icon-image"></use></svg> Galería de Fotos</h3>
-                        <p class="text-base lg:text-xl 2xl:text-2xl text-stone-600 mt-1 lg:mt-3">Todas las fotos capturadas por los invitados aparecerán aquí.</p>
-                    </div>
-                    <div class="flex items-center gap-3 lg:gap-5 flex-wrap w-full md:w-auto">
-                        <span class="bg-amber-100/80 backdrop-blur border border-amber-200 text-amber-800 font-bold px-5 py-3 lg:px-8 lg:py-4 2xl:px-10 2xl:py-5 rounded-xl lg:rounded-2xl text-base lg:text-xl 2xl:text-2xl shadow-sm w-full sm:w-auto text-center" id="admin-photo-count">0 Fotos Totales</span>
-                        <div class="flex gap-3 lg:gap-5 w-full sm:w-auto">
-                            <button onclick="window.downloadAllPhotosZip()" class="flex-1 bg-stone-800 text-white px-5 py-3 lg:px-8 lg:py-4 2xl:px-10 2xl:py-5 rounded-xl lg:rounded-2xl text-base lg:text-xl 2xl:text-2xl font-semibold hover:bg-stone-900 transition-colors flex items-center justify-center gap-2 shadow-md active:scale-95" title="Descargar todas en ZIP">
-                                <svg class="w-5 h-5 lg:w-6 lg:h-6 2xl:w-8 2xl:h-8"><use href="#icon-folder-down"></use></svg> <span class="hidden sm:inline">Descargar ZIP</span><span class="sm:hidden">ZIP</span>
-                            </button>
-                            <button onclick="window.deleteAllPhotos()" class="flex-1 bg-red-100/80 text-red-700 border border-red-200 px-5 py-3 lg:px-8 lg:py-4 2xl:px-10 2xl:py-5 rounded-xl lg:rounded-2xl text-base lg:text-xl 2xl:text-2xl font-semibold hover:bg-red-200 transition-colors flex items-center justify-center gap-2 shadow-sm active:scale-95" title="Eliminar todas las fotos">
-                                <svg class="w-5 h-5 lg:w-6 lg:h-6 2xl:w-8 2xl:h-8"><use href="#icon-trash-2"></use></svg> <span class="hidden xl:inline">Vaciar Galería</span><span class="xl:hidden">Vaciar</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Contenedor Dinámico de Fotos en Admin -->
-                <div id="admin-gallery-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-5 lg:gap-8 2xl:gap-10">
-                    <!-- Las fotos se inyectarán aquí mediante JS -->
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- ==========================================
-         VISTA 5: CONFIGURACIÓN OCULTA PANTALLA COMPLETA
-         ========================================== -->
-    <div id="view-config" class="view hidden-view min-h-screen w-full flex flex-col items-center justify-center py-12 lg:py-24 px-6 relative z-10 overflow-y-auto">
-        <button onclick="window.switchView('view-totem')" class="fixed top-8 right-8 lg:top-12 lg:right-12 2xl:top-16 2xl:right-16 text-stone-800 p-3 lg:p-5 2xl:p-6 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm z-50">
-            <svg class="w-7 h-7 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-x"></use></svg>
-        </button>
-
-        <div class="w-full max-w-3xl lg:max-w-5xl 2xl:max-w-7xl flex flex-col space-y-8 lg:space-y-12 2xl:space-y-16 mt-10">
-            <div class="flex flex-col items-center gap-4 lg:gap-8 border-b-2 border-stone-300/50 pb-6 lg:pb-10 text-center">
-                <div class="w-20 h-20 lg:w-32 lg:h-32 2xl:w-40 2xl:h-40 bg-white/60 backdrop-blur-md border border-white/50 rounded-full flex items-center justify-center shadow-sm">
-                    <svg class="w-10 h-10 lg:w-16 lg:h-16 2xl:w-20 2xl:h-20 text-amber-600"><use href="#icon-settings"></use></svg>
-                </div>
-                <h2 class="text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-serif text-amber-700 drop-shadow-sm">Configuración General</h2>
-                <p class="text-lg lg:text-2xl 2xl:text-3xl text-stone-600">Personaliza la experiencia visual y los textos del evento.</p>
-            </div>
-            
-            <form id="config-form" class="space-y-6 lg:space-y-10 2xl:space-y-12 bg-white/60 backdrop-blur-xl border border-white/50 p-8 md:p-12 lg:p-16 2xl:p-24 rounded-[2.5rem] lg:rounded-[4rem] shadow-lg">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10 2xl:gap-12">
-                    <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Título Principal</label>
-                        <input id="cfg-title" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Subtítulo</label>
-                        <input id="cfg-subtitle" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Botón de Búsqueda</label>
-                        <input id="cfg-search-btn" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Descripción Ruleta</label>
-                        <input id="cfg-roulette-text" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Etiqueta de Mesa</label>
-                        <input id="cfg-table-label" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Botón Aceptar Reto</label>
-                        <input id="cfg-accept-btn" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Título Menú Video</label>
-                        <input id="cfg-video-title" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Subtítulo Invitado</label>
-                        <input id="cfg-dashboard-subtitle" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
-                    </div>
-                </div>
-
-                <hr class="border-stone-300/40 my-8 lg:my-12">
-
-                <div class="space-y-6 lg:space-y-10">
-                    <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">URL Fondo Ruleta</label>
-                        <input id="cfg-roulette-bg" type="url" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">URL Centro Ruleta</label>
-                        <input id="cfg-roulette-center" type="url" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
-                    </div>
-                </div>
-                
-                <!-- SECCIÓN MEJORADA DE VIDEO -->
-                <div class="bg-white/80 p-6 lg:p-10 2xl:p-12 rounded-2xl lg:rounded-3xl border-2 border-amber-200/50 shadow-inner space-y-4 lg:space-y-8 mt-6 lg:mt-10">
-                    <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-800 mb-2 lg:mb-4 uppercase tracking-wide">URL Video Principal</label>
-                        <input id="cfg-video" type="url" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white bg-white focus:bg-white focus:border-amber-500 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
-                        <p class="text-sm lg:text-lg 2xl:text-xl text-stone-500 mt-2 lg:mt-4 leading-relaxed">
-                            💡 Para usar Bucle (Loop), prefiere YouTube o enlaces `.mp4`. Google Drive restringe funciones nativas.
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-3 lg:gap-5 pt-2 lg:pt-4">
-                        <input id="cfg-video-loop" type="checkbox" class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10 rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer">
-                        <label for="cfg-video-loop" class="text-base lg:text-2xl 2xl:text-3xl font-bold text-stone-800 cursor-pointer select-none">Reproducir en Bucle Infinito</label>
-                    </div>
-                </div>
-                
-                <div class="pt-4 lg:pt-8">
-                    <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Contraseña Admin</label>
-                    <input id="cfg-admin-pass" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors text-center tracking-widest font-mono" required>
-                </div>
-                
-                <button type="submit" class="w-full bg-stone-900 text-amber-400 py-5 lg:py-8 2xl:py-10 rounded-2xl lg:rounded-3xl font-bold text-xl lg:text-3xl 2xl:text-4xl hover:bg-stone-800 transition-colors shadow-xl active:scale-95 flex justify-center items-center gap-3 lg:gap-6 mt-8 lg:mt-16">
-                    <svg class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10"><use href="#icon-save"></use></svg> GUARDAR CONFIGURACIÓN
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         LÓGICA JAVASCRIPT CON FIREBASE UNIFICADO
-         ========================================== -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        // 1. Configuración de Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyBxE8t9sEWalMO_i0bFDjGp5I95iuYj5Io",
-            authDomain: "dinastiamesas.firebaseapp.com",
-            projectId: "dinastiamesas",
-            storageBucket: "dinastiamesas.firebasestorage.app",
-            messagingSenderId: "23829938113",
-            appId: "1:23829938113:web:d0d791c86b5b8c1df63940"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhwV00ZSwM8mPhI4k3Cg4ztmd3TGC1HqLm32gdhGepFhKZp0dS-P5WyAi-tRplcapVPw/exec'; 
-
-        // 2. Variables de estado
-        let guests = [];
-        let photos = [];
-        let currentGuest = null;
-        let challengeAccepted = false; 
         
-        let currentPhotoUrl = '';
-        let currentPhotoName = '';
-        window.selectedChallenge = ''; 
-        window.pendingChallenges = []; 
+        <a href="/" class="mt-8 text-purple-400 hover:text-purple-300 underline underline-offset-4 transition">
+            <i class="fa-solid fa-arrow-left mr-2"></i>Volver al inicio
+        </a>
+    </div>
 
-        // ESTADO DE CONFIGURACIÓN GLOBAL (Valores por defecto)
-        window.appConfig = {
-            title: "¡Bienvenidas!",
-            subtitle: "Encuentra tu puesto y únete a la celebración",
-            searchBtnText: "Buscar mi puesto",
-            rouletteText: "Gira la ruleta para descubrir tu reto fotográfico en esta boda.",
-            tableLabelText: "Tu mesa es la número",
-            acceptBtnText: "¡Aceptar Reto e ir a mi mesa!",
-            videoTitleText: "Mensaje de poder",
-            dashboardSubtitle: "Nos alegra mucho que estés aquí.",
-            rouletteBg: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-            rouletteCenter: "https://image2url.com/r2/default/images/1773931962266-01b311d3-46f3-49f7-a83b-cf9dc1b67e7c.avif",
-            videoLink: "https://drive.google.com/file/d/1pJXSVBktub3dYF72z1OJodXbgwYpvP4L/preview",
-            videoLoop: true, // Nuevo estado para el bucle
-            adminPassword: "admin123",
-            eventType: "boda" // Por defecto boda
-        };
+    <!-- Scripts de interactividad y minijuego -->
+    <script>
+        // --- 1. Fondo de Estrellas ---
+        const bgCanvas = document.getElementById('bgCanvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        let stars = [];
 
-        // DICCIONARIO MAESTRO DE RETOS POR TIPO DE EVENTO
-        const RETOS = {
-            boda: [
-                "Tómate una selfie con la novia.", "Tómate una selfie con el novio.", "Fotografía un beso apasionado (que no sea el tuyo).", "Captura una lágrima de felicidad.", "Toma una foto del centro de mesa más bonito.",
-                "Fotografía a alguien riendo a carcajadas.", "Capta a un niño haciendo una travesura.", "Toma una foto de tres generaciones juntas.", "Fotografía los zapatos más elegantes de la fiesta.", "Selfie con alguien que acabas de conocer.",
-                "Toma una foto brindando con tu bebida favorita.", "Captura el momento exacto en que alguien muerde el pastel.", "Fotografía a los novios tomados de la mano sin que se den cuenta.", "Tómate una foto con los padres de la novia.", "Tómate una foto con los padres del novio.",
-                "Consigue una foto grupal de toda tu mesa.", "Toma una foto artística de los anillos (si puedes).", "Fotografía el vestido de la novia en todo su esplendor.", "Selfie haciendo una mueca graciosa con tu acompañante.", "Captura a alguien abrazando a los novios.",
-                "Toma una foto de la decoración de luces.", "Fotografía a la pareja con más tiempo de casados.", "Consigue una foto con el DJ o la banda.", "Captura a alguien cantando a todo pulmón.", "Toma una foto de las flores más bellas del salón.",
-                "Selfie con la persona más alta de la fiesta.", "Fotografía a alguien disfrutando el banquete.", "Captura el peinado más espectacular.", "Toma una foto del ramo de la novia.", "Consigue una foto con el padrino o dama de honor.",
-                "Fotografía una pose de baile dramática.", "Captura a los novios mirándose a los ojos.", "Toma una foto de un grupo chocando las copas.", "Selfie con el bartender.", "Fotografía un detalle escondido de la decoración.",
-                "Capta la corbata o moño más llamativo.", "Toma una foto de las manos entrelazadas de los novios.", "Consigue una foto de alguien secándose una lágrima.", "Fotografía a la persona que más ha bailado.", "Selfie en la pista de baile vacía.",
-                "Toma una foto de una pareja bailando lento.", "Captura el momento en que sirven la comida.", "Fotografía a alguien arreglándose el maquillaje o traje.", "Consigue una foto grupal de solo hombres.", "Consigue una foto grupal de solo mujeres.",
-                "Toma una foto de las sombras de los invitados bailando.", "Selfie mostrando tu outfit completo.", "Capta a los novios en un momento de relajación.", "Fotografía el mejor paso de baile de la noche.", "Toma una foto de una bebida muy colorida.",
-                "Captura a alguien mirando su celular y sonriendo.", "Fotografía a alguien que se haya quitado los zapatos para bailar.", "Selfie con la persona de mayor edad en la fiesta.", "Toma una foto de alguien probando un postre.", "Fotografía el cielo o techo del lugar.",
-                "Consigue una foto de los novios con sus mejores amigos.", "Capta la expression de asombro de un invitado.", "Toma una foto de espaldas a los novios mientras miran al frente.", "Selfie usando algún accesorio de la fiesta.", "Fotografía a alguien levantando los brazos en la pista.",
-                "Capta el momento de partir el pastel.", "Toma una foto de las copas vacías después de un brindis.", "Fotografía a dos personas susurrándose algo.", "Selfie grupal más grande que puedas lograr.", "Toma una foto de los regalos o buzón de los novios.",
-                "Captura un abrazo súper apretado.", "Fotografía a alguien dando un discurso.", "Toma una foto de los novios llegando a la pista.", "Consigue una foto de una mirada cómplice.", "Selfie guiñando el ojo.",
-                "Fotografía a la persona con el mejor ritmo.", "Capta a un invitado durmiéndose (o casi).", "Toma una foto de un plato recién servido.", "Fotografía el menú de la boda de forma creativa.", "Selfie con alguien que lleve el mismo color que tú.",
-                "Captura a los novios bailando su primera canción.", "Toma una foto de un brindis desde el suelo (ángulo bajo).", "Fotografía la mesa de dulces antes de que se acaben.", "Consigue una foto de un niño bailando.", "Selfie con la iluminación más dramática del lugar.",
-                "Capta a alguien robándose un beso.", "Toma una foto de las sillas de los novios.", "Fotografía el momento de lanzar el ramo.", "Captura a la persona que atrapó el ramo.", "Selfie haciendo un corazón con las manos.",
-                "Fotografía a alguien brindando con agua.", "Toma una foto de los centros de mesa al final de la fiesta.", "Capta a alguien corriendo hacia la pista de baile.", "Consigue una foto de un apretón de manos emotivo.", "Selfie con los meseros (¡son los héroes!).",
-                "Toma una foto de un detalle del traje del novio.", "Fotografía a dos invitados que no se conocían hablando.", "Captura la silueta de los novios a contraluz.", "Selfie desenfocada pero divertida.", "Toma una foto del letrero de bienvenida.",
-                "Fotografía a alguien comiendo a escondidas.", "Capta a los invitados haciendo 'el trencito' o coreografía grupal.", "Toma una foto del reloj marcando la medianoche.", "Consigue una foto de un invitado muy elegante.", "Selfie final antes de irte de la fiesta."
-            ],
-            cumpleanos: [
-                "Tómate una selfie con el cumpleañero/a.", "Toma una foto del pastel de cumpleaños.", "Captura el momento exacto de soplar las velas.", "Toma una foto del regalo más original o grande.", "Selfie usando un gorrito de fiesta o accesorio.",
-                "Toma una foto de la mesa de dulces o bocadillos.", "Captura a alguien comiendo pastel felizmente.", "Toma una foto de un abrazo fuerte al cumpleañero/a.", "Selfie con la decoración de la fiesta de fondo.", "Toma una foto creativa a los globos.",
-                "Captura a alguien riendo a carcajadas.", "Toma una foto de un brindis en honor al cumpleañero/a.", "Selfie con el invitado más joven de la fiesta.", "Selfie con el invitado de mayor edad.", "Consigue una foto de grupo de tu mesa completa.",
-                "Captura un paso de baile divertido de algún invitado.", "Toma una foto artística de las bebidas preparadas.", "Selfie haciendo una mueca graciosa.", "Toma una foto del cumpleañero/a abriendo un regalo.", "Captura una cara de sorpresa auténtica.",
-                "Toma una foto de la comida principal del evento.", "Selfie con los padres del cumpleañero/a.", "Toma una foto a los amigos de la infancia del festejado.", "Captura a los invitados cantando 'Feliz Cumpleaños'.", "Toma una foto de un detalle oculto en la decoración.",
-                "Selfie con gafas de sol divertidas.", "Toma una foto infraganti de alguien robando un dulce.", "Captura un choque de copas entre amigos.", "Toma una foto a la tarjeta de invitación física.", "Selfie de cuerpo entero mostrando tu outfit de fiesta.",
-                "Toma una foto a los zapatos del cumpleañero/a.", "Captura infraganti a alguien llegando tarde.", "Toma una foto de un niño jugando o corriendo.", "Selfie con la persona que mejor baila en la fiesta.", "Toma una foto en el momento exacto de la piñata.",
-                "Captura a alguien sirviendo una bebida.", "Toma una foto a las luces o iluminación del lugar.", "Selfie con alguien que acabas de conocer hoy.", "Toma una foto de otra persona tomando una foto.", "Captura un momento de descanso o relajación en la fiesta.",
-                "Toma una foto de cerca a la sonrisa del cumpleañero/a.", "Selfie con los hermanos o familiares del festejado.", "Consigue una foto grupal haciendo una pose ridícula.", "Captura a alguien a punto de probar un bocado.", "Toma una foto elegante a los centros de mesa.",
-                "Selfie con el DJ o el encargado de poner la música.", "Toma una foto infraganti de alguien con la boca llena.", "Captura un abrazo grupal (de 3 o más personas).", "Toma una foto de los souvenirs o recuerdos de la fiesta.", "Selfie movida o desenfocada pero muy divertida.",
-                "Toma una foto del cumpleañero/a posando como modelo.", "Captura a dos personas hablándose al oído.", "Toma una foto a alguien mirando su celular y sonriendo.", "Selfie en medio de la pista de baile.", "Toma una foto de un postre que se vea delicioso.",
-                "Captura a alguien arreglándose el cabello o el maquillaje.", "Toma una foto de varias copas vacías juntas.", "Selfie haciendo el símbolo de paz con los dedos.", "Toma una foto de un detalle del betún del pastel.", "Captura a los invitados aplaudiendo al festejado.",
-                "Toma una foto artística de las sombras de los invitados.", "Selfie junto a un cartel o letrero de 'Feliz Cumpleaños'.", "Captura infraganti a alguien bostezando.", "Consigue una foto de alguien saltando en el aire.", "Toma una foto del cumpleañero/a sosteniendo su bebida.",
-                "Selfie con alguien que lleve ropa del mismo color que tú.", "Toma una foto de una conversación muy animada.", "Captura a alguien secándose el sudor de tanto bailar.", "Toma una foto a los platos completamente vacíos.", "Selfie mostrando la lengua a la cámara.",
-                "Toma una foto del cumpleañero/a abrazando a sus abuelos.", "Captura a alguien corriendo por la fiesta.", "Toma una foto de un peinado muy elaborado o extravagante.", "Selfie con el organizador principal de la fiesta.", "Toma una foto infraganti de alguien escondiéndose de la cámara.",
-                "Captura el momento de un beso en la mejilla al festejado.", "Toma una foto a las servilletas o vasos temáticos.", "Selfie en el lugar con la mejor iluminación del salón.", "Toma una foto de alguien cantando a todo pulmón.", "Captura a alguien haciendo trampa en un juego de fiesta.",
-                "Toma una foto que transmita toda la felicidad del cumpleañero/a.", "Selfie con un primo/a del festejado.", "Toma una foto de alguien dando un discurso o brindis emotivo.", "Captura a un invitado que parezca despistado.", "Toma una foto de todos los regalos apilados.",
-                "Selfie junto a tres personas más.", "Toma una foto a alguien usando un accesorio luminoso.", "Captura la silueta del cumpleañero/a a contraluz.", "Toma una foto de una corbata, moño o accesorio muy llamativo.", "Selfie tomada desde un ángulo muy alto (picado).",
-                "Toma una foto del cumpleañero/a con su mejor amigo/a.", "Captura a alguien mirando la comida con mucho deseo.", "Toma una foto de una flor o detalle natural del salón.", "Selfie con los ojos bien cerrados.", "Toma una foto de alguien ayudando a recoger o servir.",
-                "Captura a un invitado muy concentrado en algo.", "Toma una foto de una mano sosteniendo un dulce.", "Selfie apuntando la cámara hacia el cielo o el techo.", "Toma una foto de alguien levantando los brazos de alegría.", "Captura el último momento de la fiesta antes de irte."
-            ],
-            cristiano: [
-                "Selfie con tu sonrisa más linda.",
-                "Foto haciendo una pose divertida con 3 personas.",
-                "Foto con alguien que no conocías antes.",
-                "Foto haciendo corazón con las manos ❤️ en un espacio del evento que te guste.",
-                "Foto abrazando a alguien.",
-                "Selfie con tu nueva amiga del encuentro.",
-                "Foto actuando sorpresa 😱 con algún detalle del encuentro.",
-                "Foto mostrando algún regalo del encuentro.",
-                "Captura una sonrisa genuina.",
-                "Foto de alguien riéndose sin darse cuenta.",
-                "Captura un momento de emoción del encuentro.",
-                "Foto de una mirada especial entre amigas.",
-                "Foto de un gesto de cariño.",
-                "Captura una risa contagiosa en grupo.",
-                "Toma una foto de un grupo compartiendo juntas.",
-                "Captura un momento de unión.",
-                "Captura una reacción al ver la pantalla.",
-                "Foto de alguien disfrutando la actividad.",
-                "Captura detalles bonitos de este encuentro (decoración, sorpresas).",
-                "Una toma creativa del lugar.",
-                "Captura un detalle pequeño pero significativo.",
-                "Captura una reacción emotiva.",
-                "Toma una foto de un momento espontáneo e irrepetible.",
-                "Una foto que represente el evento.",
-                "Una imagen que transmita alegría.",
-                "Captura la mejor foto del evento 📸✨.",
-                "Toma una foto de un gesto pequeño pero significativo.",
-                "Captura una reacción auténtica.",
-                "Foto con alguien que acaban de conocer.",
-                "Consigue una foto grupal creativa.",
-                "Dile a alguien por qué crees que es valiosa (aunque la acabes de conocer) y luego tómense una Foto juntas.",
-                "Foto de algo del evento que les transmitió amor.",
-                "Capturar un detalle pequeño pero hermoso.",
-                "Foto de una frase del evento que les haya impactado.",
-                "Captura algo del evento que les haya gustado mucho.",
-                "Foto divertida y creativa con un grupo de mujeres."
-            ]
-        };
+        function resizeBg() {
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeBg);
+        resizeBg();
 
-        window.switchView = function(viewId) {
-            document.querySelectorAll('.view').forEach(el => {
-                el.classList.add('hidden-view');
-            });
-            document.getElementById(viewId).classList.remove('hidden-view');
-
-            if (viewId === 'view-show-qr') {
-                renderDynamicQR();
-            } else if (viewId === 'view-admin-login') {
-                document.getElementById('admin-password-input').value = '';
-                document.getElementById('admin-login-error').classList.add('hidden');
-            } else if (viewId === 'view-admin') {
-                renderAdminList();
-                renderGallery(); 
-                // Asegurar que el select del panel de admin tenga el valor actual
-                const typeSelect = document.getElementById('admin-event-type');
-                if (typeSelect) typeSelect.value = window.appConfig.eventType || 'boda';
-            }
-        };
-
-        // --- SISTEMA DE RENDERIZADO Y CONTROL DE VIDEO ---
-        window.videoBtnTimeout = null;
-
-        window.resetVideoBtnTimer = function() {
-            const btn = document.getElementById('welcome-video-close-btn');
-            if (!btn) return;
-            
-            // Mostrar botón con animación
-            btn.classList.remove('opacity-0', '-translate-y-4', 'pointer-events-none');
-            btn.classList.add('opacity-100', 'translate-y-0');
-            
-            clearTimeout(window.videoBtnTimeout);
-            
-            // Ocultar después de 3 segundos de inactividad
-            window.videoBtnTimeout = setTimeout(() => {
-                btn.classList.remove('opacity-100', 'translate-y-0');
-                btn.classList.add('opacity-0', '-translate-y-4', 'pointer-events-none');
-            }, 3000);
-        };
-
-        window.openWelcomeVideo = function() {
-            const modal = document.getElementById('modal-welcome-video');
-            const videoWrapper = document.getElementById('video-wrapper');
-            
-            if (videoWrapper) {
-                const link = window.appConfig.videoLink || "";
-                const isLoop = window.appConfig.videoLoop !== false;
-                const loopAttr = isLoop ? "loop" : "";
-                
-                if (link.includes('youtube.com') || link.includes('youtu.be')) {
-                    let ytLink = link;
-                    const videoIdMatch = link.match(/(?:v=|youtu\.be\/|embed\/)([^&?]+)/);
-                    if (videoIdMatch && videoIdMatch[1]) {
-                        // Reproduce automático al abrir (autoplay=1) y toma el 100%
-                        ytLink = `https://www.youtube.com/embed/${videoIdMatch[1]}?autoplay=1${isLoop ? `&loop=1&playlist=${videoIdMatch[1]}` : ''}`;
-                    }
-                    videoWrapper.innerHTML = `<iframe src="${ytLink}" class="w-full h-full border-0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
-                } else if (link.match(/\.(mp4|webm|ogg)$/i) || link.includes('uc?export=download')) {
-                    videoWrapper.innerHTML = `<video src="${link}" class="w-full h-full object-contain" controls autoplay ${loopAttr} playsinline></video>`;
-                } else {
-                    videoWrapper.innerHTML = `<iframe src="${link}" class="w-full h-full border-0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
-                }
-            }
-
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            
-            // Iniciar el temporizador para ocultar el botón al abrir
-            window.resetVideoBtnTimer();
-        };
-
-        window.closeWelcomeVideo = function() {
-            const modal = document.getElementById('modal-welcome-video');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            
-            // Destruir el iframe/video para evitar que el audio siga sonando al cerrar
-            const videoWrapper = document.getElementById('video-wrapper');
-            if (videoWrapper) {
-                videoWrapper.innerHTML = '';
-            }
-        };
-
-        // --- SISTEMA DE CONFIGURACIÓN DINÁMICA ---
-        function cargarConfiguracion() {
-            onSnapshot(doc(db, "configuracion", "general"), (docSnap) => {
-                if (docSnap.exists()) {
-                    window.appConfig = { ...window.appConfig, ...docSnap.data() };
-                }
-                aplicarConfiguracion();
+        for(let i=0; i<100; i++) {
+            stars.push({
+                x: Math.random() * bgCanvas.width,
+                y: Math.random() * bgCanvas.height,
+                radius: Math.random() * 1.5,
+                speed: Math.random() * 0.5 + 0.1
             });
         }
 
-        function aplicarConfiguracion() {
-            // Aplicar al DOM
-            const titleEl = document.getElementById('totem-title');
-            if(titleEl) titleEl.innerText = window.appConfig.title || "¡Bienvenidas!";
-
-            const subtitleEl = document.getElementById('totem-subtitle');
-            if(subtitleEl) subtitleEl.innerText = window.appConfig.subtitle || "Encuentra tu puesto y únete a la celebración";
-
-            const searchBtnEl = document.getElementById('btn-search');
-            if(searchBtnEl) searchBtnEl.innerText = window.appConfig.searchBtnText || "Buscar mi puesto";
-
-            const rouletteDescEl = document.getElementById('roulette-desc-text');
-            if(rouletteDescEl) rouletteDescEl.innerText = window.appConfig.rouletteText || "Gira la ruleta para descubrir tu reto fotográfico en esta boda.";
-
-            const tableLabelEl = document.getElementById('table-label-text');
-            if(tableLabelEl) tableLabelEl.innerText = window.appConfig.tableLabelText || "Tu mesa es la número";
-
-            const acceptBtnEl = document.getElementById('btn-accept-challenge');
-            if(acceptBtnEl) acceptBtnEl.innerText = window.appConfig.acceptBtnText || "¡Aceptar Reto e ir a mi mesa!";
-
-            const totemVideoBtnEl = document.getElementById('totem-video-btn-text');
-            if(totemVideoBtnEl) totemVideoBtnEl.innerText = window.appConfig.videoTitleText || "Mensaje de poder";
-
-            const dashboardSubEl = document.getElementById('dashboard-subtitle');
-            if(dashboardSubEl) dashboardSubEl.innerText = window.appConfig.dashboardSubtitle || "Nos alegra mucho que estés aquí.";
-
-            const rBgEl = document.getElementById('roulette-wheel');
-            if(rBgEl) rBgEl.style.backgroundImage = `url('${window.appConfig.rouletteBg}')`;
-
-            const rCenterEl = document.getElementById('roulette-center-img');
-            if(rCenterEl) rCenterEl.src = window.appConfig.rouletteCenter;
-
-            // Rellenar formulario de config
-            document.getElementById('cfg-title').value = window.appConfig.title || "¡Bienvenidas!";
-            document.getElementById('cfg-subtitle').value = window.appConfig.subtitle || "Encuentra tu puesto y únete a la celebración";
-            document.getElementById('cfg-search-btn').value = window.appConfig.searchBtnText || "Buscar mi puesto";
-            document.getElementById('cfg-roulette-text').value = window.appConfig.rouletteText || "Gira la ruleta para descubrir tu reto fotográfico en esta boda.";
-            document.getElementById('cfg-table-label').value = window.appConfig.tableLabelText || "Tu mesa es la número";
-            document.getElementById('cfg-accept-btn').value = window.appConfig.acceptBtnText || "¡Aceptar Reto e ir a mi mesa!";
-            document.getElementById('cfg-video-title').value = window.appConfig.videoTitleText || "Mensaje de poder";
-            document.getElementById('cfg-dashboard-subtitle').value = window.appConfig.dashboardSubtitle || "Nos alegra mucho que estés aquí.";
-            document.getElementById('cfg-roulette-bg').value = window.appConfig.rouletteBg;
-            document.getElementById('cfg-roulette-center').value = window.appConfig.rouletteCenter;
-            document.getElementById('cfg-video').value = window.appConfig.videoLink;
-            document.getElementById('cfg-admin-pass').value = window.appConfig.adminPassword;
-            
-            const loopCheckbox = document.getElementById('cfg-video-loop');
-            if(loopCheckbox) loopCheckbox.checked = window.appConfig.videoLoop !== false;
-
-            const typeSelect = document.getElementById('admin-event-type');
-            if (typeSelect) typeSelect.value = window.appConfig.eventType || 'boda';
-        }
-
-        window.handleSaveConfig = async function(event) {
-            event.preventDefault();
-            const newConfig = {
-                title: document.getElementById('cfg-title').value,
-                subtitle: document.getElementById('cfg-subtitle').value,
-                searchBtnText: document.getElementById('cfg-search-btn').value,
-                rouletteText: document.getElementById('cfg-roulette-text').value,
-                tableLabelText: document.getElementById('cfg-table-label').value,
-                acceptBtnText: document.getElementById('cfg-accept-btn').value,
-                videoTitleText: document.getElementById('cfg-video-title').value,
-                dashboardSubtitle: document.getElementById('cfg-dashboard-subtitle').value,
-                rouletteBg: document.getElementById('cfg-roulette-bg').value,
-                rouletteCenter: document.getElementById('cfg-roulette-center').value,
-                videoLink: document.getElementById('cfg-video').value,
-                videoLoop: document.getElementById('cfg-video-loop').checked,
-                adminPassword: document.getElementById('cfg-admin-pass').value
-            };
-
-            try {
-                await setDoc(doc(db, "configuracion", "general"), newConfig, { merge: true });
-                alert("¡Configuración actualizada en vivo!");
-                window.switchView('view-totem');
-            } catch (error) {
-                console.error("Error guardando config:", error);
-                alert("Error al guardar la configuración.");
-            }
-        };
-
-        window.changeEventType = async function() {
-            const newType = document.getElementById('admin-event-type').value;
-            try {
-                await setDoc(doc(db, "configuracion", "general"), { eventType: newType }, { merge: true });
-                alert("¡El tipo de evento y la lista de retos se han actualizado exitosamente!");
-            } catch (error) {
-                console.error("Error cambiando tipo de evento:", error);
-                alert("Hubo un error al actualizar los retos.");
-            }
-        };
-
-        // Detector de clic secreto (5 clics rápidos)
-        let secretClicks = 0;
-        let clickTimer;
-        window.handleSecretClick = function() {
-            secretClicks++;
-            clearTimeout(clickTimer);
-            clickTimer = setTimeout(() => { secretClicks = 0; }, 2000);
-
-            if (secretClicks >= 5) {
-                secretClicks = 0;
-                const pass = prompt("Acceso Especial a Configuración. Ingresa la clave maestra:");
-                // La contraseña para la configuración oculta es estrictamente 1705
-                if (pass === '1705') {
-                    window.switchView('view-config');
-                } else {
-                    if (pass !== null) alert("Contraseña incorrecta.");
-                }
-            }
-        };
-
-        // --- RESTO DE LA APP ---
-
-        window.logout = function() {
-            currentGuest = null;
-            challengeAccepted = false;
-            window.pendingChallenges = []; 
-            document.getElementById('pending-challenges-text').classList.add('hidden');
-            document.getElementById('active-challenge-banner').classList.add('hidden');
-            
-            document.getElementById('challenge-action-container').classList.remove('hidden');
-            document.getElementById('next-challenge-container').classList.add('hidden');
-            
-            window.switchView('view-totem');
-        };
-
-        window.triggerCameraUpload = function() {
-            document.getElementById('camera-file-input').click();
-        };
-
-        window.triggerGalleryUpload = function() {
-            document.getElementById('gallery-file-input').click();
-        };
-
-        window.deleteGuest = async function(id) {
-            if(confirm("¿Estás seguro de que quieres eliminar a este invitado?")) {
-                try {
-                    await deleteDoc(doc(db, "invitados", id));
-                } catch (error) {
-                    console.error("Error eliminando invitado:", error);
-                    alert("Hubo un error al eliminar.");
-                }
-            }
-        };
-
-        window.deleteAllGuests = async function() {
-            if(guests.length === 0) {
-                alert("No hay invitados para eliminar.");
-                return;
-            }
-            if(confirm("⚠️ ATENCIÓN ⚠️\n\n¿Estás absolutamente seguro de que quieres eliminar a TODOS los invitados de la lista? Esta acción NO se puede deshacer.")) {
-                try {
-                    // Eliminamos cada documento de la colección 'invitados'
-                    const deletePromises = guests.map(g => deleteDoc(doc(db, "invitados", g.id)));
-                    await Promise.all(deletePromises);
-                    alert("Todos los invitados han sido eliminados correctamente.");
-                } catch (error) {
-                    console.error("Error eliminando a todos los invitados:", error);
-                    alert("Hubo un error al intentar vaciar la lista.");
-                }
-            }
-        };
-
-        window.deletePhoto = async function(id) {
-            if(confirm("⚠️ ATENCIÓN ⚠️\n\n¿Estás seguro de que quieres eliminar esta foto de la galería? Esta acción NO se puede deshacer.")) {
-                try {
-                    await deleteDoc(doc(db, "galeria", id));
-                    alert("Foto eliminada correctamente.");
-                } catch (error) {
-                    console.error("Error eliminando foto:", error);
-                    alert("Hubo un error al intentar eliminar la foto.");
-                }
-            }
-        };
-
-        window.deleteAllPhotos = async function() {
-            if(photos.length === 0) {
-                alert("No hay fotos para eliminar.");
-                return;
-            }
-            if(confirm("⚠️ ATENCIÓN ⚠️\n\n¿Estás absolutamente seguro de que quieres eliminar TODAS las fotos de la galería? Esta acción NO se puede deshacer.")) {
-                try {
-                    // Eliminamos cada documento de la colección 'galeria'
-                    const deletePromises = photos.map(p => deleteDoc(doc(db, "galeria", p.id)));
-                    await Promise.all(deletePromises);
-                    alert("Todas las fotos han sido eliminadas correctamente.");
-                } catch (error) {
-                    console.error("Error eliminando todas las fotos:", error);
-                    alert("Hubo un error al intentar vaciar la galería.");
-                }
-            }
-        };
-
-        window.handleAdminLogin = function(event) {
-            event.preventDefault();
-            const passwordInput = document.getElementById('admin-password-input');
-            const errorMsg = document.getElementById('admin-login-error');
-            
-            // Validamos contra la contraseña configurada en la BD
-            if (passwordInput.value === window.appConfig.adminPassword) {
-                passwordInput.value = '';
-                errorMsg.classList.add('hidden');
-                window.switchView('view-admin');
-            } else {
-                errorMsg.classList.remove('hidden');
-                passwordInput.value = '';
-                passwordInput.focus();
-            }
-        };
-
-        // FUNCIONES DE RETOS
-        window.spinRoulette = function() {
-            const btn = document.getElementById('btn-spin');
-            const wheel = document.getElementById('roulette-wheel');
-            
-            btn.disabled = true;
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
-            
-            // Elegir un reto de la lista configurada actualmente
-            const type = window.appConfig.eventType || 'boda';
-            const currentRetosList = RETOS[type] || RETOS['boda'];
-            
-            let retoTexto = currentRetosList[Math.floor(Math.random() * currentRetosList.length)];
-            window.selectedChallenge = retoTexto;
-
-            const randomExtraDeg = Math.floor(Math.random() * 360);
-            const totalDeg = 3600 + randomExtraDeg; 
-            wheel.style.transform = `rotate(${totalDeg}deg)`;
-
-            setTimeout(() => {
-                document.getElementById('modal-roulette').classList.add('hidden');
-                document.getElementById('modal-roulette').classList.remove('flex');
-                
-                const countdownModal = document.getElementById('modal-countdown');
-                const countdownText = document.getElementById('countdown-text');
-                
-                countdownModal.classList.remove('hidden');
-                countdownModal.classList.add('flex');
-
-                let count = 3;
-                countdownText.innerText = count;
-                countdownText.classList.remove('animate-pop');
-                void countdownText.offsetWidth; 
-                countdownText.classList.add('animate-pop');
-
-                const interval = setInterval(() => {
-                    count--;
-                    if (count > 0) {
-                        countdownText.innerText = count;
-                        countdownText.classList.remove('animate-pop');
-                        void countdownText.offsetWidth;
-                        countdownText.classList.add('animate-pop');
-                    } else {
-                        clearInterval(interval);
-                        countdownModal.classList.add('hidden');
-                        countdownModal.classList.remove('flex');
-                        
-                        const instructionModal = document.getElementById('modal-challenge-instruction');
-                        instructionModal.classList.remove('hidden');
-                        instructionModal.classList.add('flex');
-                        
-                        document.getElementById('challenge-reveal-text').innerText = `"${window.selectedChallenge}"`;
-                        document.getElementById('active-challenge-text').innerText = `"${window.selectedChallenge}"`;
-                        
-                        setTimeout(() => {
-                            wheel.style.transition = 'none';
-                            wheel.style.transform = 'rotate(0deg)';
-                            btn.disabled = false;
-                            btn.classList.remove('opacity-50', 'cursor-not-allowed');
-                            setTimeout(() => wheel.style.transition = 'transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)', 50);
-                        }, 500);
-                    }
-                }, 1000);
-
-            }, 3000); 
-        };
-
-        window.skipRoulette = function() {
-            document.getElementById('modal-roulette').classList.add('hidden');
-            document.getElementById('modal-roulette').classList.remove('flex');
-            
-            challengeAccepted = false;
-            window.switchView('view-guest-dashboard');
-        };
-
-        window.showChallengeReveal = function() {
-            document.getElementById('modal-challenge-instruction').classList.add('hidden');
-            document.getElementById('modal-challenge-instruction').classList.remove('flex');
-            
-            const revealModal = document.getElementById('modal-challenge-reveal');
-            revealModal.classList.remove('hidden');
-            revealModal.classList.add('flex');
-        };
-
-        window.closeChallengeReveal = function() {
-            document.getElementById('modal-challenge-reveal').classList.add('hidden');
-            document.getElementById('modal-challenge-reveal').classList.remove('flex');
-            
-            challengeAccepted = true;
-            
-            document.getElementById('active-challenge-banner').classList.remove('hidden');
-            document.getElementById('challenge-action-container').classList.remove('hidden');
-            document.getElementById('next-challenge-container').classList.add('hidden');
-            
-            window.switchView('view-guest-dashboard');
-        };
-
-        window.completeChallenge = function() {
-            document.getElementById('challenge-action-container').classList.add('hidden');
-            document.getElementById('next-challenge-container').classList.remove('hidden');
-        };
-
-        window.declineNextChallenge = function() {
-            document.getElementById('modal-challenge-success').classList.add('hidden');
-            document.getElementById('modal-challenge-success').classList.remove('flex');
-        };
-
-        window.acceptNextChallenge = function() {
-            document.getElementById('modal-challenge-success').classList.add('hidden');
-            document.getElementById('modal-challenge-success').classList.remove('flex');
-            window.getNewChallenge();
-        };
-
-        window.getNewChallenge = function() {
-            const type = window.appConfig.eventType || 'boda';
-            const currentRetosList = RETOS[type] || RETOS['boda'];
-
-            if (window.pendingChallenges && window.pendingChallenges.length > 0) {
-                window.selectedChallenge = window.pendingChallenges.shift(); 
-                
-                if (window.pendingChallenges.length === 0) {
-                    document.getElementById('pending-challenges-text').classList.add('hidden');
-                } else {
-                    document.getElementById('pending-count').innerText = window.pendingChallenges.length;
-                }
-            } else {
-                window.selectedChallenge = currentRetosList[Math.floor(Math.random() * currentRetosList.length)];
-            }
-            
-            document.getElementById('active-challenge-text').innerText = `"${window.selectedChallenge}"`;
-            
-            document.getElementById('next-challenge-container').classList.add('hidden');
-            document.getElementById('challenge-action-container').classList.remove('hidden');
-        };
-
-        window.postponeChallenge = function() {
-            if (window.selectedChallenge) {
-                window.pendingChallenges.push(window.selectedChallenge);
-            }
-            
-            const type = window.appConfig.eventType || 'boda';
-            const currentRetosList = RETOS[type] || RETOS['boda'];
-
-            window.selectedChallenge = currentRetosList[Math.floor(Math.random() * currentRetosList.length)];
-            document.getElementById('active-challenge-text').innerText = `"${window.selectedChallenge}"`;
-            
-            document.getElementById('pending-challenges-text').classList.remove('hidden');
-            document.getElementById('pending-count').innerText = window.pendingChallenges.length;
-        };
-
-        // FUNCIONES DE FOTOS
-        window.openPhotoModal = function(url, guestName, challengeText) {
-            currentPhotoUrl = url;
-            currentPhotoName = guestName;
-            document.getElementById('modal-image').src = url;
-            document.getElementById('modal-guest-name').innerText = `📸 Compartida por: ${guestName}`;
-            
-            const challengeEl = document.getElementById('modal-challenge-name');
-            if (challengeText && challengeText !== "null") {
-                challengeEl.innerText = `🎯 Reto: ${challengeText}`;
-                challengeEl.classList.remove('hidden');
-            } else {
-                challengeEl.classList.add('hidden');
-            }
-            
-            const modal = document.getElementById('photo-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        };
-
-        window.closePhotoModal = function() {
-            const modal = document.getElementById('photo-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            currentPhotoUrl = '';
-            currentPhotoName = '';
-            document.getElementById('modal-image').src = '';
-            document.getElementById('modal-challenge-name').classList.add('hidden');
-        };
-
-        window.downloadCurrentPhoto = function() {
-            if(!currentPhotoUrl) return;
-            const a = document.createElement('a');
-            a.href = currentPhotoUrl;
-            a.download = `Boda_${currentPhotoName}_${Date.now()}.jpg`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        };
-
-        window.downloadAllPhotosZip = async function() {
-            if (photos.length === 0) {
-                alert("No hay fotos para descargar aún.");
-                return;
-            }
-
-            const btn = document.querySelector('button[onclick="window.downloadAllPhotosZip()"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = `<svg class="w-4 h-4 animate-spin"><use href="#icon-loader-2"></use></svg> Comprimiendo...`;
-            btn.disabled = true;
-
-            try {
-                const zip = new JSZip();
-                const folder = zip.folder("Fotos_Boda");
-
-                photos.forEach((photo, index) => {
-                    const base64Data = photo.url.split(',')[1];
-                    const safeGuestName = (photo.guestName || 'Anonimo').replace(/[^a-zA-Z0-9]/g, '_');
-                    const fileName = `Foto_${index + 1}_${safeGuestName}.jpg`;
-                    
-                    folder.file(fileName, base64Data, {base64: true});
-                });
-
-                const content = await zip.generateAsync({type:"blob"});
-                
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(content);
-                link.download = `Fotos_Boda_${Date.now()}.zip`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-
-            } catch (error) {
-                console.error("Error al crear el archivo comprimido:", error);
-                alert("Hubo un error al comprimir las fotos.");
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
-        };
-
-        // 4. Lógica de Base de Datos
-        function cargarInvitados() {
-            onSnapshot(collection(db, "invitados"), (snapshot) => {
-                guests = [];
-                snapshot.forEach((docu) => {
-                    guests.push({ id: docu.id, ...docu.data() });
-                });
-                renderAdminList();
-            });
-        }
-
-        function cargarGaleria() {
-            onSnapshot(collection(db, "galeria"), (snapshot) => {
-                photos = [];
-                snapshot.forEach((docu) => {
-                    photos.push({ id: docu.id, ...docu.data() });
-                });
-                
-                photos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                
-                if (!document.getElementById('view-admin').classList.contains('hidden-view')) {
-                    renderAdminList();
-                    renderGallery();
+        function drawStars() {
+            bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+            bgCtx.fillStyle = '#ffffff';
+            stars.forEach(star => {
+                bgCtx.beginPath();
+                bgCtx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                bgCtx.fill();
+                star.y += star.speed;
+                if(star.y > bgCanvas.height) {
+                    star.y = 0;
+                    star.x = Math.random() * bgCanvas.width;
                 }
             });
+            requestAnimationFrame(drawStars);
         }
+        drawStars();
 
-        async function handleAddGuest(event) {
-            event.preventDefault();
-            const nameInput = document.getElementById('admin-input-name');
-            const tableInput = document.getElementById('admin-input-table');
+        // --- 2. Minijuego de Esquivar Asteroides ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startBtn = document.getElementById('startBtn');
+        const gameOverlay = document.getElementById('gameOverlay');
+        const gameOverText = document.getElementById('gameOverText');
+        const scoreText = document.getElementById('scoreText');
+        const liveScore = document.getElementById('liveScore');
 
-            if (!nameInput.value.trim() || !tableInput.value.trim()) {
-                alert("Por favor completa el nombre y la mesa para guardar al invitado.");
-                return;
-            }
+        let isPlaying = false;
+        let animationId;
+        let score = 0;
+        let frames = 0;
 
-            try {
-                await addDoc(collection(db, "invitados"), { 
-                    name: nameInput.value.trim(), 
-                    table: tableInput.value.trim() 
-                });
-                nameInput.value = '';
-                tableInput.value = '';
-            } catch (error) {
-                console.error("Error guardando invitado:", error);
-                alert("No se pudo guardar. Revisa tu conexión.");
-            }
-        }
-
-        function renderAdminList() {
-            const list = document.getElementById('admin-guest-list');
-            if (!list) return;
-            list.innerHTML = "";
-
-            if (guests.length === 0) {
-                list.innerHTML = `<li class="p-4 lg:p-8 text-center text-stone-500 font-medium">No hay invitados registrados aún.</li>`;
-                return;
-            }
-
-            const guestsWithCounts = guests.map(g => {
-                return {
-                    ...g,
-                    photoCount: photos.filter(p => p.guestId === g.id || (p.guestName && p.guestName.trim() === g.name)).length
-                };
-            }).sort((a, b) => b.photoCount - a.photoCount);
-
-            const maxPhotos = Math.max(...guestsWithCounts.map(g => g.photoCount));
-
-            guestsWithCounts.forEach(g => {
-                const li = document.createElement("li");
-                li.className = "flex justify-between items-center p-4 lg:p-6 2xl:p-8 hover:bg-white/40 transition-colors";
-
-                const isWinner = g.photoCount > 0 && g.photoCount === maxPhotos;
-                const crownBadge = isWinner ? `<svg class="w-5 h-5 lg:w-6 lg:h-6 2xl:w-8 2xl:h-8 text-amber-500 fill-amber-500 animate-bounce"><use href="#icon-crown"></use></svg>` : '';
-                const photoBadge = `<span class="inline-flex items-center gap-1 px-3 py-1 ${isWinner ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-white/50 text-stone-700 border border-white'} text-xs lg:text-sm 2xl:text-base rounded-full uppercase tracking-wide font-bold shadow-sm"><svg class="w-3 h-3 lg:w-4 lg:h-4"><use href="#icon-camera"></use></svg> ${g.photoCount}</span>`;
-
-                li.innerHTML = `
-                <div>
-                    <span class="font-bold text-stone-800 flex items-center gap-2 text-lg lg:text-2xl 2xl:text-3xl">${g.name} ${crownBadge}</span>
-                    <div class="flex items-center gap-3 mt-1.5 lg:mt-3">
-                        <span class="text-sm lg:text-lg 2xl:text-xl font-bold text-amber-600 bg-white/50 px-2 lg:px-3 py-0.5 lg:py-1 rounded border border-white">Mesa ${g.table}</span>
-                        ${photoBadge}
-                    </div>
-                </div>
-                <button onclick="window.deleteGuest('${g.id}')" class="text-red-400 hover:text-red-600 bg-white/50 hover:bg-white p-3 lg:p-4 2xl:p-5 rounded-xl border border-transparent hover:border-red-100 transition-all shadow-sm" title="Eliminar">
-                    <svg class="w-5 h-5 lg:w-6 lg:h-6 2xl:w-8 2xl:h-8"><use href="#icon-trash-2"></use></svg>
-                </button>
-                `;
-                list.appendChild(li);
-            });
-        }
-
-        function renderDynamicQR() {
-            const currentUrl = window.location.href.split('?')[0]; 
-            const qrImg = document.getElementById('dynamic-qr-img');
-            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(currentUrl)}`;
-        }
-
-        function handleSearch() {
-            const searchInput = document.getElementById('search-input');
-            const query = searchInput.value.trim().toLowerCase();
-
-            if (query === '') return;
-
-            const found = guests.find(g => g.name.toLowerCase().includes(query));
-
-            if (found) {
-                currentGuest = found;
-                document.getElementById('guest-name-display').innerText = found.name;
-                document.getElementById('guest-table-display').innerText = found.table;
-                searchInput.value = ''; 
-                
-                const rouletteModal = document.getElementById('modal-roulette');
-                rouletteModal.classList.remove('hidden');
-                rouletteModal.classList.add('flex');
-
-            } else {
-                alert('Invitado no encontrado. Por favor, intenta de nuevo o contacta al organizador.');
-            }
-        }
-
-        window.handlePhotoUpload = function(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const isChallengePending = !document.getElementById('challenge-action-container').classList.contains('hidden');
-            let wasChallenge = false;
-
-            if (challengeAccepted && isChallengePending) {
-                wasChallenge = true;
-                window.completeChallenge(); 
-            }
-            
-            event.target.value = ''; 
-
-            if (wasChallenge) {
-                const successModal = document.getElementById('modal-challenge-success');
-                successModal.classList.remove('hidden');
-                successModal.classList.add('flex');
-            } else {
-                alert('¡Foto compartida con éxito! Gracias por capturar este momento.');
-            }
-
-            const reader = new FileReader();
-            reader.onloadend = async () => {
-                const originalBase64 = reader.result;
-                const fileName = `${currentGuest ? currentGuest.name : 'Anónimo'}_${Date.now()}.jpg`;
-
-                if (GOOGLE_SCRIPT_URL !== '') {
-                    try {
-                        const base64Data = originalBase64.split(',')[1];
-                        fetch(GOOGLE_SCRIPT_URL, {
-                            method: 'POST',
-                            mode: 'no-cors',
-                            body: JSON.stringify({
-                                name: fileName,
-                                mimeType: file.type,
-                                data: base64Data,
-                                folderId: '1JUGN6O_x5iRlb92nc-W5G132VyFRcQ12'
-                            })
-                        });
-                    } catch (error) {
-                        console.error('No se pudo subir a Drive', error);
-                    }
-                }
-
-                const img = new Image();
-                img.src = originalBase64;
-                img.onload = async () => {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 800;
-                    let scaleSize = 1;
-                    
-                    if (img.width > MAX_WIDTH) {
-                        scaleSize = MAX_WIDTH / img.width;
-                    }
-                    
-                    canvas.width = img.width * scaleSize;
-                    canvas.height = img.height * scaleSize;
-                    
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
-
-                    try {
-                        await addDoc(collection(db, "galeria"), {
-                            url: compressedBase64,
-                            guestName: currentGuest ? currentGuest.name : 'Anónimo',
-                            guestId: currentGuest ? currentGuest.id : null,
-                            challenge: wasChallenge ? window.selectedChallenge : null,
-                            timestamp: Date.now()
-                        });
-                    } catch (e) {
-                        console.error("Error guardando foto en Firebase:", e);
-                    }
-                };
-            };
-            reader.readAsDataURL(file);
+        // Jugador
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height - 50,
+            size: 30, // Tamaño de fuente para el emoji
+            emoji: '🚀'
         };
 
-        function renderGallery() {
-            const container = document.getElementById('admin-gallery-container');
-            const countSpan = document.getElementById('admin-photo-count');
-            if (!container) return;
+        // Obstáculos
+        let obstacles = [];
+        const obstacleEmojis = ['☄️', '👾', '🛰️', '🪐'];
 
-            container.innerHTML = '';
-            if(countSpan) countSpan.innerText = `${photos.length} Fotos Totales`;
+        // Manejo de controles (Mouse y Touch)
+        function movePlayer(e) {
+            if (!isPlaying) return;
+            const rect = canvas.getBoundingClientRect();
+            let clientX = e.clientX;
+            
+            // Soporte para touch
+            if(e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+            }
 
-            if (photos.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full flex flex-col items-center justify-center text-stone-500 py-12 lg:py-20 2xl:py-24 bg-white/40 rounded-[2rem] border-2 border-white border-dashed">
-                        <svg class="w-16 h-16 lg:w-24 lg:h-24 2xl:w-32 2xl:h-32 opacity-40 mb-4 lg:mb-6"><use href="#icon-image"></use></svg>
-                        <p class="text-lg lg:text-2xl 2xl:text-3xl font-medium">Aún no hay fotos en vivo.</p>
-                        <p class="text-sm lg:text-lg 2xl:text-xl mt-2">Los invitados deben completar retos para que aparezcan aquí.</p>
-                    </div>
-                `;
-            } else {
-                photos.forEach(photo => {
-                    const item = document.createElement('div');
-                    item.className = 'relative aspect-square rounded-2xl lg:rounded-3xl overflow-hidden shadow-sm group cursor-pointer border-[3px] border-white/80 hover:border-amber-400 transition-all';
-                    item.onclick = () => window.openPhotoModal(photo.url, photo.guestName, photo.challenge);
-                    
-                    const challengeText = photo.challenge ? `<p class="text-amber-300 text-[10px] md:text-xs lg:text-sm 2xl:text-base truncate mt-1 drop-shadow-md font-medium" title="${photo.challenge.replace(/"/g, '&quot;')}">🎯 ${photo.challenge}</p>` : '';
+            const mouseX = clientX - rect.left;
+            
+            // Mantener al jugador dentro del canvas
+            if (mouseX > 0 && mouseX < canvas.width) {
+                player.x = mouseX;
+            }
+        }
 
-                    item.innerHTML = `
-                        <img src="${photo.url}" alt="Momento del evento" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        <button onclick="event.stopPropagation(); window.deletePhoto('${photo.id}')" class="absolute top-3 right-3 lg:top-4 lg:right-4 bg-red-500/90 hover:bg-red-600 text-white p-2 lg:p-3 rounded-xl backdrop-blur-md transition-colors z-10 shadow-lg border border-red-400/50" title="Eliminar Foto">
-                            <svg class="w-4 h-4 lg:w-6 lg:h-6"><use href="#icon-trash-2"></use></svg>
-                        </button>
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 lg:p-6 pt-12 lg:pt-16 pointer-events-none">
-                            <p class="text-white text-sm md:text-base lg:text-xl font-bold truncate drop-shadow-md">📸 ${photo.guestName}</p>
-                            ${challengeText}
-                        </div>
-                    `;
-                    container.appendChild(item);
+        canvas.addEventListener('mousemove', movePlayer);
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault(); // Evita scroll
+            movePlayer(e);
+        }, { passive: false });
+
+        function resetGame() {
+            obstacles = [];
+            score = 0;
+            frames = 0;
+            liveScore.innerText = score;
+            player.x = canvas.width / 2;
+        }
+
+        function startGame() {
+            resetGame();
+            isPlaying = true;
+            gameOverlay.classList.add('hidden');
+            gameOverText.classList.add('hidden');
+            gameLoop();
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            cancelAnimationFrame(animationId);
+            gameOverlay.classList.remove('hidden');
+            gameOverText.classList.remove('hidden');
+            scoreText.innerText = `Puntos totales: ${score}`;
+            startBtn.innerText = "Intentar de nuevo";
+        }
+
+        function gameLoop() {
+            if (!isPlaying) return;
+
+            // Limpiar canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Dibujar jugador
+            ctx.font = `${player.size}px Arial`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(player.emoji, player.x, player.y);
+
+            // Generar obstáculos
+            if (frames % (Math.max(20, 60 - Math.floor(score/100))) === 0) {
+                const randomEmoji = obstacleEmojis[Math.floor(Math.random() * obstacleEmojis.length)];
+                obstacles.push({
+                    x: Math.random() * (canvas.width - 40) + 20,
+                    y: -30,
+                    speed: Math.random() * 2 + 2 + (score/500), // Aumenta dificultad
+                    size: Math.random() * 15 + 20,
+                    emoji: randomEmoji
                 });
             }
-        }
 
-        function initApp() {
-            // Cargar datos en vivo
-            cargarConfiguracion(); 
-            cargarInvitados();
-            cargarGaleria(); 
-            
-            document.getElementById('btn-search').addEventListener('click', handleSearch);
-            document.getElementById('search-input').addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') handleSearch();
-            });
+            // Mover y dibujar obstáculos
+            for (let i = 0; i < obstacles.length; i++) {
+                let obs = obstacles[i];
+                obs.y += obs.speed;
+                
+                ctx.font = `${obs.size}px Arial`;
+                ctx.fillText(obs.emoji, obs.x, obs.y);
 
-            document.getElementById('admin-form').addEventListener('submit', handleAddGuest);
-            document.getElementById('config-form').addEventListener('submit', window.handleSaveConfig);
-            
-            document.getElementById('camera-file-input').addEventListener('change', window.handlePhotoUpload);
-            document.getElementById('gallery-file-input').addEventListener('change', window.handlePhotoUpload);
-            
-            document.getElementById('admin-login-form').addEventListener('submit', window.handleAdminLogin);
-            
-            // Detectar interacción para mostrar el botón de video si está oculto
-            document.addEventListener('mousemove', () => {
-                if (!document.getElementById('modal-welcome-video').classList.contains('hidden')) {
-                    window.resetVideoBtnTimer();
+                // Detección de colisión (cálculo circular aproximado)
+                const dx = player.x - obs.x;
+                const dy = player.y - obs.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                // Ajuste de hitbox para emojis
+                if (distance < (player.size/2 + obs.size/2 - 5)) {
+                    gameOver();
                 }
-            });
-            document.addEventListener('touchstart', () => {
-                if (!document.getElementById('modal-welcome-video').classList.contains('hidden')) {
-                    window.resetVideoBtnTimer();
+
+                // Eliminar obstáculos que salen de la pantalla y sumar puntos
+                if (obs.y > canvas.height + 30) {
+                    obstacles.splice(i, 1);
+                    i--;
+                    score += 10;
+                    liveScore.innerText = score;
                 }
-            });
+            }
+
+            frames++;
+            animationId = requestAnimationFrame(gameLoop);
         }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initApp);
-        } else {
-            initApp();
-        }
+        startBtn.addEventListener('click', startGame);
+
+        // Dibujo inicial estático del jugador
+        ctx.font = `${player.size}px Arial`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(player.emoji, player.x, player.y);
+
     </script>
 </body>
 </html>
