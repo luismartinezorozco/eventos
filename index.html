@@ -224,61 +224,61 @@
     <!-- ==========================================
          VISTA 1: TÓTEM (ENTRADA PRINCIPAL) FULL RESPONSIVE
          ========================================== -->
-    <div id="view-totem" class="view min-h-screen w-full flex flex-col justify-between items-center px-6 py-8 md:py-12 lg:py-16 relative z-10">
+    <div id="view-totem" class="view min-h-screen w-full flex flex-col justify-between items-center px-4 md:px-6 py-6 md:py-12 lg:py-16 relative z-10">
         
         <!-- Spacer para centrar el contenido principal verticalmente -->
-        <div class="w-full flex-grow flex flex-col items-center justify-center max-w-2xl lg:max-w-4xl 2xl:max-w-6xl space-y-10 lg:space-y-16 2xl:space-y-24 my-8">
+        <div class="w-full flex-grow flex flex-col items-center justify-center max-w-2xl lg:max-w-4xl 2xl:max-w-6xl space-y-6 sm:space-y-8 md:space-y-10 lg:space-y-16 2xl:space-y-24 my-4 md:my-8">
             
             <!-- Logo de Inicio (Oculto por defecto, se activa en configuración) -->
-            <img id="totem-home-logo" src="" alt="Logo del Evento" class="hidden max-h-32 md:max-h-48 lg:max-h-64 2xl:max-h-80 object-contain drop-shadow-md -mb-6 lg:-mb-10" />
+            <img id="totem-home-logo" src="" alt="Logo del Evento" class="hidden max-h-24 sm:max-h-32 md:max-h-48 lg:max-h-64 2xl:max-h-80 object-contain drop-shadow-md -mb-2 sm:-mb-6 lg:-mb-10 px-4" />
 
             <!-- Títulos -->
-            <div class="space-y-4 lg:space-y-6 2xl:space-y-10 text-center w-full px-4">
-                <h1 id="totem-title" class="text-6xl md:text-7xl lg:text-8xl 2xl:text-[8rem] font-serif text-amber-700 tracking-tight drop-shadow-sm leading-tight">¡Bienvenidas!</h1>
-                <p id="totem-subtitle" class="text-xl md:text-2xl lg:text-3xl 2xl:text-5xl text-stone-600 font-medium">Encuentra tu puesto y únete a la celebración</p>
+            <div class="space-y-3 sm:space-y-4 lg:space-y-6 2xl:space-y-10 text-center w-full px-2 sm:px-4">
+                <h1 id="totem-title" class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl 2xl:text-[8rem] font-serif text-amber-700 tracking-tight drop-shadow-sm leading-tight">¡Bienvenidas!</h1>
+                <p id="totem-subtitle" class="text-lg sm:text-xl md:text-2xl lg:text-3xl 2xl:text-5xl text-stone-600 font-medium px-4">Encuentra tu puesto y únete a la celebración</p>
             </div>
 
             <!-- Botón de Video -->
-            <button id="totem-video-btn" onclick="window.openWelcomeVideo()" class="inline-flex items-center justify-center gap-3 lg:gap-4 2xl:gap-6 bg-stone-900 text-amber-400 px-8 py-4 lg:px-12 lg:py-6 2xl:px-16 2xl:py-8 rounded-full font-medium hover:bg-stone-800 transition-colors shadow-xl active:scale-95 text-lg lg:text-2xl 2xl:text-4xl">
-                <svg class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-12 2xl:h-12"><use href="#icon-play-circle"></use></svg>
-                <span id="totem-video-btn-text">Mensaje de poder</span>
+            <button id="totem-video-btn" onclick="window.openWelcomeVideo()" class="inline-flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 2xl:gap-6 bg-stone-900 text-amber-400 px-6 py-3 sm:px-8 sm:py-4 lg:px-12 lg:py-6 2xl:px-16 2xl:py-8 rounded-full font-medium hover:bg-stone-800 transition-colors shadow-xl active:scale-95 text-base sm:text-lg lg:text-2xl 2xl:text-4xl w-full max-w-[280px] sm:max-w-none sm:w-auto mx-auto">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 2xl:w-12 2xl:h-12 flex-shrink-0"><use href="#icon-play-circle"></use></svg>
+                <span id="totem-video-btn-text" class="truncate">Mensaje de poder</span>
             </button>
 
             <!-- Sección de Búsqueda (Ocultable desde Configuración) -->
-            <div id="totem-search-section" class="w-full space-y-4 lg:space-y-6 2xl:space-y-8 pt-4 lg:pt-8 2xl:px-12">
+            <div id="totem-search-section" class="w-full space-y-3 sm:space-y-4 lg:space-y-6 2xl:space-y-8 pt-4 lg:pt-8 2xl:px-12">
                 <div class="relative text-left">
-                    <svg class="absolute left-6 top-1/2 transform -translate-y-1/2 text-stone-400 w-7 h-7 lg:w-9 lg:h-9 2xl:w-12 2xl:h-12 pointer-events-none"><use href="#icon-search"></use></svg>
+                    <svg class="absolute left-4 sm:left-6 top-1/2 transform -translate-y-1/2 text-stone-400 w-5 h-5 sm:w-7 sm:h-7 lg:w-9 lg:h-9 2xl:w-12 2xl:h-12 pointer-events-none"><use href="#icon-search"></use></svg>
                     <input
                         type="text"
                         id="search-input"
                         placeholder="Escribe tu nombre..."
-                        class="w-full pl-16 lg:pl-20 2xl:pl-28 pr-6 py-5 lg:py-7 2xl:py-10 rounded-2xl lg:rounded-3xl border-2 border-white/50 bg-white/60 backdrop-blur-md focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-500/20 text-xl lg:text-3xl 2xl:text-5xl transition-all shadow-sm outline-none"
+                        class="w-full pl-12 sm:pl-16 lg:pl-20 2xl:pl-28 pr-4 sm:pr-6 py-4 sm:py-5 lg:py-7 2xl:py-10 rounded-2xl lg:rounded-3xl border-2 border-white/50 bg-white/60 backdrop-blur-md focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-500/20 text-lg sm:text-xl lg:text-3xl 2xl:text-5xl transition-all shadow-sm outline-none"
                     />
                 </div>
                 <button 
                     id="btn-search"
-                    class="w-full bg-amber-600 text-white py-5 lg:py-7 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-xl lg:text-3xl 2xl:text-5xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95"
+                    class="w-full bg-amber-600 text-white py-4 sm:py-5 lg:py-7 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-lg sm:text-xl lg:text-3xl 2xl:text-5xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95"
                 >
                     Buscar mi puesto
                 </button>
             </div>
 
             <!-- Sección de Acceso Anónimo (Oculta por defecto, se activa en Configuración) -->
-            <div id="totem-anonymous-section" class="w-full hidden space-y-4 lg:space-y-6 2xl:space-y-8 pt-4 lg:pt-8 2xl:px-12">
+            <div id="totem-anonymous-section" class="w-full hidden space-y-3 sm:space-y-4 lg:space-y-6 2xl:space-y-8 pt-4 lg:pt-8 2xl:px-12">
                 <button 
                     onclick="window.enterAnonymous()"
-                    class="w-full bg-amber-600 text-white py-5 lg:py-7 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-xl lg:text-3xl 2xl:text-5xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95 flex items-center justify-center gap-3 lg:gap-5"
+                    class="w-full bg-amber-600 text-white py-4 sm:py-5 lg:py-7 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-lg sm:text-xl lg:text-3xl 2xl:text-5xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95 flex items-center justify-center gap-2 sm:gap-3 lg:gap-5"
                 >
-                    <svg class="w-8 h-8 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-star"></use></svg>
+                    <svg class="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-star"></use></svg>
                     Entrar a los Retos
                 </button>
             </div>
 
             <!-- Separador -->
-            <div class="w-full relative flex items-center py-4 lg:py-8 2xl:py-12 2xl:px-12">
+            <div class="w-full relative flex items-center py-4 sm:py-6 lg:py-8 2xl:py-12 2xl:px-12">
                 <div class="flex-grow border-t-2 border-stone-300/60"></div>
                 <span 
-                    class="flex-shrink-0 mx-6 text-stone-500 font-medium cursor-pointer select-none text-lg lg:text-2xl 2xl:text-4xl hover:text-stone-600 transition-colors" 
+                    class="flex-shrink-0 mx-3 sm:mx-6 text-stone-500 font-medium cursor-pointer select-none text-sm sm:text-lg lg:text-2xl 2xl:text-4xl hover:text-stone-600 transition-colors" 
                     onclick="window.handleSecretClick()" 
                     title="Doble tap secreto">
                     O usa tu celular
@@ -290,19 +290,19 @@
             <div class="w-full 2xl:px-12">
                 <button 
                     onclick="window.switchView('view-show-qr')"
-                    class="w-full bg-white/50 backdrop-blur-md border-2 border-amber-200/50 text-amber-800 py-5 lg:py-7 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-xl lg:text-3xl 2xl:text-5xl hover:bg-white/80 transition-all flex items-center justify-center gap-3 lg:gap-5 2xl:gap-8 active:scale-95 shadow-sm"
+                    class="w-full bg-white/50 backdrop-blur-md border-2 border-amber-200/50 text-amber-800 py-4 sm:py-5 lg:py-7 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-lg sm:text-xl lg:text-3xl 2xl:text-5xl hover:bg-white/80 transition-all flex items-center justify-center gap-2 sm:gap-3 lg:gap-5 2xl:gap-8 active:scale-95 shadow-sm"
                 >
-                    <svg class="w-7 h-7 lg:w-10 lg:h-10 2xl:w-14 2xl:h-14"><use href="#icon-qr-code"></use></svg>
+                    <svg class="w-6 h-6 sm:w-7 sm:h-7 lg:w-10 lg:h-10 2xl:w-14 2xl:h-14"><use href="#icon-qr-code"></use></svg>
                     Mostrar Código QR
                 </button>
             </div>
         </div>
 
-        <!-- Botón Administrador Footer Relativo (Soluciona el problema de superposición) -->
-        <div class="w-full flex justify-center mt-6 lg:mt-10 flex-shrink-0">
+        <!-- Botón Administrador Footer Relativo -->
+        <div class="w-full flex justify-center mt-4 sm:mt-6 lg:mt-10 flex-shrink-0">
             <button 
                 onclick="window.switchView('view-admin-login')"
-                class="text-stone-400 hover:text-stone-600 flex items-center gap-2 text-sm lg:text-lg 2xl:text-2xl transition-colors p-4 rounded-full hover:bg-stone-200/50"
+                class="text-stone-400 hover:text-stone-600 flex items-center gap-2 text-xs sm:text-sm lg:text-lg 2xl:text-2xl transition-colors p-3 sm:p-4 rounded-full hover:bg-stone-200/50"
             >
                 <svg class="w-4 h-4 lg:w-6 lg:h-6 2xl:w-8 2xl:h-8"><use href="#icon-users"></use></svg> Acceso Organizador
             </button>
@@ -312,38 +312,39 @@
     <!-- ==========================================
          VISTA 1.5: MOSTRAR CÓDIGO QR PANTALLA COMPLETA
          ========================================== -->
-    <div id="view-show-qr" class="view hidden-view min-h-screen w-full flex flex-col items-center justify-center p-6 relative z-10 overflow-hidden">
+    <div id="view-show-qr" class="view hidden-view min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-6 relative z-10 overflow-hidden">
         
         <!-- Nuevo fondo tipo marca de agua para el QR -->
         <div id="qr-watermark-bg" class="absolute inset-0 z-[-1] bg-center bg-no-repeat bg-contain opacity-15 md:opacity-20 pointer-events-none m-8 lg:m-24" style="background-image: none;"></div>
 
         <button 
             onclick="window.switchView('view-totem')"
-            class="absolute top-8 right-8 lg:top-12 lg:right-12 2xl:top-16 2xl:right-16 text-stone-800 p-3 lg:p-5 2xl:p-6 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm"
+            class="absolute top-6 right-6 sm:top-8 sm:right-8 lg:top-12 lg:right-12 2xl:top-16 2xl:right-16 text-stone-800 p-3 lg:p-5 2xl:p-6 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm"
         >
-            <svg class="w-7 h-7 lg:w-10 lg:h-10 2xl:w-14 2xl:h-14"><use href="#icon-x"></use></svg>
+            <svg class="w-6 h-6 sm:w-7 sm:h-7 lg:w-10 lg:h-10 2xl:w-14 2xl:h-14"><use href="#icon-x"></use></svg>
         </button>
 
-        <div class="w-full max-w-md lg:max-w-2xl 2xl:max-w-4xl flex flex-col items-center justify-center space-y-10 lg:space-y-16 2xl:space-y-24 text-center my-auto">
-            <div class="space-y-4 lg:space-y-8">
-                <h2 class="text-4xl md:text-5xl lg:text-7xl 2xl:text-8xl font-serif text-amber-700 drop-shadow-sm">Escanea con tu celular</h2>
-                <p class="text-stone-600 text-xl lg:text-3xl 2xl:text-4xl">Abre la cámara de tu teléfono y apunta a este código para acceder a tu plataforma.</p>
+        <div class="w-full max-w-md lg:max-w-2xl 2xl:max-w-4xl flex flex-col items-center justify-center space-y-6 sm:space-y-10 lg:space-y-16 2xl:space-y-24 text-center my-auto">
+            <div class="space-y-3 sm:space-y-4 lg:space-y-8 px-4">
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl 2xl:text-8xl font-serif text-amber-700 drop-shadow-sm">Escanea con tu celular</h2>
+                <p class="text-stone-600 text-lg sm:text-xl lg:text-3xl 2xl:text-4xl">Abre la cámara de tu teléfono y apunta a este código para acceder a tu plataforma.</p>
             </div>
 
-            <div class="bg-white/60 backdrop-blur-md p-8 lg:p-12 2xl:p-16 rounded-[2rem] lg:rounded-[3rem] 2xl:rounded-[4rem] border-2 border-white/50 shadow-xl inline-block relative z-10">
-                <div class="bg-white p-4 lg:p-8 2xl:p-12 rounded-3xl lg:rounded-[2.5rem] 2xl:rounded-[3rem] shadow-sm">
-                    <div class="relative flex items-center justify-center w-64 h-64 md:w-80 md:h-80 lg:w-[24rem] lg:h-[24rem] 2xl:w-[36rem] 2xl:h-[36rem]">
+            <div class="bg-white/60 backdrop-blur-md p-6 sm:p-8 lg:p-12 2xl:p-16 rounded-[2rem] lg:rounded-[3rem] 2xl:rounded-[4rem] border-2 border-white/50 shadow-xl inline-block relative z-10 mx-4">
+                <div class="bg-white p-3 sm:p-4 lg:p-8 2xl:p-12 rounded-[1.5rem] sm:rounded-3xl lg:rounded-[2.5rem] 2xl:rounded-[3rem] shadow-sm">
+                    <!-- Ajuste específico para que el código QR encaje en pantallas de celular muy pequeñas -->
+                    <div class="relative flex items-center justify-center w-52 h-52 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-[24rem] lg:h-[24rem] 2xl:w-[36rem] 2xl:h-[36rem]">
                         <img 
                             id="dynamic-qr-img"
                             src="" 
                             alt="Código QR del Evento" 
-                            class="w-full h-full relative z-10"
+                            class="w-full h-full relative z-10 object-contain"
                         />
                     </div>
                 </div>
             </div>
             
-            <p class="text-stone-500 font-medium tracking-wide text-center text-xl lg:text-3xl 2xl:text-5xl uppercase">
+            <p class="text-stone-500 font-medium tracking-wide text-center text-lg sm:text-xl lg:text-3xl 2xl:text-5xl uppercase">
                 App de Eventos
             </p>
         </div>
@@ -484,7 +485,7 @@
     <!-- ==========================================
          VISTA 4: PANEL DE ADMINISTRACIÓN (TIPO APP)
          ========================================== -->
-    <div id="view-admin" class="view hidden-view min-h-screen w-full p-6 md:p-12 lg:p-16 2xl:p-24 relative z-10">
+    <div id="view-admin" class="view hidden-view min-h-screen w-full p-4 sm:p-6 md:p-12 lg:p-16 2xl:p-24 relative z-10">
         <div class="max-w-7xl 2xl:max-w-[100rem] mx-auto space-y-8 lg:space-y-12 2xl:space-y-16 mt-4">
             
             <!-- Header Glassmorphism -->
@@ -501,7 +502,7 @@
             </div>
 
             <!-- Contenido Principal: Formularios y Lista -->
-            <div class="grid lg:grid-cols-3 gap-8 lg:gap-12 2xl:gap-16">
+            <div class="grid lg:grid-cols-3 gap-6 lg:gap-12 2xl:gap-16">
                 <!-- Columna Izquierda (Controles) -->
                 <div class="lg:col-span-1 flex flex-col gap-6 lg:gap-10 2xl:gap-12">
                     
@@ -515,7 +516,7 @@
                                     id="admin-input-name" 
                                     placeholder="Ej. Juan Pérez" 
                                     required
-                                    class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white bg-white/50 focus:bg-white focus:border-amber-400 focus:ring-0 outline-none transition-colors text-lg lg:text-xl 2xl:text-2xl"
+                                    class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white bg-white/50 focus:bg-white focus:border-amber-400 focus:ring-0 outline-none transition-colors text-base sm:text-lg lg:text-xl 2xl:text-2xl"
                                 >
                             </div>
                             <div>
@@ -524,7 +525,7 @@
                                     id="admin-input-table" 
                                     placeholder="Ej. 12" 
                                     required
-                                    class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white bg-white/50 focus:bg-white focus:border-amber-400 focus:ring-0 outline-none transition-colors text-lg lg:text-xl 2xl:text-2xl"
+                                    class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white bg-white/50 focus:bg-white focus:border-amber-400 focus:ring-0 outline-none transition-colors text-base sm:text-lg lg:text-xl 2xl:text-2xl"
                                 >
                             </div>
                             <button type="submit" class="w-full bg-stone-800 text-white py-4 lg:py-6 2xl:py-8 rounded-xl lg:rounded-2xl hover:bg-stone-900 transition-colors font-semibold text-lg lg:text-2xl 2xl:text-3xl flex items-center justify-center mt-4 lg:mt-8 text-center shadow-md active:scale-95">
@@ -539,7 +540,7 @@
                             <svg class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10 text-amber-600"><use href="#icon-party-popper"></use></svg> Tipo de Evento
                         </h3>
                         <p class="text-sm lg:text-lg 2xl:text-xl text-stone-500 mb-4 lg:mb-8">Cambia la lista de retos de la ruleta.</p>
-                        <select id="admin-event-type" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white bg-white/50 focus:bg-white focus:border-amber-400 focus:ring-0 outline-none transition-colors text-lg lg:text-xl 2xl:text-2xl mb-4 lg:mb-8 font-medium text-stone-700">
+                        <select id="admin-event-type" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white bg-white/50 focus:bg-white focus:border-amber-400 focus:ring-0 outline-none transition-colors text-base sm:text-lg lg:text-xl 2xl:text-2xl mb-4 lg:mb-8 font-medium text-stone-700">
                             <option value="boda">Boda (100 Retos)</option>
                             <option value="cumpleanos">Cumpleaños (100 Retos)</option>
                             <option value="cristiano">Encuentro / Cristiano (36 Retos)</option>
@@ -593,7 +594,7 @@
                 </div>
                 
                 <!-- Contenedor Dinámico de Fotos en Admin -->
-                <div id="admin-gallery-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-5 lg:gap-8 2xl:gap-10">
+                <div id="admin-gallery-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-3 sm:gap-5 lg:gap-8 2xl:gap-10">
                     <!-- Las fotos se inyectarán aquí mediante JS -->
                 </div>
             </div>
@@ -604,109 +605,109 @@
     <!-- ==========================================
          VISTA 5: CONFIGURACIÓN OCULTA PANTALLA COMPLETA
          ========================================== -->
-    <div id="view-config" class="view hidden-view min-h-screen w-full flex flex-col items-center justify-center py-12 lg:py-24 px-6 relative z-10 overflow-y-auto">
-        <button onclick="window.switchView('view-totem')" class="fixed top-8 right-8 lg:top-12 lg:right-12 2xl:top-16 2xl:right-16 text-stone-800 p-3 lg:p-5 2xl:p-6 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm z-50">
-            <svg class="w-7 h-7 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-x"></use></svg>
+    <div id="view-config" class="view hidden-view min-h-screen w-full flex flex-col items-center justify-center py-10 sm:py-12 lg:py-24 px-4 sm:px-6 relative z-10 overflow-y-auto">
+        <button onclick="window.switchView('view-totem')" class="fixed top-6 right-6 sm:top-8 sm:right-8 lg:top-12 lg:right-12 2xl:top-16 2xl:right-16 text-stone-800 p-3 lg:p-5 2xl:p-6 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm z-50">
+            <svg class="w-6 h-6 sm:w-7 sm:h-7 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-x"></use></svg>
         </button>
 
         <div class="w-full max-w-3xl lg:max-w-5xl 2xl:max-w-7xl flex flex-col space-y-8 lg:space-y-12 2xl:space-y-16 mt-10">
             <div class="flex flex-col items-center gap-4 lg:gap-8 border-b-2 border-stone-300/50 pb-6 lg:pb-10 text-center">
-                <div class="w-20 h-20 lg:w-32 lg:h-32 2xl:w-40 2xl:h-40 bg-white/60 backdrop-blur-md border border-white/50 rounded-full flex items-center justify-center shadow-sm">
-                    <svg class="w-10 h-10 lg:w-16 lg:h-16 2xl:w-20 2xl:h-20 text-amber-600"><use href="#icon-settings"></use></svg>
+                <div class="w-16 h-16 sm:w-20 sm:h-20 lg:w-32 lg:h-32 2xl:w-40 2xl:h-40 bg-white/60 backdrop-blur-md border border-white/50 rounded-full flex items-center justify-center shadow-sm">
+                    <svg class="w-8 h-8 sm:w-10 sm:h-10 lg:w-16 lg:h-16 2xl:w-20 2xl:h-20 text-amber-600"><use href="#icon-settings"></use></svg>
                 </div>
-                <h2 class="text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-serif text-amber-700 drop-shadow-sm">Configuración General</h2>
-                <p class="text-lg lg:text-2xl 2xl:text-3xl text-stone-600">Personaliza la experiencia visual y los textos del evento.</p>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-serif text-amber-700 drop-shadow-sm px-2">Configuración General</h2>
+                <p class="text-base sm:text-lg lg:text-2xl 2xl:text-3xl text-stone-600 px-4">Personaliza la experiencia visual y los textos del evento.</p>
             </div>
             
-            <form id="config-form" class="space-y-6 lg:space-y-10 2xl:space-y-12 bg-white/60 backdrop-blur-xl border border-white/50 p-8 md:p-12 lg:p-16 2xl:p-24 rounded-[2.5rem] lg:rounded-[4rem] shadow-lg">
+            <form id="config-form" class="space-y-6 lg:space-y-10 2xl:space-y-12 bg-white/60 backdrop-blur-xl border border-white/50 p-6 sm:p-8 md:p-12 lg:p-16 2xl:p-24 rounded-[2rem] lg:rounded-[4rem] shadow-lg">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10 2xl:gap-12">
                     <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Título Principal</label>
-                        <input id="cfg-title" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
+                        <label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 sm:mb-2 lg:mb-4 uppercase tracking-wide">Título Principal</label>
+                        <input id="cfg-title" type="text" class="w-full p-3 sm:p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base sm:text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
                     </div>
                     <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Subtítulo</label>
-                        <input id="cfg-subtitle" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
+                        <label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 sm:mb-2 lg:mb-4 uppercase tracking-wide">Subtítulo</label>
+                        <input id="cfg-subtitle" type="text" class="w-full p-3 sm:p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base sm:text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 sm:mb-2 lg:mb-4 uppercase tracking-wide">URL Logo de Inicio (Opcional)</label>
+                        <input id="cfg-home-logo" type="url" placeholder="Ej. https://ejemplo.com/logo-inicio.png" class="w-full p-3 sm:p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base sm:text-lg lg:text-2xl 2xl:text-3xl transition-colors">
                     </div>
                     <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">URL Logo de Inicio (Opcional)</label>
-                        <input id="cfg-home-logo" type="url" placeholder="Ej. https://ejemplo.com/logo-inicio.png" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors">
+                        <label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 sm:mb-2 lg:mb-4 uppercase tracking-wide">Botón de Búsqueda</label>
+                        <input id="cfg-search-btn" type="text" class="w-full p-3 sm:p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base sm:text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
                     </div>
                     <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Botón de Búsqueda</label>
-                        <input id="cfg-search-btn" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
+                        <label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 sm:mb-2 lg:mb-4 uppercase tracking-wide">Descripción Ruleta</label>
+                        <input id="cfg-roulette-text" type="text" class="w-full p-3 sm:p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base sm:text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
                     </div>
                     <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Descripción Ruleta</label>
-                        <input id="cfg-roulette-text" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
+                        <label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 sm:mb-2 lg:mb-4 uppercase tracking-wide">Etiqueta de Mesa</label>
+                        <input id="cfg-table-label" type="text" class="w-full p-3 sm:p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base sm:text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
                     </div>
                     <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Etiqueta de Mesa</label>
-                        <input id="cfg-table-label" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
+                        <label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 sm:mb-2 lg:mb-4 uppercase tracking-wide">Botón Aceptar Reto</label>
+                        <input id="cfg-accept-btn" type="text" class="w-full p-3 sm:p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base sm:text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
                     </div>
                     <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Botón Aceptar Reto</label>
-                        <input id="cfg-accept-btn" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
+                        <label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 sm:mb-2 lg:mb-4 uppercase tracking-wide">Título Menú Video</label>
+                        <input id="cfg-video-title" type="text" class="w-full p-3 sm:p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base sm:text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
                     </div>
                     <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Título Menú Video</label>
-                        <input id="cfg-video-title" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
+                        <label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 sm:mb-2 lg:mb-4 uppercase tracking-wide">Subtítulo Invitado</label>
+                        <input id="cfg-dashboard-subtitle" type="text" class="w-full p-3 sm:p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base sm:text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
                     </div>
-                    <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Subtítulo Invitado</label>
-                        <input id="cfg-dashboard-subtitle" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">URL Logo Marca de Agua (Pantalla QR)</label>
-                        <input id="cfg-qr-logo" type="url" placeholder="Ej. https://ejemplo.com/logo.png" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors">
+                    <div class="md:col-span-2">
+                        <label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 sm:mb-2 lg:mb-4 uppercase tracking-wide">URL Logo Marca de Agua (Pantalla QR)</label>
+                        <input id="cfg-qr-logo" type="url" placeholder="Ej. https://ejemplo.com/logo.png" class="w-full p-3 sm:p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base sm:text-lg lg:text-2xl 2xl:text-3xl transition-colors">
                     </div>
                 </div>
 
                 <!-- Toggle para Acceso Anónimo -->
-                <div class="flex items-center gap-3 lg:gap-5 pt-2 lg:pt-4 bg-white/50 p-6 rounded-2xl border-2 border-amber-200/50 mt-6 lg:mt-10 shadow-inner">
-                    <input id="cfg-anonymous" type="checkbox" class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10 rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer">
-                    <label for="cfg-anonymous" class="text-base lg:text-xl 2xl:text-3xl font-bold text-stone-800 cursor-pointer select-none">Habilitar "Acceso Directo" (Oculta la búsqueda de invitados y salta a los retos)</label>
+                <div class="flex items-center gap-3 lg:gap-5 pt-2 lg:pt-4 bg-white/50 p-4 sm:p-6 rounded-xl sm:rounded-2xl border-2 border-amber-200/50 mt-6 lg:mt-10 shadow-inner">
+                    <input id="cfg-anonymous" type="checkbox" class="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10 rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer flex-shrink-0">
+                    <label for="cfg-anonymous" class="text-sm sm:text-base lg:text-xl 2xl:text-3xl font-bold text-stone-800 cursor-pointer select-none leading-tight">Habilitar "Acceso Directo" (Oculta la búsqueda de invitados y salta a los retos)</label>
                 </div>
 
-                <hr class="border-stone-300/40 my-8 lg:my-12">
+                <hr class="border-stone-300/40 my-6 sm:my-8 lg:my-12">
 
                 <div class="space-y-6 lg:space-y-10">
                     <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">URL Fondo Ruleta</label>
-                        <input id="cfg-roulette-bg" type="url" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
+                        <label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 sm:mb-2 lg:mb-4 uppercase tracking-wide">URL Fondo Ruleta</label>
+                        <input id="cfg-roulette-bg" type="url" class="w-full p-3 sm:p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base sm:text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
                     </div>
                     <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">URL Centro Ruleta</label>
-                        <input id="cfg-roulette-center" type="url" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
+                        <label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 sm:mb-2 lg:mb-4 uppercase tracking-wide">URL Centro Ruleta</label>
+                        <input id="cfg-roulette-center" type="url" class="w-full p-3 sm:p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base sm:text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
                     </div>
                 </div>
                 
                 <!-- SECCIÓN MEJORADA DE VIDEO -->
-                <div class="bg-white/80 p-6 lg:p-10 2xl:p-12 rounded-2xl lg:rounded-3xl border-2 border-amber-200/50 shadow-inner space-y-4 lg:space-y-8 mt-6 lg:mt-10">
+                <div class="bg-white/80 p-5 sm:p-6 lg:p-10 2xl:p-12 rounded-2xl lg:rounded-3xl border-2 border-amber-200/50 shadow-inner space-y-4 sm:space-y-6 lg:space-y-8 mt-6 lg:mt-10">
                     <div class="flex items-center gap-3 lg:gap-5 pb-4 lg:pb-6 border-b border-amber-200">
-                        <input id="cfg-show-video" type="checkbox" class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10 rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer">
-                        <label for="cfg-show-video" class="text-base lg:text-2xl 2xl:text-3xl font-bold text-stone-800 cursor-pointer select-none">Mostrar botón de Video en el Inicio</label>
+                        <input id="cfg-show-video" type="checkbox" class="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10 rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer flex-shrink-0">
+                        <label for="cfg-show-video" class="text-sm sm:text-base lg:text-2xl 2xl:text-3xl font-bold text-stone-800 cursor-pointer select-none leading-tight">Mostrar botón de Video en el Inicio</label>
                     </div>
                     <div>
-                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-800 mb-2 lg:mb-4 uppercase tracking-wide">URL Video Principal</label>
-                        <input id="cfg-video" type="url" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white bg-white focus:bg-white focus:border-amber-500 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
-                        <p class="text-sm lg:text-lg 2xl:text-xl text-stone-500 mt-2 lg:mt-4 leading-relaxed">
+                        <label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-800 mb-1 sm:mb-2 lg:mb-4 uppercase tracking-wide">URL Video Principal</label>
+                        <input id="cfg-video" type="url" class="w-full p-3 sm:p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white bg-white focus:bg-white focus:border-amber-500 outline-none text-base sm:text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
+                        <p class="text-xs sm:text-sm lg:text-lg 2xl:text-xl text-stone-500 mt-2 lg:mt-4 leading-relaxed">
                             💡 Para usar Bucle (Loop), prefiere YouTube o enlaces `.mp4`. Google Drive restringe funciones nativas.
                         </p>
                     </div>
                     <div class="flex items-center gap-3 lg:gap-5 pt-2 lg:pt-4">
-                        <input id="cfg-video-loop" type="checkbox" class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10 rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer">
-                        <label for="cfg-video-loop" class="text-base lg:text-2xl 2xl:text-3xl font-bold text-stone-800 cursor-pointer select-none">Reproducir en Bucle Infinito</label>
+                        <input id="cfg-video-loop" type="checkbox" class="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10 rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer flex-shrink-0">
+                        <label for="cfg-video-loop" class="text-sm sm:text-base lg:text-2xl 2xl:text-3xl font-bold text-stone-800 cursor-pointer select-none leading-tight">Reproducir en Bucle Infinito</label>
                     </div>
                 </div>
                 
                 <div class="pt-4 lg:pt-8">
-                    <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Contraseña Admin</label>
-                    <input id="cfg-admin-pass" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors text-center tracking-widest font-mono" required>
+                    <label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 sm:mb-2 lg:mb-4 uppercase tracking-wide">Contraseña Admin</label>
+                    <input id="cfg-admin-pass" type="text" class="w-full p-3 sm:p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base sm:text-lg lg:text-2xl 2xl:text-3xl transition-colors text-center tracking-widest font-mono" required>
                 </div>
                 
-                <button type="submit" class="w-full bg-stone-900 text-amber-400 py-5 lg:py-8 2xl:py-10 rounded-2xl lg:rounded-3xl font-bold text-xl lg:text-3xl 2xl:text-4xl hover:bg-stone-800 transition-colors shadow-xl active:scale-95 flex justify-center items-center gap-3 lg:gap-6 mt-8 lg:mt-16">
-                    <svg class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10"><use href="#icon-save"></use></svg> GUARDAR CONFIGURACIÓN
+                <button type="submit" class="w-full bg-stone-900 text-amber-400 py-4 sm:py-5 lg:py-8 2xl:py-10 rounded-2xl lg:rounded-3xl font-bold text-lg sm:text-xl lg:text-3xl 2xl:text-4xl hover:bg-stone-800 transition-colors shadow-xl active:scale-95 flex justify-center items-center gap-2 sm:gap-3 lg:gap-6 mt-6 sm:mt-8 lg:mt-16">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10"><use href="#icon-save"></use></svg> GUARDAR CONFIGURACIÓN
                 </button>
             </form>
         </div>
