@@ -111,6 +111,36 @@
     </div>
 
     <!-- ==========================================
+         MODAL DE REGISTRO PARA ACCESO DIRECTO
+         ========================================== -->
+    <div id="modal-anonymous-register" class="fixed inset-0 bg-stone-900/90 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white/95 backdrop-blur-xl border border-white/50 rounded-[2rem] lg:rounded-[3rem] shadow-2xl p-8 lg:p-12 text-center space-y-6 lg:space-y-8 relative overflow-hidden animate-pop">
+            <button onclick="window.closeAnonymousRegister()" class="absolute top-4 right-4 lg:top-6 lg:right-6 text-stone-400 hover:text-stone-700 transition-colors p-2 bg-stone-100 rounded-full">
+                <svg class="w-6 h-6 lg:w-8 lg:h-8"><use href="#icon-x"></use></svg>
+            </button>
+            <div class="w-16 h-16 lg:w-24 lg:h-24 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                <svg class="w-8 h-8 lg:w-12 lg:h-12 text-amber-600"><use href="#icon-users"></use></svg>
+            </div>
+            <h2 class="text-2xl md:text-3xl lg:text-4xl font-serif text-stone-800">¿Quién eres?</h2>
+            <p class="text-stone-600 text-base lg:text-xl">Por favor, ingresa tu <span class="font-bold">nombre y apellido</span> para registrarte y guardar tus fotos en la galería.</p>
+            
+            <form id="anonymous-register-form" onsubmit="window.submitAnonymousRegister(event)" class="space-y-4 lg:space-y-6 pt-4">
+                <input 
+                    type="text" 
+                    id="anonymous-name-input" 
+                    placeholder="Ej. Ana Pérez" 
+                    required 
+                    minlength="3"
+                    class="w-full p-4 lg:p-6 rounded-xl lg:rounded-2xl border-2 border-white bg-stone-50 focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-500/20 outline-none text-lg lg:text-2xl transition-all shadow-inner text-center"
+                >
+                <button type="submit" class="w-full bg-amber-600 text-white py-4 lg:py-6 rounded-xl lg:rounded-2xl font-semibold text-lg lg:text-2xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95 flex justify-center items-center gap-2">
+                    Continuar a los Retos
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
          DINÁMICA DE RETOS (RULETA, CONTEO, REVELACIÓN Y ÉXITO)
          ========================================== -->
     
@@ -1222,13 +1252,41 @@
         };
 
         window.enterAnonymous = function() {
-            // Saltarse el formulario y entrar directo
-            currentGuest = { name: "Invitado Especial", id: "anonymous", table: "-" };
+            // En lugar de entrar directo, mostramos el modal para pedir el nombre
+            const modal = document.getElementById('modal-anonymous-register');
+            document.getElementById('anonymous-name-input').value = ''; 
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closeAnonymousRegister = function() {
+            const modal = document.getElementById('modal-anonymous-register');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        window.submitAnonymousRegister = function(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById('anonymous-name-input');
+            const nameVal = nameInput.value.trim();
+            
+            if (!nameVal) {
+                alert("Por favor, ingresa tu nombre y apellido.");
+                return;
+            }
+
+            // Registramos al usuario actual con el nombre proporcionado
+            currentGuest = { name: nameVal, id: "anon_" + Date.now(), table: "-" };
             document.getElementById('guest-name-display').innerText = currentGuest.name;
             
+            // Ocultar el contenedor de la mesa ya que no tienen mesa asignada
             const tableContainer = document.getElementById('guest-table-container');
             if (tableContainer) tableContainer.classList.add('hidden');
             
+            // Cerrar modal de registro
+            window.closeAnonymousRegister();
+            
+            // Mostrar la ruleta para comenzar
             const rouletteModal = document.getElementById('modal-roulette');
             rouletteModal.classList.remove('hidden');
             rouletteModal.classList.add('flex');
