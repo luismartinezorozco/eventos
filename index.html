@@ -241,8 +241,8 @@
                 <span id="totem-video-btn-text">Mensaje de poder</span>
             </button>
 
-            <!-- Sección de Búsqueda -->
-            <div class="w-full space-y-4 lg:space-y-6 2xl:space-y-8 pt-4 lg:pt-8 2xl:px-12">
+            <!-- Sección de Búsqueda (Ocultable desde Configuración) -->
+            <div id="totem-search-section" class="w-full space-y-4 lg:space-y-6 2xl:space-y-8 pt-4 lg:pt-8 2xl:px-12">
                 <div class="relative text-left">
                     <svg class="absolute left-6 top-1/2 transform -translate-y-1/2 text-stone-400 w-7 h-7 lg:w-9 lg:h-9 2xl:w-12 2xl:h-12 pointer-events-none"><use href="#icon-search"></use></svg>
                     <input
@@ -257,6 +257,17 @@
                     class="w-full bg-amber-600 text-white py-5 lg:py-7 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-xl lg:text-3xl 2xl:text-5xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95"
                 >
                     Buscar mi puesto
+                </button>
+            </div>
+
+            <!-- Sección de Acceso Anónimo (Oculta por defecto, se activa en Configuración) -->
+            <div id="totem-anonymous-section" class="w-full hidden space-y-4 lg:space-y-6 2xl:space-y-8 pt-4 lg:pt-8 2xl:px-12">
+                <button 
+                    onclick="window.enterAnonymous()"
+                    class="w-full bg-amber-600 text-white py-5 lg:py-7 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-xl lg:text-3xl 2xl:text-5xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95 flex items-center justify-center gap-3 lg:gap-5"
+                >
+                    <svg class="w-8 h-8 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-star"></use></svg>
+                    Entrar a los Retos
                 </button>
             </div>
 
@@ -314,12 +325,14 @@
 
             <div class="bg-white/60 backdrop-blur-md p-8 lg:p-12 2xl:p-16 rounded-[2rem] lg:rounded-[3rem] 2xl:rounded-[4rem] border-2 border-white/50 shadow-xl inline-block">
                 <div class="bg-white p-4 lg:p-8 2xl:p-12 rounded-3xl lg:rounded-[2.5rem] 2xl:rounded-[3rem] shadow-sm">
-                    <img 
-                        id="dynamic-qr-img"
-                        src="" 
-                        alt="Código QR del Evento" 
-                        class="w-64 h-64 md:w-80 md:h-80 lg:w-[24rem] lg:h-[24rem] 2xl:w-[36rem] 2xl:h-[36rem] mix-blend-multiply"
-                    />
+                    <div id="qr-bg-container" class="relative flex items-center justify-center bg-center bg-contain bg-no-repeat w-64 h-64 md:w-80 md:h-80 lg:w-[24rem] lg:h-[24rem] 2xl:w-[36rem] 2xl:h-[36rem]">
+                        <img 
+                            id="dynamic-qr-img"
+                            src="" 
+                            alt="Código QR del Evento" 
+                            class="w-full h-full mix-blend-multiply relative z-10"
+                        />
+                    </div>
                 </div>
             </div>
             
@@ -349,7 +362,7 @@
         </div>
             
         <!-- Número de Mesa Glassmorphism -->
-        <div class="w-full bg-white/60 backdrop-blur-md border-2 border-white/50 rounded-[2.5rem] lg:rounded-[3rem] p-10 lg:p-16 2xl:p-20 text-center shadow-sm">
+        <div id="guest-table-container" class="w-full bg-white/60 backdrop-blur-md border-2 border-white/50 rounded-[2.5rem] lg:rounded-[3rem] p-10 lg:p-16 2xl:p-20 text-center shadow-sm">
             <p id="table-label-text" class="text-sm md:text-base lg:text-xl 2xl:text-3xl text-stone-500 font-bold uppercase tracking-widest mb-2 lg:mb-6">Tu mesa es la número</p>
             <p id="guest-table-display" class="text-8xl md:text-9xl lg:text-[10rem] 2xl:text-[14rem] font-serif text-amber-600 drop-shadow-sm leading-none">--</p>
         </div>
@@ -632,6 +645,16 @@
                         <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">Subtítulo Invitado</label>
                         <input id="cfg-dashboard-subtitle" type="text" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors" required>
                     </div>
+                    <div>
+                        <label class="block text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-2 lg:mb-4 uppercase tracking-wide">URL Logo Fondo QR</label>
+                        <input id="cfg-qr-logo" type="url" placeholder="Ej. https://ejemplo.com/logo.png" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-lg lg:text-2xl 2xl:text-3xl transition-colors">
+                    </div>
+                </div>
+
+                <!-- Toggle para Acceso Anónimo -->
+                <div class="flex items-center gap-3 lg:gap-5 pt-2 lg:pt-4 bg-white/50 p-6 rounded-2xl border-2 border-amber-200/50 mt-6 lg:mt-10 shadow-inner">
+                    <input id="cfg-anonymous" type="checkbox" class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10 rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer">
+                    <label for="cfg-anonymous" class="text-base lg:text-xl 2xl:text-3xl font-bold text-stone-800 cursor-pointer select-none">Habilitar "Acceso Directo" (Oculta la búsqueda de invitados y salta a los retos)</label>
                 </div>
 
                 <hr class="border-stone-300/40 my-8 lg:my-12">
@@ -722,7 +745,9 @@
             videoLink: "https://drive.google.com/file/d/1pJXSVBktub3dYF72z1OJodXbgwYpvP4L/preview",
             videoLoop: true, // Nuevo estado para el bucle
             adminPassword: "admin123",
-            eventType: "boda" // Por defecto boda
+            eventType: "boda", // Por defecto boda
+            allowAnonymous: false,
+            qrLogo: ""
         };
 
         // DICCIONARIO MAESTRO DE RETOS POR TIPO DE EVENTO
@@ -958,6 +983,33 @@
             const rCenterEl = document.getElementById('roulette-center-img');
             if(rCenterEl) rCenterEl.src = window.appConfig.rouletteCenter;
 
+            // Novedades: Modo Anónimo y Logo QR
+            const anonymousCheckbox = document.getElementById('cfg-anonymous');
+            if(anonymousCheckbox) anonymousCheckbox.checked = window.appConfig.allowAnonymous === true;
+            
+            const qrLogoInput = document.getElementById('cfg-qr-logo');
+            if(qrLogoInput) qrLogoInput.value = window.appConfig.qrLogo || "";
+
+            const totemSearchSection = document.getElementById('totem-search-section');
+            const totemAnonymousSection = document.getElementById('totem-anonymous-section');
+            
+            if (window.appConfig.allowAnonymous) {
+                if(totemSearchSection) totemSearchSection.classList.add('hidden');
+                if(totemAnonymousSection) totemAnonymousSection.classList.remove('hidden');
+            } else {
+                if(totemSearchSection) totemSearchSection.classList.remove('hidden');
+                if(totemAnonymousSection) totemAnonymousSection.classList.add('hidden');
+            }
+
+            const qrBgContainer = document.getElementById('qr-bg-container');
+            if (qrBgContainer) {
+                if (window.appConfig.qrLogo && window.appConfig.qrLogo.trim() !== "") {
+                    qrBgContainer.style.backgroundImage = `url('${window.appConfig.qrLogo}')`;
+                } else {
+                    qrBgContainer.style.backgroundImage = 'none';
+                }
+            }
+
             // Rellenar formulario de config
             document.getElementById('cfg-title').value = window.appConfig.title || "¡Bienvenidas!";
             document.getElementById('cfg-subtitle').value = window.appConfig.subtitle || "Encuentra tu puesto y únete a la celebración";
@@ -994,7 +1046,9 @@
                 rouletteCenter: document.getElementById('cfg-roulette-center').value,
                 videoLink: document.getElementById('cfg-video').value,
                 videoLoop: document.getElementById('cfg-video-loop').checked,
-                adminPassword: document.getElementById('cfg-admin-pass').value
+                adminPassword: document.getElementById('cfg-admin-pass').value,
+                allowAnonymous: document.getElementById('cfg-anonymous').checked,
+                qrLogo: document.getElementById('cfg-qr-logo').value
             };
 
             try {
@@ -1118,6 +1172,19 @@
                     alert("Hubo un error al intentar vaciar la galería.");
                 }
             }
+        };
+
+        window.enterAnonymous = function() {
+            // Saltarse el formulario y entrar directo
+            currentGuest = { name: "Invitado Especial", id: "anonymous", table: "-" };
+            document.getElementById('guest-name-display').innerText = currentGuest.name;
+            
+            const tableContainer = document.getElementById('guest-table-container');
+            if (tableContainer) tableContainer.classList.add('hidden');
+            
+            const rouletteModal = document.getElementById('modal-roulette');
+            rouletteModal.classList.remove('hidden');
+            rouletteModal.classList.add('flex');
         };
 
         window.handleAdminLogin = function(event) {
@@ -1479,6 +1546,11 @@
                 currentGuest = found;
                 document.getElementById('guest-name-display').innerText = found.name;
                 document.getElementById('guest-table-display').innerText = found.table;
+                
+                // Asegurarse de mostrar el recuadro de la mesa si entran de forma normal
+                const tableContainer = document.getElementById('guest-table-container');
+                if (tableContainer) tableContainer.classList.remove('hidden');
+
                 searchInput.value = ''; 
                 
                 const rouletteModal = document.getElementById('modal-roulette');
