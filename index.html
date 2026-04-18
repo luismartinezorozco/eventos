@@ -34,7 +34,7 @@
     <!-- ==========================================
          PANTALLA DE CARGA (SPLASH SCREEN)
          ========================================== -->
-    <div id="global-loader" class="fixed inset-0 z-[10000] bg-stone-100 flex flex-col items-center justify-center transition-opacity duration-500">
+    <div id="global-loader" class="fixed inset-0 z-[10000] bg-stone-100 flex flex-col items-center justify-center transition-opacity duration-300">
         <div class="relative flex items-center justify-center mb-6">
             <div class="w-20 h-20 lg:w-24 lg:h-24 border-4 border-amber-200 rounded-full animate-ping absolute"></div>
             <div class="w-16 h-16 lg:w-20 lg:h-20 border-4 border-amber-500 border-t-transparent rounded-full animate-spin relative z-10"></div>
@@ -546,7 +546,9 @@
         window.currentGuest = null; window.challengeAccepted = false; 
         window.currentPhotoUrl = ''; window.currentPhotoName = '';
         window.selectedChallenge = ''; window.pendingChallenges = [];
+        
         window.isFirstLoad = true; 
+        window.firebaseConnected = false;
         
         window.RETOS_DB = {
             boda: ["Tómate una selfie con la novia.", "Tómate una selfie con el novio.", "Fotografía un beso apasionado.", "Captura una lágrima de felicidad.", "Toma una foto del centro de mesa."],
@@ -555,18 +557,16 @@
             porcicultura: ["Selfie con un cerdo.", "Foto con el conferencista.", "Captura comiendo chicharrón.", "Selfie con veterinario.", "Stand innovador."]
         };
 
-        // FAIL-SAFE: Quita la pantalla de carga MÁXIMO a los 1.5 segundos SIEMPRE.
-        // Ya no esperamos al window.load, se ejecuta apenas el navegador lee esta línea.
-        setTimeout(() => {
-            if (window.isFirstLoad) {
-                const loader = document.getElementById('global-loader');
-                if (loader) {
-                    loader.classList.add('opacity-0');
-                    setTimeout(() => { loader.style.display = 'none'; }, 500);
-                }
-                window.isFirstLoad = false;
-            }
-        }, 1500);
+        // RECUPERAR CACHÉ (LocalStorage) para hacer la carga ultra-rápida y sin parpadeos
+        try {
+            const cachedConfig = localStorage.getItem('eventAppConfig');
+            if (cachedConfig) window.appConfig = { ...window.appConfig, ...JSON.parse(cachedConfig) };
+            
+            const cachedGuests = localStorage.getItem('eventAppGuests');
+            if (cachedGuests) window.guests = JSON.parse(cachedGuests);
+        } catch (e) {
+            console.warn("No se pudo leer la caché local.");
+        }
 
         window.aplicarConfiguracion = function() {
             const el = (id) => document.getElementById(id);
@@ -633,8 +633,21 @@
             }
         };
 
-        // Pintar con los valores por defecto instantáneamente
+        // Pintar instantáneamente con caché o valores por defecto
         window.aplicarConfiguracion();
+
+        // Ocultar la pantalla de carga casi inmediatamente (150ms)
+        function ocultarSplash() {
+            if (window.isFirstLoad) {
+                const loader = document.getElementById('global-loader');
+                if (loader) {
+                    loader.classList.add('opacity-0');
+                    setTimeout(() => { loader.style.display = 'none'; }, 300);
+                }
+                window.isFirstLoad = false;
+            }
+        }
+        setTimeout(ocultarSplash, 150);
     </script>
 
 
@@ -658,7 +671,6 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         
-        // Forzar long-polling para evitar bloqueos de WebSockets en entornos restrictivos
         const db = initializeFirestore(app, {
             experimentalForceLongPolling: true
         });
@@ -671,25 +683,27 @@
         function cargarConfiguracionBackground() {
             onSnapshot(doc(db, "configuracion", "general"), (docSnap) => {
                 if (docSnap.exists()) {
-                    window.appConfig = { ...window.appConfig, ...docSnap.data() };
+                    const newData = docSnap.data();
+                    window.appConfig = { ...window.appConfig, ...newData };
+                    
+                    // Guardar en la caché local
+                    try { localStorage.setItem('eventAppConfig', JSON.stringify(window.appConfig)); } catch (e) {}
+                    
                     window.aplicarConfiguracion();
                 }
-                
-                if (window.isFirstLoad) {
-                    const loader = document.getElementById('global-loader');
-                    if (loader) {
-                        loader.classList.add('opacity-0');
-                        setTimeout(() => { loader.style.display = 'none'; }, 500);
-                    }
-                    window.isFirstLoad = false;
-                }
+                ocultarSplash();
             });
         }
 
         function cargarInvitadosBackground() {
             onSnapshot(collection(db, "invitados"), (snapshot) => {
+                window.firebaseConnected = true; // Confirmar que Firebase ya terminó de descargar invitados
                 window.guests = [];
                 snapshot.forEach((docu) => { window.guests.push({ id: docu.id, ...docu.data() }); });
+                
+                // Guardar invitados en caché
+                try { localStorage.setItem('eventAppGuests', JSON.stringify(window.guests)); } catch (e) {}
+                
                 renderAdminList();
             });
         }
@@ -1094,6 +1108,13 @@
             const searchInput = document.getElementById('search-input');
             const query = searchInput.value.trim().toLowerCase();
             if (query === '') return;
+            
+            // Protección: Si el invitado escribe antes de que Firebase se conecte
+            if (window.guests.length === 0 && !window.firebaseConnected) {
+                alert('Sincronizando la lista de invitados... Por favor, intenta de nuevo en un par de segundos.');
+                return;
+            }
+            
             const found = window.guests.find(g => g.name.toLowerCase().includes(query));
 
             if (found) {
@@ -1106,7 +1127,9 @@
                 
                 const rouletteModal = document.getElementById('modal-roulette');
                 rouletteModal.classList.remove('hidden'); rouletteModal.classList.add('flex');
-            } else { alert('Invitado no encontrado. Por favor, intenta de nuevo.'); }
+            } else { 
+                alert('Invitado no encontrado. Por favor, verifica que tu nombre esté bien escrito o contacta al organizador.'); 
+            }
         };
 
         window.handlePhotoUpload = function(event) {
