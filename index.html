@@ -34,13 +34,13 @@
     <!-- ==========================================
          PANTALLA DE CARGA (SPLASH SCREEN)
          ========================================== -->
-    <div id="global-loader" class="fixed inset-0 z-[10000] bg-stone-100 flex flex-col items-center justify-center transition-opacity duration-300">
+    <div id="global-loader" class="fixed inset-0 z-[10000] bg-stone-100 flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="relative flex items-center justify-center mb-6">
             <div class="w-20 h-20 lg:w-24 lg:h-24 border-4 border-amber-200 rounded-full animate-ping absolute"></div>
             <div class="w-16 h-16 lg:w-20 lg:h-20 border-4 border-amber-500 border-t-transparent rounded-full animate-spin relative z-10"></div>
         </div>
         <h2 class="text-2xl lg:text-3xl font-serif text-amber-700 tracking-widest uppercase">Cargando Evento</h2>
-        <p class="text-stone-500 mt-2 text-sm lg:text-base animate-pulse">Sincronizando información...</p>
+        <p class="text-stone-500 mt-2 text-sm lg:text-base animate-pulse">Sincronizando información en tiempo real...</p>
     </div>
 
     <!-- ==========================================
@@ -529,7 +529,7 @@
          SCRIPT DE VARIABLES GLOBALES BASE Y FAIL-SAFE
          ========================================== -->
     <script>
-        // Configuración por defecto
+        // Configuración por defecto de seguridad (en caso de que Firebase falle)
         window.appConfig = {
             title: "¡Bienvenidas!", subtitle: "Encuentra tu puesto y únete a la celebración",
             searchBtnText: "Buscar mi puesto", rouletteText: "Gira la ruleta para descubrir tu reto fotográfico.",
@@ -550,23 +550,16 @@
         window.isFirstLoad = true; 
         window.firebaseConnected = false;
         
+        // Controladores para la pantalla de carga
+        window.configLoaded = false;
+        window.guestsLoaded = false;
+        
         window.RETOS_DB = {
             boda: ["Tómate una selfie con la novia.", "Tómate una selfie con el novio.", "Fotografía un beso apasionado.", "Captura una lágrima de felicidad.", "Toma una foto del centro de mesa."],
             cumpleanos: ["Tómate una selfie con el cumpleañero/a.", "Toma una foto del pastel.", "Captura soplar las velas.", "Foto del mejor regalo.", "Selfie con gorrito."],
             cristiano: ["Selfie con tu sonrisa.", "Foto haciendo pose divertida con 3 personas.", "Foto con alguien nuevo.", "Foto haciendo corazón ❤️.", "Foto abrazando."],
             porcicultura: ["Selfie con un cerdo.", "Foto con el conferencista.", "Captura comiendo chicharrón.", "Selfie con veterinario.", "Stand innovador."]
         };
-
-        // RECUPERAR CACHÉ (LocalStorage) para hacer la carga ultra-rápida y sin parpadeos
-        try {
-            const cachedConfig = localStorage.getItem('eventAppConfig');
-            if (cachedConfig) window.appConfig = { ...window.appConfig, ...JSON.parse(cachedConfig) };
-            
-            const cachedGuests = localStorage.getItem('eventAppGuests');
-            if (cachedGuests) window.guests = JSON.parse(cachedGuests);
-        } catch (e) {
-            console.warn("No se pudo leer la caché local.");
-        }
 
         window.aplicarConfiguracion = function() {
             const el = (id) => document.getElementById(id);
@@ -633,21 +626,39 @@
             }
         };
 
-        // Pintar instantáneamente con caché o valores por defecto
-        window.aplicarConfiguracion();
-
-        // Ocultar la pantalla de carga casi inmediatamente (150ms)
+        // Función para ocultar el splash screen SOLO cuando todo esté listo
         function ocultarSplash() {
             if (window.isFirstLoad) {
                 const loader = document.getElementById('global-loader');
                 if (loader) {
                     loader.classList.add('opacity-0');
-                    setTimeout(() => { loader.style.display = 'none'; }, 300);
+                    setTimeout(() => { loader.style.display = 'none'; }, 500); // 500ms para una transición suave
                 }
                 window.isFirstLoad = false;
             }
         }
-        setTimeout(ocultarSplash, 150);
+        
+        // Comprueba si tanto la configuración como los invitados de Firebase ya llegaron
+        window.checkFullLoad = function() {
+            if (window.configLoaded && window.guestsLoaded && window.isFirstLoad) {
+                ocultarSplash();
+            }
+        };
+
+        // Red de seguridad: Si el usuario no tiene internet, quita la pantalla de carga después de 5 segundos
+        // y muestra lo que haya podido rescatar de la memoria (caché)
+        setTimeout(() => {
+            if (window.isFirstLoad) {
+                try {
+                    const cachedConfig = localStorage.getItem('eventAppConfig');
+                    if (cachedConfig) window.appConfig = { ...window.appConfig, ...JSON.parse(cachedConfig) };
+                    const cachedGuests = localStorage.getItem('eventAppGuests');
+                    if (cachedGuests) window.guests = JSON.parse(cachedGuests);
+                } catch (e) {}
+                window.aplicarConfiguracion();
+                ocultarSplash();
+            }
+        }, 5000);
     </script>
 
 
@@ -685,26 +696,35 @@
                 if (docSnap.exists()) {
                     const newData = docSnap.data();
                     window.appConfig = { ...window.appConfig, ...newData };
-                    
-                    // Guardar en la caché local
                     try { localStorage.setItem('eventAppConfig', JSON.stringify(window.appConfig)); } catch (e) {}
-                    
-                    window.aplicarConfiguracion();
                 }
-                ocultarSplash();
+                
+                // Aplicar los textos recién llegados de Firebase ANTES de quitar la pantalla de carga
+                window.aplicarConfiguracion();
+                
+                // Informar que la config ya llegó
+                window.configLoaded = true;
+                window.checkFullLoad();
+            }, (error) => {
+                console.error("Error cargando configuración:", error);
+                window.configLoaded = true; window.checkFullLoad();
             });
         }
 
         function cargarInvitadosBackground() {
             onSnapshot(collection(db, "invitados"), (snapshot) => {
-                window.firebaseConnected = true; // Confirmar que Firebase ya terminó de descargar invitados
+                window.firebaseConnected = true; 
                 window.guests = [];
                 snapshot.forEach((docu) => { window.guests.push({ id: docu.id, ...docu.data() }); });
-                
-                // Guardar invitados en caché
                 try { localStorage.setItem('eventAppGuests', JSON.stringify(window.guests)); } catch (e) {}
-                
                 renderAdminList();
+                
+                // Informar que la lista de invitados ya llegó
+                window.guestsLoaded = true;
+                window.checkFullLoad();
+            }, (error) => {
+                console.error("Error cargando invitados:", error);
+                window.guestsLoaded = true; window.checkFullLoad();
             });
         }
 
