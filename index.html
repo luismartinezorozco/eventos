@@ -35,13 +35,13 @@
          PANTALLA DE CARGA (SPLASH SCREEN)
          Evita que se vean datos viejos mientras Firebase sincroniza
          ========================================== -->
-    <div id="global-loader" class="fixed inset-0 z-[10000] bg-stone-100 flex flex-col items-center justify-center transition-opacity duration-700">
+    <div id="global-loader" class="fixed inset-0 z-[10000] bg-stone-100 flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="relative flex items-center justify-center mb-6">
             <div class="w-20 h-20 lg:w-24 lg:h-24 border-4 border-amber-200 rounded-full animate-ping absolute"></div>
             <div class="w-16 h-16 lg:w-20 lg:h-20 border-4 border-amber-500 border-t-transparent rounded-full animate-spin relative z-10"></div>
         </div>
         <h2 class="text-2xl lg:text-3xl font-serif text-amber-700 tracking-widest uppercase">Cargando Evento</h2>
-        <p class="text-stone-500 mt-2 text-sm lg:text-base animate-pulse">Sincronizando información en tiempo real...</p>
+        <p class="text-stone-500 mt-2 text-sm lg:text-base animate-pulse">Sincronizando información...</p>
     </div>
 
     <!-- ==========================================
@@ -527,10 +527,10 @@
 
 
     <!-- ==========================================
-         SCRIPT DE VARIABLES GLOBALES BASE
+         SCRIPT DE VARIABLES GLOBALES BASE Y FAIL-SAFE
          ========================================== -->
     <script>
-        // Configuración por defecto que se sobreescribirá con Firebase
+        // Configuración por defecto
         window.appConfig = {
             title: "¡Bienvenidas!", subtitle: "Encuentra tu puesto y únete a la celebración",
             searchBtnText: "Buscar mi puesto", rouletteText: "Gira la ruleta para descubrir tu reto fotográfico.",
@@ -547,7 +547,7 @@
         window.currentGuest = null; window.challengeAccepted = false; 
         window.currentPhotoUrl = ''; window.currentPhotoName = '';
         window.selectedChallenge = ''; window.pendingChallenges = [];
-        window.isFirstLoad = true; // Control de pantalla de carga
+        window.isFirstLoad = true; 
         
         window.RETOS_DB = {
             boda: ["Tómate una selfie con la novia.", "Tómate una selfie con el novio.", "Fotografía un beso apasionado.", "Captura una lágrima de felicidad.", "Toma una foto del centro de mesa."],
@@ -555,6 +555,20 @@
             cristiano: ["Selfie con tu sonrisa.", "Foto haciendo pose divertida con 3 personas.", "Foto con alguien nuevo.", "Foto haciendo corazón ❤️.", "Foto abrazando."],
             porcicultura: ["Selfie con un cerdo.", "Foto con el conferencista.", "Captura comiendo chicharrón.", "Selfie con veterinario.", "Stand innovador."]
         };
+
+        // FAIL-SAFE: Quita la pantalla de carga MÁXIMO a los 2.5 segundos, haya internet o no.
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                if (window.isFirstLoad) {
+                    const loader = document.getElementById('global-loader');
+                    if (loader) {
+                        loader.classList.add('opacity-0');
+                        setTimeout(() => { loader.style.display = 'none'; }, 500);
+                    }
+                    window.isFirstLoad = false;
+                }
+            }, 2500); 
+        });
 
         window.aplicarConfiguracion = function() {
             const el = (id) => document.getElementById(id);
@@ -609,7 +623,6 @@
                 } else { qrWatermarkBg.style.backgroundImage = 'none'; }
             }
 
-            // Formulario Config
             if(el('cfg-title')) {
                 el('cfg-title').value = window.appConfig.title; el('cfg-subtitle').value = window.appConfig.subtitle;
                 el('cfg-search-btn').value = window.appConfig.searchBtnText; el('cfg-roulette-text').value = window.appConfig.rouletteText;
@@ -621,6 +634,9 @@
                 if(el('admin-event-type')) el('admin-event-type').value = window.appConfig.eventType || 'boda';
             }
         };
+
+        // Pintar con los valores por defecto instantáneamente
+        window.aplicarConfiguracion();
     </script>
 
 
@@ -629,7 +645,8 @@
          ========================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { initializeFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBxE8t9sEWalMO_i0bFDjGp5I95iuYj5Io",
@@ -641,7 +658,13 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        const auth = getAuth(app);
+        
+        // Forzar long-polling para evitar bloqueos de WebSockets en entornos restrictivos
+        const db = initializeFirestore(app, {
+            experimentalForceLongPolling: true
+        });
+
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhwV00ZSwM8mPhI4k3Cg4ztmd3TGC1HqLm32gdhGepFhKZp0dS-P5WyAi-tRplcapVPw/exec'; 
 
         // ----------------------------------------------------
@@ -650,21 +673,19 @@
         function cargarConfiguracionBackground() {
             onSnapshot(doc(db, "configuracion", "general"), (docSnap) => {
                 if (docSnap.exists()) {
-                    // Actualiza la configuración global 100% real de Firebase
                     window.appConfig = { ...window.appConfig, ...docSnap.data() };
                     window.aplicarConfiguracion();
-
-                    // Cuando Firebase entrega el PRIMER dato real, apagamos el Loader.
-                    if (window.isFirstLoad) {
-                        const loader = document.getElementById('global-loader');
-                        if (loader) {
-                            loader.classList.add('opacity-0');
-                            setTimeout(() => {
-                                loader.style.display = 'none';
-                            }, 700); // Dar tiempo a la transición de opacidad
-                        }
-                        window.isFirstLoad = false;
+                }
+                
+                // Si Firebase responde rápido, quita el loader inmediatamente
+                // (Si el documento no existía, también lo quita para no trabarse)
+                if (window.isFirstLoad) {
+                    const loader = document.getElementById('global-loader');
+                    if (loader) {
+                        loader.classList.add('opacity-0');
+                        setTimeout(() => { loader.style.display = 'none'; }, 500);
                     }
+                    window.isFirstLoad = false;
                 }
             });
         }
@@ -1193,9 +1214,23 @@
         document.addEventListener('touchstart', () => { if (!document.getElementById('modal-welcome-video').classList.contains('hidden')) window.resetVideoBtnTimer(); });
 
         // Cargar Base de Datos desde Firebase de forma real
-        cargarConfiguracionBackground(); 
-        cargarInvitadosBackground();
-        cargarGaleriaBackground(); 
+        async function iniciarApp() {
+            try {
+                // 1. Iniciar sesión de forma anónima (ya activado en consola)
+                await signInAnonymously(auth);
+
+                // 2. Iniciar sincronización de datos directamente
+                cargarConfiguracionBackground(); 
+                cargarInvitadosBackground();
+                cargarGaleriaBackground(); 
+            } catch (error) {
+                console.error("Error de inicialización de Firebase:", error);
+                const loader = document.getElementById('global-loader');
+                if (loader) loader.style.display = 'none';
+            }
+        }
+
+        iniciarApp();
     </script>
 </body>
 </html>
