@@ -29,11 +29,10 @@
         ::-webkit-scrollbar-thumb:hover { background: rgba(168, 162, 158, 0.8); }
     </style>
 </head>
-<body class="text-stone-800 font-sans antialiased relative min-h-screen">
+<body class="text-stone-800 font-sans antialiased relative min-h-[100dvh]">
 
     <!-- ==========================================
          PANTALLA DE CARGA (SPLASH SCREEN)
-         Evita que se vean datos viejos mientras Firebase sincroniza
          ========================================== -->
     <div id="global-loader" class="fixed inset-0 z-[10000] bg-stone-100 flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="relative flex items-center justify-center mb-6">
@@ -233,43 +232,43 @@
     <!-- ==========================================
          VISTA 1: TÓTEM (ENTRADA PRINCIPAL)
          ========================================== -->
-    <div id="view-totem" class="view min-h-screen w-full flex flex-col justify-between items-center px-4 md:px-6 py-6 md:py-12 lg:py-16 relative z-10">
-        <div class="w-full flex-grow flex flex-col items-center justify-center max-w-2xl lg:max-w-4xl 2xl:max-w-6xl space-y-6 sm:space-y-8 md:space-y-10 lg:space-y-16 2xl:space-y-24 my-4 md:my-8">
-            <img id="totem-home-logo" src="" alt="Logo del Evento" class="hidden max-h-24 sm:max-h-32 md:max-h-48 lg:max-h-64 2xl:max-h-80 object-contain drop-shadow-md -mb-2 sm:-mb-6 lg:-mb-10 px-4" />
-            <div class="space-y-3 sm:space-y-4 lg:space-y-6 2xl:space-y-10 text-center w-full px-2 sm:px-4">
+    <div id="view-totem" class="view min-h-[100dvh] w-full flex flex-col justify-between items-center px-4 md:px-6 py-4 md:py-6 lg:py-8 relative z-10 overflow-y-auto">
+        <div class="w-full flex-grow flex flex-col items-center justify-center max-w-2xl lg:max-w-4xl 2xl:max-w-6xl space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10 2xl:space-y-12 my-2 md:my-4">
+            <img id="totem-home-logo" src="" alt="Logo del Evento" class="hidden max-h-20 sm:max-h-28 md:max-h-40 lg:max-h-56 2xl:max-h-64 object-contain drop-shadow-md -mb-2 sm:-mb-4 lg:-mb-6 px-4" />
+            <div class="space-y-2 sm:space-y-3 lg:space-y-4 2xl:space-y-6 text-center w-full px-2 sm:px-4">
                 <h1 id="totem-title" class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl 2xl:text-[8rem] font-serif text-amber-700 tracking-tight drop-shadow-sm leading-tight">¡Bienvenidas!</h1>
                 <p id="totem-subtitle" class="text-lg sm:text-xl md:text-2xl lg:text-3xl 2xl:text-5xl text-stone-600 font-medium px-4">Encuentra tu puesto y únete a la celebración</p>
             </div>
-            <button id="totem-video-btn" onclick="window.openWelcomeVideo()" class="inline-flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 2xl:gap-6 bg-stone-900 text-amber-400 px-6 py-3 sm:px-8 sm:py-4 lg:px-12 lg:py-6 2xl:px-16 2xl:py-8 rounded-full font-medium hover:bg-stone-800 transition-colors shadow-xl active:scale-95 text-base sm:text-lg lg:text-2xl 2xl:text-4xl w-full max-w-[280px] sm:max-w-none sm:w-auto mx-auto">
-                <svg class="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 2xl:w-12 2xl:h-12 flex-shrink-0"><use href="#icon-play-circle"></use></svg>
+            <button id="totem-video-btn" onclick="window.openWelcomeVideo()" class="inline-flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 2xl:gap-6 bg-stone-900 text-amber-400 px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 2xl:px-14 2xl:py-6 rounded-full font-medium hover:bg-stone-800 transition-colors shadow-xl active:scale-95 text-base sm:text-lg lg:text-xl 2xl:text-3xl w-full max-w-[280px] sm:max-w-none sm:w-auto mx-auto mt-2">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 2xl:w-10 2xl:h-10 flex-shrink-0"><use href="#icon-play-circle"></use></svg>
                 <span id="totem-video-btn-text" class="truncate">Mensaje de poder</span>
             </button>
-            <div id="totem-search-section" class="w-full space-y-3 sm:space-y-4 lg:space-y-6 2xl:space-y-8 pt-4 lg:pt-8 2xl:px-12">
+            <div id="totem-search-section" class="w-full space-y-3 sm:space-y-4 lg:space-y-6 2xl:space-y-8 pt-2 lg:pt-4 2xl:px-12">
                 <div class="relative text-left">
                     <svg class="absolute left-4 sm:left-6 top-1/2 transform -translate-y-1/2 text-stone-400 w-5 h-5 sm:w-7 sm:h-7 lg:w-9 lg:h-9 2xl:w-12 2xl:h-12 pointer-events-none"><use href="#icon-search"></use></svg>
-                    <input type="text" id="search-input" placeholder="Escribe tu nombre..." class="w-full pl-12 sm:pl-16 lg:pl-20 2xl:pl-28 pr-4 sm:pr-6 py-4 sm:py-5 lg:py-7 2xl:py-10 rounded-2xl lg:rounded-3xl border-2 border-white/50 bg-white/60 backdrop-blur-md focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-500/20 text-lg sm:text-xl lg:text-3xl 2xl:text-5xl transition-all shadow-sm outline-none" />
+                    <input type="text" id="search-input" placeholder="Escribe tu nombre..." class="w-full pl-12 sm:pl-16 lg:pl-20 2xl:pl-28 pr-4 sm:pr-6 py-4 sm:py-5 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl border-2 border-white/50 bg-white/60 backdrop-blur-md focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-500/20 text-lg sm:text-xl lg:text-2xl 2xl:text-4xl transition-all shadow-sm outline-none" />
                 </div>
-                <button id="btn-search" class="w-full bg-amber-600 text-white py-4 sm:py-5 lg:py-7 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-lg sm:text-xl lg:text-3xl 2xl:text-5xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95">Buscar mi puesto</button>
+                <button id="btn-search" class="w-full bg-amber-600 text-white py-4 sm:py-5 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl font-semibold text-lg sm:text-xl lg:text-2xl 2xl:text-4xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95">Buscar mi puesto</button>
             </div>
-            <div id="totem-anonymous-section" class="w-full hidden space-y-3 sm:space-y-4 lg:space-y-6 2xl:space-y-8 pt-4 lg:pt-8 2xl:px-12">
-                <button onclick="window.enterAnonymous()" class="w-full bg-amber-600 text-white py-4 sm:py-5 lg:py-7 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-lg sm:text-xl lg:text-3xl 2xl:text-5xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95 flex items-center justify-center gap-2 sm:gap-3 lg:gap-5">
+            <div id="totem-anonymous-section" class="w-full hidden space-y-3 sm:space-y-4 lg:space-y-6 2xl:space-y-8 pt-2 lg:pt-4 2xl:px-12">
+                <button onclick="window.enterAnonymous()" class="w-full bg-amber-600 text-white py-4 sm:py-5 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl font-semibold text-lg sm:text-xl lg:text-2xl 2xl:text-4xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95 flex items-center justify-center gap-2 sm:gap-3 lg:gap-5">
                     <svg class="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-star"></use></svg> Entrar a los Retos
                 </button>
             </div>
-            <div class="w-full relative flex items-center py-4 sm:py-6 lg:py-8 2xl:py-12 2xl:px-12">
+            <div class="w-full relative flex items-center py-2 sm:py-4 lg:py-6 2xl:py-8 2xl:px-12">
                 <div class="flex-grow border-t-2 border-stone-300/60"></div>
-                <span class="flex-shrink-0 mx-3 sm:mx-6 text-stone-500 font-medium cursor-pointer select-none text-sm sm:text-lg lg:text-2xl 2xl:text-4xl hover:text-stone-600 transition-colors" onclick="window.handleSecretClick()" title="Doble tap secreto">O usa tu celular</span>
+                <span class="flex-shrink-0 mx-3 sm:mx-6 text-stone-500 font-medium cursor-pointer select-none text-sm sm:text-base lg:text-xl 2xl:text-3xl hover:text-stone-600 transition-colors" onclick="window.handleSecretClick()" title="Doble tap secreto">O usa tu celular</span>
                 <div class="flex-grow border-t-2 border-stone-300/60"></div>
             </div>
             <div class="w-full 2xl:px-12">
-                <button onclick="window.switchView('view-show-qr')" class="w-full bg-white/50 backdrop-blur-md border-2 border-amber-200/50 text-amber-800 py-4 sm:py-5 lg:py-7 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-lg sm:text-xl lg:text-3xl 2xl:text-5xl hover:bg-white/80 transition-all flex items-center justify-center gap-2 sm:gap-3 lg:gap-5 2xl:gap-8 active:scale-95 shadow-sm">
-                    <svg class="w-6 h-6 sm:w-7 sm:h-7 lg:w-10 lg:h-10 2xl:w-14 2xl:h-14"><use href="#icon-qr-code"></use></svg> Mostrar Código QR
+                <button onclick="window.switchView('view-show-qr')" class="w-full bg-white/50 backdrop-blur-md border-2 border-amber-200/50 text-amber-800 py-3 sm:py-4 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl font-semibold text-lg sm:text-xl lg:text-2xl 2xl:text-4xl hover:bg-white/80 transition-all flex items-center justify-center gap-2 sm:gap-3 lg:gap-5 2xl:gap-8 active:scale-95 shadow-sm">
+                    <svg class="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 2xl:w-12 2xl:h-12"><use href="#icon-qr-code"></use></svg> Mostrar Código QR
                 </button>
             </div>
         </div>
-        <div class="w-full flex justify-center mt-4 sm:mt-6 lg:mt-10 flex-shrink-0">
-            <button onclick="window.switchView('view-admin-login')" class="text-stone-400 hover:text-stone-600 flex items-center gap-2 text-xs sm:text-sm lg:text-lg 2xl:text-2xl transition-colors p-3 sm:p-4 rounded-full hover:bg-stone-200/50">
-                <svg class="w-4 h-4 lg:w-6 lg:h-6 2xl:w-8 2xl:h-8"><use href="#icon-users"></use></svg> Acceso Organizador
+        <div class="w-full flex justify-center mt-auto pt-4 pb-2 sm:pb-4 flex-shrink-0 relative z-20">
+            <button onclick="window.switchView('view-admin-login')" class="text-stone-400 hover:text-stone-600 flex items-center gap-2 text-xs sm:text-sm lg:text-base 2xl:text-xl transition-colors p-2 sm:p-3 rounded-full hover:bg-stone-200/50 bg-white/20 backdrop-blur-sm">
+                <svg class="w-4 h-4 lg:w-5 lg:h-5 2xl:w-7 2xl:h-7"><use href="#icon-users"></use></svg> Acceso Organizador
             </button>
         </div>
     </div>
@@ -277,7 +276,7 @@
     <!-- ==========================================
          VISTA 1.5: MOSTRAR CÓDIGO QR 
          ========================================== -->
-    <div id="view-show-qr" class="view hidden-view min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-6 relative z-10 overflow-hidden">
+    <div id="view-show-qr" class="view hidden-view min-h-[100dvh] w-full flex flex-col items-center justify-center p-4 sm:p-6 relative z-10 overflow-hidden">
         <div id="qr-watermark-bg" class="absolute inset-0 z-[-1] bg-center bg-no-repeat bg-contain opacity-15 md:opacity-20 pointer-events-none m-8 lg:m-24" style="background-image: none;"></div>
         <button onclick="window.switchView('view-totem')" class="absolute top-6 right-6 sm:top-8 sm:right-8 lg:top-12 lg:right-12 2xl:top-16 2xl:right-16 text-stone-800 p-3 lg:p-5 2xl:p-6 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm">
             <svg class="w-6 h-6 sm:w-7 sm:h-7 lg:w-10 lg:h-10 2xl:w-14 2xl:h-14"><use href="#icon-x"></use></svg>
@@ -301,7 +300,7 @@
     <!-- ==========================================
          VISTA 2: DASHBOARD DEL INVITADO 
          ========================================== -->
-    <div id="view-guest-dashboard" class="view hidden-view min-h-screen w-full flex flex-col px-6 py-12 lg:py-16 2xl:py-24 max-w-3xl lg:max-w-5xl 2xl:max-w-7xl mx-auto space-y-12 lg:space-y-16 2xl:space-y-20 relative z-10">
+    <div id="view-guest-dashboard" class="view hidden-view min-h-[100dvh] w-full flex flex-col px-6 py-12 lg:py-16 2xl:py-24 max-w-3xl lg:max-w-5xl 2xl:max-w-7xl mx-auto space-y-12 lg:space-y-16 2xl:space-y-20 relative z-10">
         <div class="flex justify-between items-center w-full">
             <button onclick="window.logout()" class="p-3 lg:p-5 2xl:p-6 bg-white/50 backdrop-blur-md border border-white/50 rounded-full shadow-sm hover:bg-white/80 transition-colors text-stone-700">
                 <svg class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-12 2xl:h-12"><use href="#icon-arrow-left"></use></svg>
@@ -362,7 +361,7 @@
     <!-- ==========================================
          VISTA 3: LOGIN DE ADMINISTRADOR 
          ========================================== -->
-    <div id="view-admin-login" class="view hidden-view min-h-screen w-full flex flex-col items-center justify-center p-6 relative z-10">
+    <div id="view-admin-login" class="view hidden-view min-h-[100dvh] w-full flex flex-col items-center justify-center p-6 relative z-10">
         <button onclick="window.switchView('view-totem')" class="absolute top-8 right-8 lg:top-12 lg:right-12 2xl:top-16 2xl:right-16 text-stone-800 p-3 lg:p-5 2xl:p-6 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm">
             <svg class="w-7 h-7 lg:w-10 lg:h-10 2xl:w-14 2xl:h-14"><use href="#icon-x"></use></svg>
         </button>
@@ -387,7 +386,7 @@
     <!-- ==========================================
          VISTA 4: PANEL DE ADMINISTRACIÓN 
          ========================================== -->
-    <div id="view-admin" class="view hidden-view min-h-screen w-full p-4 sm:p-6 md:p-12 lg:p-16 2xl:p-24 relative z-10">
+    <div id="view-admin" class="view hidden-view min-h-[100dvh] w-full p-4 sm:p-6 md:p-12 lg:p-16 2xl:p-24 relative z-10">
         <div class="max-w-7xl 2xl:max-w-[100rem] mx-auto space-y-8 lg:space-y-12 2xl:space-y-16 mt-4">
             <div class="bg-white/60 backdrop-blur-xl border border-white/50 p-6 lg:p-8 2xl:p-10 rounded-3xl lg:rounded-[2.5rem] shadow-sm text-stone-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 lg:gap-6">
                 <div class="flex items-center gap-3 lg:gap-6">
@@ -460,7 +459,7 @@
     <!-- ==========================================
          VISTA 5: CONFIGURACIÓN 
          ========================================== -->
-    <div id="view-config" class="view hidden-view min-h-screen w-full flex flex-col items-center justify-center py-10 sm:py-12 lg:py-24 px-4 sm:px-6 relative z-10 overflow-y-auto">
+    <div id="view-config" class="view hidden-view min-h-[100dvh] w-full flex flex-col items-center justify-center py-10 sm:py-12 lg:py-24 px-4 sm:px-6 relative z-10 overflow-y-auto">
         <button onclick="window.switchView('view-totem')" class="fixed top-6 right-6 sm:top-8 sm:right-8 lg:top-12 lg:right-12 2xl:top-16 2xl:right-16 text-stone-800 p-3 lg:p-5 2xl:p-6 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm z-50">
             <svg class="w-6 h-6 sm:w-7 sm:h-7 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-x"></use></svg>
         </button>
@@ -556,19 +555,18 @@
             porcicultura: ["Selfie con un cerdo.", "Foto con el conferencista.", "Captura comiendo chicharrón.", "Selfie con veterinario.", "Stand innovador."]
         };
 
-        // FAIL-SAFE: Quita la pantalla de carga MÁXIMO a los 2.5 segundos, haya internet o no.
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                if (window.isFirstLoad) {
-                    const loader = document.getElementById('global-loader');
-                    if (loader) {
-                        loader.classList.add('opacity-0');
-                        setTimeout(() => { loader.style.display = 'none'; }, 500);
-                    }
-                    window.isFirstLoad = false;
+        // FAIL-SAFE: Quita la pantalla de carga MÁXIMO a los 1.5 segundos SIEMPRE.
+        // Ya no esperamos al window.load, se ejecuta apenas el navegador lee esta línea.
+        setTimeout(() => {
+            if (window.isFirstLoad) {
+                const loader = document.getElementById('global-loader');
+                if (loader) {
+                    loader.classList.add('opacity-0');
+                    setTimeout(() => { loader.style.display = 'none'; }, 500);
                 }
-            }, 2500); 
-        });
+                window.isFirstLoad = false;
+            }
+        }, 1500);
 
         window.aplicarConfiguracion = function() {
             const el = (id) => document.getElementById(id);
@@ -677,8 +675,6 @@
                     window.aplicarConfiguracion();
                 }
                 
-                // Si Firebase responde rápido, quita el loader inmediatamente
-                // (Si el documento no existía, también lo quita para no trabarse)
                 if (window.isFirstLoad) {
                     const loader = document.getElementById('global-loader');
                     if (loader) {
@@ -1216,17 +1212,14 @@
         // Cargar Base de Datos desde Firebase de forma real
         async function iniciarApp() {
             try {
-                // 1. Iniciar sesión de forma anónima (ya activado en consola)
-                await signInAnonymously(auth);
-
-                // 2. Iniciar sincronización de datos directamente
-                cargarConfiguracionBackground(); 
-                cargarInvitadosBackground();
-                cargarGaleriaBackground(); 
+                // Hacemos el sign in sin "await" para que no bloquee la sincronización visual si está lento
+                signInAnonymously(auth).then(() => {
+                    cargarConfiguracionBackground(); 
+                    cargarInvitadosBackground();
+                    cargarGaleriaBackground();
+                }).catch(e => console.error(e));
             } catch (error) {
                 console.error("Error de inicialización de Firebase:", error);
-                const loader = document.getElementById('global-loader');
-                if (loader) loader.style.display = 'none';
             }
         }
 
