@@ -236,7 +236,6 @@
         <div class="w-full flex-grow flex flex-col items-center justify-center max-w-2xl lg:max-w-4xl 2xl:max-w-6xl space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10 2xl:space-y-12 my-2 md:my-4">
             <img id="totem-home-logo" src="" alt="Logo del Evento" class="hidden max-h-20 sm:max-h-28 md:max-h-40 lg:max-h-56 2xl:max-h-64 object-contain drop-shadow-md -mb-2 sm:-mb-4 lg:-mb-6 px-4" />
             <div class="space-y-2 sm:space-y-3 lg:space-y-4 2xl:space-y-6 text-center w-full px-2 sm:px-4">
-                <!-- Se retiró el texto por defecto para evitar parpadeos incorrectos -->
                 <h1 id="totem-title" class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl 2xl:text-[8rem] font-serif text-amber-700 tracking-tight drop-shadow-sm leading-tight min-h-[1em]"></h1>
                 <p id="totem-subtitle" class="text-lg sm:text-xl md:text-2xl lg:text-3xl 2xl:text-5xl text-stone-600 font-medium px-4 min-h-[1em]"></p>
             </div>
@@ -519,8 +518,23 @@
                 </div>
                 
                 <button type="submit" class="w-full bg-stone-900 text-amber-400 py-4 lg:py-8 rounded-2xl font-bold text-lg lg:text-3xl hover:bg-stone-800 transition-colors shadow-xl active:scale-95 flex justify-center items-center gap-3 mt-8">
-                    <svg class="w-6 h-6 lg:w-8 lg:h-8"><use href="#icon-save"></use></svg> GUARDAR CONFIGURACIÓN
+                    <svg class="w-6 h-6 lg:w-8 lg:h-8"><use href="#icon-save"></use></svg> 1. GUARDAR CONFIGURACIÓN
                 </button>
+
+                <!-- NUEVA SECCIÓN DE EXPORTACIÓN (CARGA 0 SEGUNDOS) -->
+                <div class="mt-12 bg-stone-900 rounded-[2rem] p-6 lg:p-10 border border-stone-700 shadow-2xl relative overflow-hidden">
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-amber-500 rounded-full opacity-20 blur-2xl"></div>
+                    <h3 class="text-white text-2xl lg:text-4xl font-serif mb-4 flex items-center gap-3 relative z-10">
+                        <svg class="w-8 h-8 text-amber-400"><use href="#icon-crown"></use></svg> Generador de Carga 0 Segundos
+                    </h3>
+                    <p class="text-stone-400 text-sm lg:text-lg mb-6 relative z-10">
+                        Haz clic aquí después de Guardar. La app absorberá tus textos y te descargará un nuevo archivo HTML "optimizado". Sube ese archivo a tu hosting. Cuando un invitado escanee el QR, la app cargará los textos al instante, sin esperar a Firebase.
+                    </p>
+                    <button type="button" id="btn-export-html" onclick="window.descargarHTMLOptimizado()" class="w-full bg-amber-500 text-stone-900 py-4 lg:py-6 rounded-xl font-bold text-lg lg:text-2xl hover:bg-amber-400 transition-colors shadow-lg active:scale-95 flex justify-center items-center gap-3 relative z-10">
+                        <svg class="w-6 h-6 lg:w-8 lg:h-8"><use href="#icon-download"></use></svg> 2. Descargar HTML de Carga Instantánea
+                    </button>
+                </div>
+
             </form>
         </div>
     </div>
@@ -530,8 +544,9 @@
          SCRIPT DE VARIABLES GLOBALES BASE Y FAIL-SAFE
          ========================================== -->
     <script>
-        // Eliminados los textos por defecto "quemados" para evitar el "flasheo" incorrecto.
+        // --- INICIO_RESPALDO ---
         window.appConfig = {
+            isOptimized: false,
             title: "", subtitle: "",
             searchBtnText: "Ingresar", rouletteText: "",
             tableLabelText: "Tu asignación", acceptBtnText: "Aceptar",
@@ -540,6 +555,7 @@
             videoLink: "", videoLoop: true, showVideoBtn: false, homeLogoUrl: "", adminPassword: "admin",
             eventType: "boda", allowAnonymous: false, qrLogo: ""
         };
+        // --- FIN_RESPALDO ---
 
         window.guests = []; window.photos = [];
         window.currentGuest = null; window.challengeAccepted = false; 
@@ -558,12 +574,12 @@
             porcicultura: ["Selfie con un cerdo.", "Foto con el conferencista.", "Captura comiendo chicharrón.", "Selfie con veterinario.", "Stand innovador."]
         };
 
-        // LEER CACHÉ INMEDIATAMENTE AL CARGAR LA PÁGINA (Sin esperar a Firebase)
+        // LEER CACHÉ PARA USUARIOS RECURRENTES
         try {
             const cachedConfig = localStorage.getItem('eventAppConfig');
             if (cachedConfig) {
                 window.appConfig = { ...window.appConfig, ...JSON.parse(cachedConfig) };
-                window.configLoaded = true; // Permite un inicio instantáneo para usuarios que regresan
+                window.configLoaded = true; 
             }
             const cachedGuests = localStorage.getItem('eventAppGuests');
             if (cachedGuests) {
@@ -637,7 +653,6 @@
             }
         };
 
-        // Aplicamos la caché (si hay) o dejamos los textos en blanco inmediatamente.
         window.aplicarConfiguracion();
 
         function ocultarSplash() {
@@ -652,23 +667,77 @@
         }
         
         window.checkFullLoad = function() {
-            // Ahora la pantalla de carga ESTRICTAMENTE ESPERA a que Firebase entregue la configuración.
             if (window.configLoaded && window.guestsLoaded && window.isFirstLoad) {
                 ocultarSplash();
             }
         };
 
-        // Red de seguridad: Subido a 12 segundos. Si hay mal internet, esperamos más para 
-        // no cortar la petición de Firebase a la mitad y mostrar cosas vacías.
+        // ¡EL TRUCO DE MAGIA ESTÁ AQUÍ!
+        // Si el HTML fue exportado y ya trae los textos "quemados" (isOptimized: true),
+        // quitamos la pantalla de carga ¡INMEDIATAMENTE!, en el milisegundo 1.
+        if (window.appConfig.isOptimized) {
+            window.configLoaded = true; // Ya no tiene que esperar a Firebase para la config
+            ocultarSplash(); // ¡Bum! 0 segundos de espera.
+        }
+
         setTimeout(() => {
             if (window.isFirstLoad) {
-                console.warn("La conexión a Firebase tardó demasiado. Forzando el inicio.");
-                window.aplicarConfiguracion();
-                ocultarSplash();
+                console.warn("Forzando el inicio por retraso de red.");
+                window.aplicarConfiguracion(); ocultarSplash();
             }
         }, 12000);
-    </script>
 
+        // ==========================================
+        // LÓGICA DE EXPORTACIÓN (CARGA INSTANTÁNEA)
+        // ==========================================
+        window.descargarHTMLOptimizado = async function() {
+            const btn = document.getElementById('btn-export-html');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<svg class="w-6 h-6 lg:w-8 lg:h-8 animate-spin"><use href="#icon-loader-2"></use></svg> Autocompilando...';
+            btn.disabled = true;
+
+            try {
+                // Preparamos el objeto con la marca "isOptimized"
+                const configParaExportar = { ...window.appConfig, isOptimized: true };
+                // Formateamos para inyectarlo en el código
+                const configString = JSON.stringify(configParaExportar, null, 8);
+                const newScript = `window.appConfig = ${configString};`;
+
+                // Obtenemos el código fuente de esta misma página
+                const response = await fetch(window.location.href.split('?')[0]);
+                let htmlText = await response.text();
+
+                // Buscamos los comentarios mágicos y reemplazamos solo el diccionario de configuración
+                const startMarker = "// --- INICIO_RESPALDO ---";
+                const endMarker = "// --- FIN_RESPALDO ---";
+                const regex = new RegExp(startMarker + "[\\s\\S]*?" + endMarker);
+
+                if (regex.test(htmlText)) {
+                    htmlText = htmlText.replace(regex, startMarker + "\n        " + newScript + "\n        " + endMarker);
+                    
+                    // Disparamos la descarga del nuevo HTML
+                    const blob = new Blob([htmlText], { type: 'text/html;charset=utf-8' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `evento_optimizado.html`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    alert("✅ ¡HTML Generado con éxito!\n\nReemplaza el archivo anterior en tu hosting por este 'evento_optimizado.html'.\n\nAl hacerlo, cualquier invitado que escanee el QR tendrá sus textos cargados en 0 segundos.");
+                } else {
+                    alert("Error interno: No se encontraron los marcadores en el código.");
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert("Error al generar el HTML. Asegúrate de estar ejecutando esto en tu hosting web y no como un archivo local en tu computadora.");
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        };
+    </script>
 
     <!-- ==========================================
          SCRIPT PRINCIPAL FIREBASE
@@ -696,30 +765,15 @@
 
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhwV00ZSwM8mPhI4k3Cg4ztmd3TGC1HqLm32gdhGepFhKZp0dS-P5WyAi-tRplcapVPw/exec'; 
 
-        // ----------------------------------------------------
-        // Lógica Principal de Sincronización Real-Time
-        // ----------------------------------------------------
         function cargarConfiguracionBackground() {
             onSnapshot(doc(db, "configuracion", "general"), (docSnap) => {
                 if (docSnap.exists()) {
                     const newData = docSnap.data();
                     window.appConfig = { ...window.appConfig, ...newData };
                     try { localStorage.setItem('eventAppConfig', JSON.stringify(window.appConfig)); } catch (e) {}
-                } else {
-                    // Si la base de datos está COMPLETAMENTE VACÍA (primera vez usando el panel)
-                    // inyectamos los valores por defecto iniciales.
-                    if (!window.appConfig.title) {
-                        window.appConfig.title = "¡Bienvenidas!";
-                        window.appConfig.subtitle = "Encuentra tu puesto y únete a la celebración";
-                        window.appConfig.searchBtnText = "Buscar mi puesto";
-                        window.appConfig.rouletteText = "Gira la ruleta para descubrir tu reto fotográfico.";
-                    }
                 }
                 
-                // Aplicar los textos recién llegados de Firebase ANTES de quitar la pantalla de carga
                 window.aplicarConfiguracion();
-                
-                // Informar que la config ya llegó
                 window.configLoaded = true;
                 window.checkFullLoad();
             }, (error) => {
@@ -736,7 +790,6 @@
                 try { localStorage.setItem('eventAppGuests', JSON.stringify(window.guests)); } catch (e) {}
                 renderAdminList();
                 
-                // Informar que la lista de invitados ya llegó
                 window.guestsLoaded = true;
                 window.checkFullLoad();
             }, (error) => {
@@ -758,9 +811,6 @@
             });
         }
 
-        // ----------------------------------------------------
-        // Funciones Asignadas a Window
-        // ----------------------------------------------------
         window.switchView = function(viewId) {
             document.querySelectorAll('.view').forEach(el => el.classList.add('hidden-view'));
             document.getElementById(viewId).classList.remove('hidden-view');
@@ -829,8 +879,7 @@
             };
             try {
                 await setDoc(doc(db, "configuracion", "general"), newConfig, { merge: true });
-                alert("¡Configuración actualizada en vivo!");
-                window.switchView('view-totem');
+                alert("¡Configuración guardada! Si quieres que cargue en 0 segundos, no olvides darle al botón 'Descargar HTML'.");
             } catch (error) { alert("Error al guardar."); }
         };
 
@@ -1138,7 +1187,6 @@
 
         function renderDynamicQR() {
             const currentUrl = window.location.href.split('?')[0]; 
-            // Añadimos un parámetro dinámico (timestamp) para forzar que el diseño del QR cambie cada vez
             const dynamicUrl = `${currentUrl}?v=${Date.now()}`;
             document.getElementById('dynamic-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(dynamicUrl)}`;
         }
@@ -1271,10 +1319,8 @@
         document.addEventListener('mousemove', () => { if (!document.getElementById('modal-welcome-video').classList.contains('hidden')) window.resetVideoBtnTimer(); });
         document.addEventListener('touchstart', () => { if (!document.getElementById('modal-welcome-video').classList.contains('hidden')) window.resetVideoBtnTimer(); });
 
-        // Cargar Base de Datos desde Firebase de forma real
         async function iniciarApp() {
             try {
-                // Hacemos el sign in sin "await" para que no bloquee la sincronización visual si está lento
                 signInAnonymously(auth).then(() => {
                     cargarConfiguracionBackground(); 
                     cargarInvitadosBackground();
