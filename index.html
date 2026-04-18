@@ -1101,7 +1101,9 @@
 
         function renderDynamicQR() {
             const currentUrl = window.location.href.split('?')[0]; 
-            document.getElementById('dynamic-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(currentUrl)}`;
+            // Añadimos un parámetro dinámico (timestamp) para forzar que el diseño del QR cambie cada vez
+            const dynamicUrl = `${currentUrl}?v=${Date.now()}`;
+            document.getElementById('dynamic-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(dynamicUrl)}`;
         }
 
         window.handleSearch = function() {
