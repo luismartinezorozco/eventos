@@ -139,7 +139,7 @@
     <div id="modal-roulette" class="fixed inset-0 bg-stone-900/90 backdrop-blur-sm z-[100] hidden flex-col items-center justify-center p-4">
         <div class="max-w-sm md:max-w-md lg:max-w-xl 2xl:max-w-3xl w-full bg-white/90 backdrop-blur-xl border border-white/50 rounded-[2rem] shadow-2xl p-8 lg:p-12 2xl:p-16 text-center space-y-6 lg:space-y-10">
             <h2 class="text-3xl md:text-4xl lg:text-5xl 2xl:text-6xl font-serif text-stone-800">¡Misión Sorpresa!</h2>
-            <p id="roulette-desc-text" class="text-stone-600 text-sm md:text-base lg:text-xl 2xl:text-2xl">Gira la ruleta para descubrir tu reto fotográfico.</p>
+            <p id="roulette-desc-text" class="text-stone-600 text-sm md:text-base lg:text-xl 2xl:text-2xl"></p>
 
             <div class="relative w-[60vw] h-[60vw] max-w-[250px] max-h-[250px] md:max-w-[320px] md:max-h-[320px] lg:max-w-[450px] lg:max-h-[450px] 2xl:max-w-[600px] 2xl:max-h-[600px] mx-auto my-6 lg:my-12">
                 <div class="absolute -top-6 md:-top-8 lg:-top-10 2xl:-top-14 left-1/2 transform -translate-x-1/2 z-30 text-amber-600 drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]">
@@ -200,7 +200,7 @@
             <div class="absolute -bottom-10 -right-10 w-32 h-32 lg:w-64 lg:h-64 bg-amber-200 rounded-full opacity-50 blur-2xl"></div>
             <h2 class="text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl font-serif text-amber-600 uppercase tracking-widest relative z-10">Tu Reto Es:</h2>
             <div class="bg-white/60 rounded-2xl lg:rounded-[2rem] p-6 lg:p-12 2xl:p-16 border border-white shadow-inner relative z-10">
-                <p id="challenge-reveal-text" class="text-2xl md:text-3xl lg:text-5xl 2xl:text-7xl font-medium text-stone-800 italic leading-relaxed">"Tomar una foto..."</p>
+                <p id="challenge-reveal-text" class="text-2xl md:text-3xl lg:text-5xl 2xl:text-7xl font-medium text-stone-800 italic leading-relaxed">...</p>
             </div>
             <button id="btn-accept-challenge" onclick="window.closeChallengeReveal()" class="w-full bg-stone-900 text-white py-4 lg:py-6 2xl:py-8 rounded-xl lg:rounded-2xl font-semibold text-lg lg:text-2xl 2xl:text-4xl hover:bg-stone-800 transition-colors shadow-lg mt-4 lg:mt-8 relative z-10">
                 ¡Aceptar Reto!
@@ -236,19 +236,20 @@
         <div class="w-full flex-grow flex flex-col items-center justify-center max-w-2xl lg:max-w-4xl 2xl:max-w-6xl space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10 2xl:space-y-12 my-2 md:my-4">
             <img id="totem-home-logo" src="" alt="Logo del Evento" class="hidden max-h-20 sm:max-h-28 md:max-h-40 lg:max-h-56 2xl:max-h-64 object-contain drop-shadow-md -mb-2 sm:-mb-4 lg:-mb-6 px-4" />
             <div class="space-y-2 sm:space-y-3 lg:space-y-4 2xl:space-y-6 text-center w-full px-2 sm:px-4">
-                <h1 id="totem-title" class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl 2xl:text-[8rem] font-serif text-amber-700 tracking-tight drop-shadow-sm leading-tight">¡Bienvenidas!</h1>
-                <p id="totem-subtitle" class="text-lg sm:text-xl md:text-2xl lg:text-3xl 2xl:text-5xl text-stone-600 font-medium px-4">Encuentra tu puesto y únete a la celebración</p>
+                <!-- Se retiró el texto por defecto para evitar parpadeos incorrectos -->
+                <h1 id="totem-title" class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl 2xl:text-[8rem] font-serif text-amber-700 tracking-tight drop-shadow-sm leading-tight min-h-[1em]"></h1>
+                <p id="totem-subtitle" class="text-lg sm:text-xl md:text-2xl lg:text-3xl 2xl:text-5xl text-stone-600 font-medium px-4 min-h-[1em]"></p>
             </div>
-            <button id="totem-video-btn" onclick="window.openWelcomeVideo()" class="inline-flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 2xl:gap-6 bg-stone-900 text-amber-400 px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 2xl:px-14 2xl:py-6 rounded-full font-medium hover:bg-stone-800 transition-colors shadow-xl active:scale-95 text-base sm:text-lg lg:text-xl 2xl:text-3xl w-full max-w-[280px] sm:max-w-none sm:w-auto mx-auto mt-2">
+            <button id="totem-video-btn" onclick="window.openWelcomeVideo()" class="inline-flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 2xl:gap-6 bg-stone-900 text-amber-400 px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 2xl:px-14 2xl:py-6 rounded-full font-medium hover:bg-stone-800 transition-colors shadow-xl active:scale-95 text-base sm:text-lg lg:text-xl 2xl:text-3xl w-full max-w-[280px] sm:max-w-none sm:w-auto mx-auto mt-2 hidden">
                 <svg class="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 2xl:w-10 2xl:h-10 flex-shrink-0"><use href="#icon-play-circle"></use></svg>
-                <span id="totem-video-btn-text" class="truncate">Mensaje de poder</span>
+                <span id="totem-video-btn-text" class="truncate"></span>
             </button>
             <div id="totem-search-section" class="w-full space-y-3 sm:space-y-4 lg:space-y-6 2xl:space-y-8 pt-2 lg:pt-4 2xl:px-12">
                 <div class="relative text-left">
                     <svg class="absolute left-4 sm:left-6 top-1/2 transform -translate-y-1/2 text-stone-400 w-5 h-5 sm:w-7 sm:h-7 lg:w-9 lg:h-9 2xl:w-12 2xl:h-12 pointer-events-none"><use href="#icon-search"></use></svg>
                     <input type="text" id="search-input" placeholder="Escribe tu nombre..." class="w-full pl-12 sm:pl-16 lg:pl-20 2xl:pl-28 pr-4 sm:pr-6 py-4 sm:py-5 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl border-2 border-white/50 bg-white/60 backdrop-blur-md focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-500/20 text-lg sm:text-xl lg:text-2xl 2xl:text-4xl transition-all shadow-sm outline-none" />
                 </div>
-                <button id="btn-search" class="w-full bg-amber-600 text-white py-4 sm:py-5 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl font-semibold text-lg sm:text-xl lg:text-2xl 2xl:text-4xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95">Buscar mi puesto</button>
+                <button id="btn-search" class="w-full bg-amber-600 text-white py-4 sm:py-5 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl font-semibold text-lg sm:text-xl lg:text-2xl 2xl:text-4xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95"></button>
             </div>
             <div id="totem-anonymous-section" class="w-full hidden space-y-3 sm:space-y-4 lg:space-y-6 2xl:space-y-8 pt-2 lg:pt-4 2xl:px-12">
                 <button onclick="window.enterAnonymous()" class="w-full bg-amber-600 text-white py-4 sm:py-5 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl font-semibold text-lg sm:text-xl lg:text-2xl 2xl:text-4xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95 flex items-center justify-center gap-2 sm:gap-3 lg:gap-5">
@@ -309,10 +310,10 @@
         </div>
         <div class="text-center space-y-2 lg:space-y-6">
             <h2 class="text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl font-serif text-amber-700 tracking-tight drop-shadow-sm">¡Hola, <span id="guest-name-display"></span>!</h2>
-            <p id="dashboard-subtitle" class="text-xl lg:text-3xl 2xl:text-4xl text-stone-600">Nos alegra mucho que estés aquí.</p>
+            <p id="dashboard-subtitle" class="text-xl lg:text-3xl 2xl:text-4xl text-stone-600"></p>
         </div>
         <div id="guest-table-container" class="w-full bg-white/60 backdrop-blur-md border-2 border-white/50 rounded-[2.5rem] lg:rounded-[3rem] p-10 lg:p-16 2xl:p-20 text-center shadow-sm">
-            <p id="table-label-text" class="text-sm md:text-base lg:text-xl 2xl:text-3xl text-stone-500 font-bold uppercase tracking-widest mb-2 lg:mb-6">Tu mesa es la número</p>
+            <p id="table-label-text" class="text-sm md:text-base lg:text-xl 2xl:text-3xl text-stone-500 font-bold uppercase tracking-widest mb-2 lg:mb-6"></p>
             <p id="guest-table-display" class="text-8xl md:text-9xl lg:text-[10rem] 2xl:text-[14rem] font-serif text-amber-600 drop-shadow-sm leading-none">--</p>
         </div>
         <div id="active-challenge-banner" class="hidden w-full">
@@ -529,16 +530,14 @@
          SCRIPT DE VARIABLES GLOBALES BASE Y FAIL-SAFE
          ========================================== -->
     <script>
-        // Configuración por defecto de seguridad (en caso de que Firebase falle)
+        // Eliminados los textos por defecto "quemados" para evitar el "flasheo" incorrecto.
         window.appConfig = {
-            title: "¡Bienvenidas!", subtitle: "Encuentra tu puesto y únete a la celebración",
-            searchBtnText: "Buscar mi puesto", rouletteText: "Gira la ruleta para descubrir tu reto fotográfico.",
-            tableLabelText: "Tu mesa es la número", acceptBtnText: "¡Aceptar Reto!",
-            videoTitleText: "Mensaje de poder", dashboardSubtitle: "Nos alegra mucho que estés aquí.",
-            rouletteBg: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-            rouletteCenter: "https://image2url.com/r2/default/images/1773931962266-01b311d3-46f3-49f7-a83b-cf9dc1b67e7c.avif",
-            videoLink: "https://drive.google.com/file/d/1pJXSVBktub3dYF72z1OJodXbgwYpvP4L/preview",
-            videoLoop: true, showVideoBtn: true, homeLogoUrl: "", adminPassword: "admin123",
+            title: "", subtitle: "",
+            searchBtnText: "Ingresar", rouletteText: "",
+            tableLabelText: "Tu asignación", acceptBtnText: "Aceptar",
+            videoTitleText: "Ver Video", dashboardSubtitle: "",
+            rouletteBg: "", rouletteCenter: "",
+            videoLink: "", videoLoop: true, showVideoBtn: false, homeLogoUrl: "", adminPassword: "admin",
             eventType: "boda", allowAnonymous: false, qrLogo: ""
         };
 
@@ -549,8 +548,6 @@
         
         window.isFirstLoad = true; 
         window.firebaseConnected = false;
-        
-        // Controladores para la pantalla de carga
         window.configLoaded = false;
         window.guestsLoaded = false;
         
@@ -561,18 +558,32 @@
             porcicultura: ["Selfie con un cerdo.", "Foto con el conferencista.", "Captura comiendo chicharrón.", "Selfie con veterinario.", "Stand innovador."]
         };
 
+        // LEER CACHÉ INMEDIATAMENTE AL CARGAR LA PÁGINA (Sin esperar a Firebase)
+        try {
+            const cachedConfig = localStorage.getItem('eventAppConfig');
+            if (cachedConfig) {
+                window.appConfig = { ...window.appConfig, ...JSON.parse(cachedConfig) };
+                window.configLoaded = true; // Permite un inicio instantáneo para usuarios que regresan
+            }
+            const cachedGuests = localStorage.getItem('eventAppGuests');
+            if (cachedGuests) {
+                window.guests = JSON.parse(cachedGuests);
+                window.guestsLoaded = true;
+            }
+        } catch (e) {}
+
         window.aplicarConfiguracion = function() {
             const el = (id) => document.getElementById(id);
-            if(el('totem-title')) el('totem-title').innerText = window.appConfig.title || "¡Bienvenidas!";
-            if(el('totem-subtitle')) el('totem-subtitle').innerText = window.appConfig.subtitle || "Encuentra tu puesto...";
+            if(el('totem-title')) el('totem-title').innerText = window.appConfig.title || "";
+            if(el('totem-subtitle')) el('totem-subtitle').innerText = window.appConfig.subtitle || "";
             if(el('btn-search')) el('btn-search').innerText = window.appConfig.searchBtnText || "Buscar";
             if(el('roulette-desc-text')) el('roulette-desc-text').innerText = window.appConfig.rouletteText;
             if(el('table-label-text')) el('table-label-text').innerText = window.appConfig.tableLabelText;
             if(el('btn-accept-challenge')) el('btn-accept-challenge').innerText = window.appConfig.acceptBtnText;
             if(el('totem-video-btn-text')) el('totem-video-btn-text').innerText = window.appConfig.videoTitleText;
             if(el('dashboard-subtitle')) el('dashboard-subtitle').innerText = window.appConfig.dashboardSubtitle;
-            if(el('roulette-wheel')) el('roulette-wheel').style.backgroundImage = `url('${window.appConfig.rouletteBg}')`;
-            if(el('roulette-center-img')) el('roulette-center-img').src = window.appConfig.rouletteCenter;
+            if(el('roulette-wheel') && window.appConfig.rouletteBg) el('roulette-wheel').style.backgroundImage = `url('${window.appConfig.rouletteBg}')`;
+            if(el('roulette-center-img') && window.appConfig.rouletteCenter) el('roulette-center-img').src = window.appConfig.rouletteCenter;
 
             if(el('cfg-anonymous')) el('cfg-anonymous').checked = window.appConfig.allowAnonymous === true;
             if(el('cfg-show-video')) el('cfg-show-video').checked = window.appConfig.showVideoBtn !== false;
@@ -626,39 +637,36 @@
             }
         };
 
-        // Función para ocultar el splash screen SOLO cuando todo esté listo
+        // Aplicamos la caché (si hay) o dejamos los textos en blanco inmediatamente.
+        window.aplicarConfiguracion();
+
         function ocultarSplash() {
             if (window.isFirstLoad) {
                 const loader = document.getElementById('global-loader');
                 if (loader) {
                     loader.classList.add('opacity-0');
-                    setTimeout(() => { loader.style.display = 'none'; }, 500); // 500ms para una transición suave
+                    setTimeout(() => { loader.style.display = 'none'; }, 500);
                 }
                 window.isFirstLoad = false;
             }
         }
         
-        // Comprueba si tanto la configuración como los invitados de Firebase ya llegaron
         window.checkFullLoad = function() {
+            // Ahora la pantalla de carga ESTRICTAMENTE ESPERA a que Firebase entregue la configuración.
             if (window.configLoaded && window.guestsLoaded && window.isFirstLoad) {
                 ocultarSplash();
             }
         };
 
-        // Red de seguridad: Si el usuario no tiene internet, quita la pantalla de carga después de 5 segundos
-        // y muestra lo que haya podido rescatar de la memoria (caché)
+        // Red de seguridad: Subido a 12 segundos. Si hay mal internet, esperamos más para 
+        // no cortar la petición de Firebase a la mitad y mostrar cosas vacías.
         setTimeout(() => {
             if (window.isFirstLoad) {
-                try {
-                    const cachedConfig = localStorage.getItem('eventAppConfig');
-                    if (cachedConfig) window.appConfig = { ...window.appConfig, ...JSON.parse(cachedConfig) };
-                    const cachedGuests = localStorage.getItem('eventAppGuests');
-                    if (cachedGuests) window.guests = JSON.parse(cachedGuests);
-                } catch (e) {}
+                console.warn("La conexión a Firebase tardó demasiado. Forzando el inicio.");
                 window.aplicarConfiguracion();
                 ocultarSplash();
             }
-        }, 5000);
+        }, 12000);
     </script>
 
 
@@ -697,6 +705,15 @@
                     const newData = docSnap.data();
                     window.appConfig = { ...window.appConfig, ...newData };
                     try { localStorage.setItem('eventAppConfig', JSON.stringify(window.appConfig)); } catch (e) {}
+                } else {
+                    // Si la base de datos está COMPLETAMENTE VACÍA (primera vez usando el panel)
+                    // inyectamos los valores por defecto iniciales.
+                    if (!window.appConfig.title) {
+                        window.appConfig.title = "¡Bienvenidas!";
+                        window.appConfig.subtitle = "Encuentra tu puesto y únete a la celebración";
+                        window.appConfig.searchBtnText = "Buscar mi puesto";
+                        window.appConfig.rouletteText = "Gira la ruleta para descubrir tu reto fotográfico.";
+                    }
                 }
                 
                 // Aplicar los textos recién llegados de Firebase ANTES de quitar la pantalla de carga
