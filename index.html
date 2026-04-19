@@ -12,39 +12,19 @@
     <script>
         // --- INICIO_RESPALDO ---
         window.appConfig = {
-        "isOptimized": true,
-        "title": "¡Bienvenidos! al 5 CONGRESO DE PORCICULTURA",
-        "subtitle": "Unete a este maravilloso evento.",
-        "searchBtnText": "Buscar mi puesto",
-        "rouletteText": "Gira la ruleta para descubrir tu reto fotográfico en esta boda.",
-        "tableLabelText": "Tu mesa es la número",
-        "acceptBtnText": "¡Aceptar Reto!",
-        "videoTitleText": "Mensaje de poder",
-        "dashboardSubtitle": "Nos alegra mucho que estés aquí.",
-        "rouletteBg": "https://www.image2url.com/r2/default/images/1776520704497-d73e4ba9-c27e-4772-93ac-71274355743c.png",
-        "rouletteCenter": "https://www.image2url.com/r2/default/images/1776520704497-d73e4ba9-c27e-4772-93ac-71274355743c.png",
-        "videoLink": "https://drive.google.com/file/d/1pJXSVBktub3dYF72z1OJodXbgwYpvP4L/preview",
-        "videoLoop": true,
-        "showVideoBtn": false,
-        "homeLogoUrl": "https://www.image2url.com/r2/default/images/1776520704497-d73e4ba9-c27e-4772-93ac-71274355743c.png",
-        "adminPassword": "admin123",
-        "eventType": "porcicultura",
-        "allowAnonymous": true,
-        "qrLogo": "https://www.image2url.com/r2/default/images/1776520704497-d73e4ba9-c27e-4772-93ac-71274355743c.png"
-};
+            isOptimized: false,
+            title: "", subtitle: "",
+            searchBtnText: "Ingresar", rouletteText: "",
+            tableLabelText: "Tu asignación", acceptBtnText: "Aceptar",
+            videoTitleText: "Ver Video", dashboardSubtitle: "",
+            rouletteBg: "", rouletteCenter: "",
+            videoLink: "", videoLoop: true, showVideoBtn: false, homeLogoUrl: "", adminPassword: "admin",
+            eventType: "boda", allowAnonymous: false, qrLogo: ""
+        };
         // --- FIN_RESPALDO ---
-        
-        // Bloqueo instantáneo: Si está optimizado, oculta el cargador ANTES de que la pantalla se dibuje
-        if (window.appConfig.isOptimized) {
-            document.documentElement.classList.add('is-optimized');
-        }
     </script>
 
     <style>
-        /* Ocultar loader inmediatamente si está optimizado (0 segundos de parpadeo) */
-        .is-optimized #global-loader {
-            display: none !important;
-        }
         /* Oculta los elementos visuales base hasta que se decida qué vista mostrar */
         .hidden-view {
             display: none !important;
@@ -66,18 +46,6 @@
     </style>
 </head>
 <body class="text-stone-800 font-sans antialiased relative min-h-[100dvh]">
-
-    <!-- ==========================================
-         PANTALLA DE CARGA (SPLASH SCREEN)
-         ========================================== -->
-    <div id="global-loader" class="fixed inset-0 z-[10000] bg-stone-100 flex flex-col items-center justify-center transition-opacity duration-500">
-        <div class="relative flex items-center justify-center mb-6">
-            <div class="w-20 h-20 lg:w-24 lg:h-24 border-4 border-amber-200 rounded-full animate-ping absolute"></div>
-            <div class="w-16 h-16 lg:w-20 lg:h-20 border-4 border-amber-500 border-t-transparent rounded-full animate-spin relative z-10"></div>
-        </div>
-        <h2 class="text-2xl lg:text-3xl font-serif text-amber-700 tracking-widest uppercase">Cargando Evento</h2>
-        <p class="text-stone-500 mt-2 text-sm lg:text-base animate-pulse">Sincronizando información en tiempo real...</p>
-    </div>
 
     <!-- ==========================================
          OPTIMIZACIÓN DE ICONOS (SVG SPRITE SHEET NATIVO)
@@ -266,7 +234,7 @@
     </div>
 
     <!-- ==========================================
-         VISTA 1: TÓTEM (ENTRADA PRINCIPAL)
+         VISTA 1: TÓTEM (ENTRADA PRINCIPAL) - SE MUESTRA INMEDIATAMENTE
          ========================================== -->
     <div id="view-totem" class="view min-h-[100dvh] w-full flex flex-col justify-between items-center px-4 md:px-6 py-4 md:py-6 lg:py-8 relative z-10 overflow-y-auto">
         <div class="w-full flex-grow flex flex-col items-center justify-center max-w-2xl lg:max-w-4xl 2xl:max-w-6xl space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10 2xl:space-y-12 my-2 md:my-4">
@@ -585,10 +553,7 @@
         window.currentPhotoUrl = ''; window.currentPhotoName = '';
         window.selectedChallenge = ''; window.pendingChallenges = [];
         
-        window.isFirstLoad = true; 
         window.firebaseConnected = false;
-        window.configLoaded = false;
-        window.guestsLoaded = false;
         
         window.RETOS_DB = {
             boda: ["Tómate una selfie con la novia.", "Tómate una selfie con el novio.", "Fotografía un beso apasionado.", "Captura una lágrima de felicidad.", "Toma una foto del centro de mesa."],
@@ -602,12 +567,10 @@
             const cachedConfig = localStorage.getItem('eventAppConfig');
             if (cachedConfig) {
                 window.appConfig = { ...window.appConfig, ...JSON.parse(cachedConfig) };
-                window.configLoaded = true; 
             }
             const cachedGuests = localStorage.getItem('eventAppGuests');
             if (cachedGuests) {
                 window.guests = JSON.parse(cachedGuests);
-                window.guestsLoaded = true;
             }
         } catch (e) {}
 
@@ -676,39 +639,8 @@
             }
         };
 
+        // Renderizado INMEDIATO con la información del respaldo (0 segundos de espera)
         window.aplicarConfiguracion();
-
-        function ocultarSplash() {
-            if (window.isFirstLoad) {
-                const loader = document.getElementById('global-loader');
-                if (loader) {
-                    loader.classList.add('opacity-0');
-                    setTimeout(() => { loader.style.display = 'none'; }, 500);
-                }
-                window.isFirstLoad = false;
-            }
-        }
-        
-        window.checkFullLoad = function() {
-            if (window.configLoaded && window.guestsLoaded && window.isFirstLoad) {
-                ocultarSplash();
-            }
-        };
-
-        // ¡EL TRUCO DE MAGIA ESTÁ AQUÍ!
-        // Si el HTML fue exportado y ya trae los textos "quemados" (isOptimized: true),
-        // quitamos la pantalla de carga ¡INMEDIATAMENTE!, en el milisegundo 1.
-        if (window.appConfig.isOptimized) {
-            window.configLoaded = true; // Ya no tiene que esperar a Firebase para la config
-            ocultarSplash(); // ¡Bum! 0 segundos de espera.
-        }
-
-        setTimeout(() => {
-            if (window.isFirstLoad) {
-                console.warn("Forzando el inicio por retraso de red.");
-                window.aplicarConfiguracion(); ocultarSplash();
-            }
-        }, 12000);
 
         // ==========================================
         // LÓGICA DE EXPORTACIÓN (CARGA INSTANTÁNEA)
@@ -797,11 +729,8 @@
                 }
                 
                 window.aplicarConfiguracion();
-                window.configLoaded = true;
-                window.checkFullLoad();
             }, (error) => {
                 console.error("Error cargando configuración:", error);
-                window.configLoaded = true; window.checkFullLoad();
             });
         }
 
@@ -812,12 +741,8 @@
                 snapshot.forEach((docu) => { window.guests.push({ id: docu.id, ...docu.data() }); });
                 try { localStorage.setItem('eventAppGuests', JSON.stringify(window.guests)); } catch (e) {}
                 renderAdminList();
-                
-                window.guestsLoaded = true;
-                window.checkFullLoad();
             }, (error) => {
                 console.error("Error cargando invitados:", error);
-                window.guestsLoaded = true; window.checkFullLoad();
             });
         }
 
