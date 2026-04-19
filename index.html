@@ -8,7 +8,32 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- JSZip para descargar todas las fotos -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <script>
+        // --- INICIO_RESPALDO ---
+        window.appConfig = {
+            isOptimized: false,
+            title: "", subtitle: "",
+            searchBtnText: "Ingresar", rouletteText: "",
+            tableLabelText: "Tu asignación", acceptBtnText: "Aceptar",
+            videoTitleText: "Ver Video", dashboardSubtitle: "",
+            rouletteBg: "", rouletteCenter: "",
+            videoLink: "", videoLoop: true, showVideoBtn: false, homeLogoUrl: "", adminPassword: "admin",
+            eventType: "boda", allowAnonymous: false, qrLogo: ""
+        };
+        // --- FIN_RESPALDO ---
+        
+        // Bloqueo instantáneo: Si está optimizado, oculta el cargador ANTES de que la pantalla se dibuje
+        if (window.appConfig.isOptimized) {
+            document.documentElement.classList.add('is-optimized');
+        }
+    </script>
+
     <style>
+        /* Ocultar loader inmediatamente si está optimizado (0 segundos de parpadeo) */
+        .is-optimized #global-loader {
+            display: none !important;
+        }
         /* Oculta los elementos visuales base hasta que se decida qué vista mostrar */
         .hidden-view {
             display: none !important;
@@ -531,7 +556,7 @@
                         Haz clic aquí después de Guardar. La app absorberá tus textos y te descargará un nuevo archivo HTML "optimizado". Sube ese archivo a tu hosting. Cuando un invitado escanee el QR, la app cargará los textos al instante, sin esperar a Firebase.
                     </p>
                     <button type="button" id="btn-export-html" onclick="window.descargarHTMLOptimizado()" class="w-full bg-amber-500 text-stone-900 py-4 lg:py-6 rounded-xl font-bold text-lg lg:text-2xl hover:bg-amber-400 transition-colors shadow-lg active:scale-95 flex justify-center items-center gap-3 relative z-10">
-                        <svg class="w-6 h-6 lg:w-8 lg:h-8"><use href="#icon-download"></use></svg> 2. Descargar HTML de Carga Instantánea
+                        <svg class="w-6 h-6 lg:w-8 lg:h-8"><use href="#icon-download"></use></svg> 2. Descargar HTML (index.html)
                     </button>
                 </div>
 
@@ -544,19 +569,6 @@
          SCRIPT DE VARIABLES GLOBALES BASE Y FAIL-SAFE
          ========================================== -->
     <script>
-        // --- INICIO_RESPALDO ---
-        window.appConfig = {
-            isOptimized: false,
-            title: "", subtitle: "",
-            searchBtnText: "Ingresar", rouletteText: "",
-            tableLabelText: "Tu asignación", acceptBtnText: "Aceptar",
-            videoTitleText: "Ver Video", dashboardSubtitle: "",
-            rouletteBg: "", rouletteCenter: "",
-            videoLink: "", videoLoop: true, showVideoBtn: false, homeLogoUrl: "", adminPassword: "admin",
-            eventType: "boda", allowAnonymous: false, qrLogo: ""
-        };
-        // --- FIN_RESPALDO ---
-
         window.guests = []; window.photos = [];
         window.currentGuest = null; window.challengeAccepted = false; 
         window.currentPhotoUrl = ''; window.currentPhotoName = '';
@@ -719,12 +731,12 @@
                     const blob = new Blob([htmlText], { type: 'text/html;charset=utf-8' });
                     const link = document.createElement('a');
                     link.href = URL.createObjectURL(blob);
-                    link.download = `evento_optimizado.html`;
+                    link.download = `index.html`;
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
                     
-                    alert("✅ ¡HTML Generado con éxito!\n\nReemplaza el archivo anterior en tu hosting por este 'evento_optimizado.html'.\n\nAl hacerlo, cualquier invitado que escanee el QR tendrá sus textos cargados en 0 segundos.");
+                    alert("✅ ¡HTML Generado con éxito!\n\nReemplaza el archivo anterior en tu hosting por este 'index.html'.\n\nAl hacerlo, cualquier invitado que escanee el QR tendrá sus textos cargados en 0 segundos.");
                 } else {
                     alert("Error interno: No se encontraron los marcadores en el código.");
                 }
