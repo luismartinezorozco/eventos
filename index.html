@@ -19,9 +19,13 @@
             videoTitleText: "Ver Video", dashboardSubtitle: "",
             rouletteBg: "", rouletteCenter: "",
             videoLink: "", videoLoop: true, showVideoBtn: false, homeLogoUrl: "", adminPassword: "admin",
-            eventType: "boda", allowAnonymous: false, qrLogo: ""
+            eventType: "boda", allowAnonymous: false, qrLogo: "", themeColor: "amber"
         };
         // --- FIN_RESPALDO ---
+        
+        // Variables para el control de temas de color en vivo
+        window.baseFileTheme = 'amber'; 
+        window.currentDOMTheme = window.baseFileTheme;
     </script>
 
     <style>
@@ -486,7 +490,21 @@
                     <div><label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 uppercase">Botón Aceptar</label><input id="cfg-accept-btn" type="text" class="w-full p-3 lg:p-6 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base lg:text-2xl" required></div>
                     <div><label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 uppercase">Texto Botón Video</label><input id="cfg-video-title" type="text" class="w-full p-3 lg:p-6 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base lg:text-2xl" required></div>
                     <div><label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 uppercase">Subtítulo Invitado</label><input id="cfg-dashboard-subtitle" type="text" class="w-full p-3 lg:p-6 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base lg:text-2xl" required></div>
-                    <div class="md:col-span-2"><label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 uppercase">URL Marca de Agua (QR)</label><input id="cfg-qr-logo" type="url" placeholder="Ej. https://ejemplo.com/logo.png" class="w-full p-3 lg:p-6 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base lg:text-2xl"></div>
+                    <div><label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 uppercase">URL Marca de Agua (QR)</label><input id="cfg-qr-logo" type="url" placeholder="Ej. https://ejemplo.com/logo.png" class="w-full p-3 lg:p-6 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base lg:text-2xl"></div>
+                    <div>
+                        <label class="block text-xs sm:text-sm lg:text-lg 2xl:text-2xl font-bold text-stone-700 mb-1 uppercase">Color del Sistema</label>
+                        <select id="cfg-theme-color" class="w-full p-3 lg:p-6 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base lg:text-2xl font-medium text-stone-700 cursor-pointer">
+                            <option value="amber">Ámbar (Original)</option>
+                            <option value="blue">Azul Océano</option>
+                            <option value="red">Rojo Pasión</option>
+                            <option value="green">Verde Naturaleza</option>
+                            <option value="emerald">Esmeralda Elegante</option>
+                            <option value="pink">Rosa Delicado</option>
+                            <option value="purple">Púrpura Real</option>
+                            <option value="cyan">Cian Moderno</option>
+                            <option value="slate">Pizarra Minimalista</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="flex items-center gap-3 bg-white/50 p-4 rounded-xl border-2 border-amber-200/50 mt-6">
@@ -521,21 +539,13 @@
                     <input id="cfg-admin-pass" type="text" class="w-full p-3 lg:p-6 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white focus:border-amber-400 outline-none text-base lg:text-2xl text-center tracking-widest font-mono" required>
                 </div>
                 
-                <button type="submit" class="w-full bg-stone-900 text-amber-400 py-4 lg:py-8 rounded-2xl font-bold text-lg lg:text-3xl hover:bg-stone-800 transition-colors shadow-xl active:scale-95 flex justify-center items-center gap-3 mt-8">
-                    <svg class="w-6 h-6 lg:w-8 lg:h-8"><use href="#icon-save"></use></svg> 1. GUARDAR CONFIGURACIÓN
-                </button>
-
-                <!-- NUEVA SECCIÓN DE EXPORTACIÓN (CARGA 0 SEGUNDOS) -->
-                <div class="mt-12 bg-stone-900 rounded-[2rem] p-6 lg:p-10 border border-stone-700 shadow-2xl relative overflow-hidden">
-                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-amber-500 rounded-full opacity-20 blur-2xl"></div>
-                    <h3 class="text-white text-2xl lg:text-4xl font-serif mb-4 flex items-center gap-3 relative z-10">
-                        <svg class="w-8 h-8 text-amber-400"><use href="#icon-crown"></use></svg> Generador de Carga 0 Segundos
-                    </h3>
-                    <p class="text-stone-400 text-sm lg:text-lg mb-6 relative z-10">
-                        Haz clic aquí después de Guardar. La app absorberá tus textos y te descargará un nuevo archivo HTML "optimizado". Sube ese archivo a tu hosting. Cuando un invitado escanee el QR, la app cargará los textos al instante, sin esperar a Firebase.
-                    </p>
-                    <button type="button" id="btn-export-html" onclick="window.descargarHTMLOptimizado()" class="w-full bg-amber-500 text-stone-900 py-4 lg:py-6 rounded-xl font-bold text-lg lg:text-2xl hover:bg-amber-400 transition-colors shadow-lg active:scale-95 flex justify-center items-center gap-3 relative z-10">
-                        <svg class="w-6 h-6 lg:w-8 lg:h-8"><use href="#icon-download"></use></svg> 2. Descargar HTML (index.html)
+                <!-- BOTONES DE ACCIÓN (GUARDAR Y EXPORTAR HTML) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 mt-12 border-t-2 border-stone-300/50 pt-8">
+                    <button type="submit" class="w-full bg-stone-900 text-amber-400 py-4 lg:py-6 rounded-2xl font-bold text-lg lg:text-2xl hover:bg-stone-800 transition-colors shadow-xl active:scale-95 flex justify-center items-center gap-3">
+                        <svg class="w-6 h-6 lg:w-8 lg:h-8"><use href="#icon-save"></use></svg> 1. GUARDAR EN VIVO
+                    </button>
+                    <button type="button" id="btn-export-html" onclick="window.descargarHTMLOptimizado()" class="w-full bg-amber-500 text-stone-900 py-4 lg:py-6 rounded-2xl font-bold text-lg lg:text-2xl hover:bg-amber-400 transition-colors shadow-xl active:scale-95 flex justify-center items-center gap-3">
+                        <svg class="w-6 h-6 lg:w-8 lg:h-8"><use href="#icon-download"></use></svg> 2. DESCARGAR HTML
                     </button>
                 </div>
 
@@ -640,8 +650,25 @@
                 el('cfg-roulette-center').value = window.appConfig.rouletteCenter || "";
                 el('cfg-video').value = window.appConfig.videoLink || ""; 
                 el('cfg-admin-pass').value = window.appConfig.adminPassword || "admin";
+                if(el('cfg-theme-color')) el('cfg-theme-color').value = window.appConfig.themeColor || window.baseFileTheme;
                 if(el('cfg-video-loop')) el('cfg-video-loop').checked = window.appConfig.videoLoop !== false;
                 if(el('admin-event-type')) el('admin-event-type').value = window.appConfig.eventType || 'boda';
+            }
+
+            // APLICACIÓN DE SISTEMA DE COLOR EN VIVO (Búsqueda y Reemplazo DOM)
+            const newTheme = window.appConfig.themeColor || window.baseFileTheme;
+            if (window.currentDOMTheme !== newTheme) {
+                // Generamos una expresión regular para encontrar clases previas (ej. text-amber-500, bg-amber-600)
+                const regex = new RegExp(`\\b([a-z]+-)?${window.currentDOMTheme}(-\\d{1,3}(?:\\/\\d+)?)\\b`, 'g');
+                const elements = [document.body, ...document.body.querySelectorAll('*')];
+                
+                elements.forEach(element => {
+                    if (typeof element.className === 'string' && element.className.includes(window.currentDOMTheme)) {
+                        const newClass = element.className.replace(regex, `$1${newTheme}$2`);
+                        if (newClass !== element.className) element.className = newClass;
+                    }
+                });
+                window.currentDOMTheme = newTheme;
             }
         };
 
@@ -649,7 +676,7 @@
         window.aplicarConfiguracion();
 
         // ==========================================
-        // LÓGICA DE EXPORTACIÓN (CARGA INSTANTÁNEA)
+        // LÓGICA DE EXPORTACIÓN (CARGA INSTANTÁNEA Y TEMA ESTÁTICO)
         // ==========================================
         window.descargarHTMLOptimizado = async function() {
             const btn = document.getElementById('btn-export-html');
@@ -668,13 +695,24 @@
                 const response = await fetch(window.location.href.split('?')[0]);
                 let htmlText = await response.text();
 
-                // Buscamos los comentarios mágicos y reemplazamos solo el diccionario de configuración
+                // 1. Modificar el tema estático en el código HTML de origen para que nazca con el nuevo color
+                const baseTheme = window.baseFileTheme || 'amber';
+                const newTheme = window.appConfig.themeColor || 'amber';
+                
+                if (baseTheme !== newTheme) {
+                    const regexSource = new RegExp(`\\b([a-z]+-)?${baseTheme}(-\\d{1,3}(?:\\/\\d+)?)\\b`, 'g');
+                    htmlText = htmlText.replace(regexSource, `$1${newTheme}$2`);
+                    // Actualizamos la variable base interna en el código fuente exportado
+                    htmlText = htmlText.replace(`window.baseFileTheme = '${baseTheme}';`, `window.baseFileTheme = '${newTheme}';`);
+                }
+
+                // 2. Reemplazamos solo el diccionario de configuración
                 const startMarker = "// --- INICIO_RESPALDO ---";
                 const endMarker = "// --- FIN_RESPALDO ---";
-                const regex = new RegExp(startMarker + "[\\s\\S]*?" + endMarker);
+                const regexConfig = new RegExp(startMarker + "[\\s\\S]*?" + endMarker);
 
-                if (regex.test(htmlText)) {
-                    htmlText = htmlText.replace(regex, startMarker + "\n        " + newScript + "\n        " + endMarker);
+                if (regexConfig.test(htmlText)) {
+                    htmlText = htmlText.replace(regexConfig, startMarker + "\n        " + newScript + "\n        " + endMarker);
                     
                     // Disparamos la descarga del nuevo HTML
                     const blob = new Blob([htmlText], { type: 'text/html;charset=utf-8' });
@@ -685,14 +723,14 @@
                     link.click();
                     document.body.removeChild(link);
                     
-                    alert("✅ ¡HTML Generado con éxito!\n\nReemplaza el archivo anterior en tu hosting por este 'index.html'.\n\nAl hacerlo, cualquier invitado que escanee el QR tendrá sus textos cargados en 0 segundos.");
+                    alert("✅ ¡HTML Generado con éxito!\n\nSe ha descargado el archivo 'index.html'. Reemplázalo en tu hosting. Al hacerlo, cualquier invitado que escanee el QR cargará los textos y colores al instante.");
                 } else {
                     alert("Error interno: No se encontraron los marcadores en el código.");
                 }
 
             } catch (error) {
                 console.error(error);
-                alert("Error al generar el HTML. Asegúrate de estar ejecutando esto en tu hosting web y no como un archivo local en tu computadora.");
+                alert("Error al generar el HTML. Asegúrate de estar ejecutando esto en un entorno de servidor web y no como un archivo local en tu computadora.");
             } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
@@ -828,7 +866,8 @@
                 videoLink: document.getElementById('cfg-video').value, videoLoop: document.getElementById('cfg-video-loop').checked,
                 showVideoBtn: document.getElementById('cfg-show-video').checked, adminPassword: document.getElementById('cfg-admin-pass').value,
                 allowAnonymous: document.getElementById('cfg-anonymous').checked, qrLogo: document.getElementById('cfg-qr-logo').value,
-                homeLogoUrl: document.getElementById('cfg-home-logo').value
+                homeLogoUrl: document.getElementById('cfg-home-logo').value,
+                themeColor: document.getElementById('cfg-theme-color').value
             };
 
             // Forzar actualización local en el mismo milisegundo en que se da "Guardar"
