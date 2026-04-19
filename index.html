@@ -12,26 +12,15 @@
     <script>
         // --- INICIO_RESPALDO ---
         window.appConfig = {
-        "isOptimized": true,
-        "title": "¡Bienvenidos! al 6 CONGRESO DE PORCICULTURA",
-        "subtitle": "Unete a este maravilloso evento.",
-        "searchBtnText": "Buscar mi puesto",
-        "rouletteText": "Gira la ruleta para descubrir tu reto fotográfico en esta boda.",
-        "tableLabelText": "Tu mesa es la número",
-        "acceptBtnText": "¡Aceptar Reto!",
-        "videoTitleText": "Mensaje de poder",
-        "dashboardSubtitle": "Nos alegra mucho que estés aquí.",
-        "rouletteBg": "https://www.image2url.com/r2/default/images/1776520704497-d73e4ba9-c27e-4772-93ac-71274355743c.png",
-        "rouletteCenter": "https://www.image2url.com/r2/default/images/1776520704497-d73e4ba9-c27e-4772-93ac-71274355743c.png",
-        "videoLink": "https://drive.google.com/file/d/1pJXSVBktub3dYF72z1OJodXbgwYpvP4L/preview",
-        "videoLoop": true,
-        "showVideoBtn": false,
-        "homeLogoUrl": "https://www.image2url.com/r2/default/images/1776520704497-d73e4ba9-c27e-4772-93ac-71274355743c.png",
-        "adminPassword": "admin123",
-        "eventType": "porcicultura",
-        "allowAnonymous": true,
-        "qrLogo": "https://www.image2url.com/r2/default/images/1776520704497-d73e4ba9-c27e-4772-93ac-71274355743c.png"
-};
+            isOptimized: false,
+            title: "", subtitle: "",
+            searchBtnText: "Ingresar", rouletteText: "",
+            tableLabelText: "Tu asignación", acceptBtnText: "Aceptar",
+            videoTitleText: "Ver Video", dashboardSubtitle: "",
+            rouletteBg: "", rouletteCenter: "",
+            videoLink: "", videoLoop: true, showVideoBtn: false, homeLogoUrl: "", adminPassword: "admin",
+            eventType: "boda", allowAnonymous: false, qrLogo: ""
+        };
         // --- FIN_RESPALDO ---
     </script>
 
@@ -590,13 +579,13 @@
             if(el('totem-title')) el('totem-title').innerText = window.appConfig.title || "";
             if(el('totem-subtitle')) el('totem-subtitle').innerText = window.appConfig.subtitle || "";
             if(el('btn-search')) el('btn-search').innerText = window.appConfig.searchBtnText || "Buscar";
-            if(el('roulette-desc-text')) el('roulette-desc-text').innerText = window.appConfig.rouletteText;
-            if(el('table-label-text')) el('table-label-text').innerText = window.appConfig.tableLabelText;
-            if(el('btn-accept-challenge')) el('btn-accept-challenge').innerText = window.appConfig.acceptBtnText;
-            if(el('totem-video-btn-text')) el('totem-video-btn-text').innerText = window.appConfig.videoTitleText;
-            if(el('dashboard-subtitle')) el('dashboard-subtitle').innerText = window.appConfig.dashboardSubtitle;
-            if(el('roulette-wheel') && window.appConfig.rouletteBg) el('roulette-wheel').style.backgroundImage = `url('${window.appConfig.rouletteBg}')`;
-            if(el('roulette-center-img') && window.appConfig.rouletteCenter) el('roulette-center-img').src = window.appConfig.rouletteCenter;
+            if(el('roulette-desc-text')) el('roulette-desc-text').innerText = window.appConfig.rouletteText || "";
+            if(el('table-label-text')) el('table-label-text').innerText = window.appConfig.tableLabelText || "";
+            if(el('btn-accept-challenge')) el('btn-accept-challenge').innerText = window.appConfig.acceptBtnText || "Aceptar";
+            if(el('totem-video-btn-text')) el('totem-video-btn-text').innerText = window.appConfig.videoTitleText || "Ver Video";
+            if(el('dashboard-subtitle')) el('dashboard-subtitle').innerText = window.appConfig.dashboardSubtitle || "";
+            if(el('roulette-wheel')) el('roulette-wheel').style.backgroundImage = window.appConfig.rouletteBg ? `url('${window.appConfig.rouletteBg}')` : "none";
+            if(el('roulette-center-img')) el('roulette-center-img').src = window.appConfig.rouletteCenter || "";
 
             if(el('cfg-anonymous')) el('cfg-anonymous').checked = window.appConfig.allowAnonymous === true;
             if(el('cfg-show-video')) el('cfg-show-video').checked = window.appConfig.showVideoBtn !== false;
@@ -639,12 +628,18 @@
             }
 
             if(el('cfg-title')) {
-                el('cfg-title').value = window.appConfig.title; el('cfg-subtitle').value = window.appConfig.subtitle;
-                el('cfg-search-btn').value = window.appConfig.searchBtnText; el('cfg-roulette-text').value = window.appConfig.rouletteText;
-                el('cfg-table-label').value = window.appConfig.tableLabelText; el('cfg-accept-btn').value = window.appConfig.acceptBtnText;
-                el('cfg-video-title').value = window.appConfig.videoTitleText; el('cfg-dashboard-subtitle').value = window.appConfig.dashboardSubtitle;
-                el('cfg-roulette-bg').value = window.appConfig.rouletteBg; el('cfg-roulette-center').value = window.appConfig.rouletteCenter;
-                el('cfg-video').value = window.appConfig.videoLink; el('cfg-admin-pass').value = window.appConfig.adminPassword;
+                el('cfg-title').value = window.appConfig.title || ""; 
+                el('cfg-subtitle').value = window.appConfig.subtitle || "";
+                el('cfg-search-btn').value = window.appConfig.searchBtnText || ""; 
+                el('cfg-roulette-text').value = window.appConfig.rouletteText || "";
+                el('cfg-table-label').value = window.appConfig.tableLabelText || ""; 
+                el('cfg-accept-btn').value = window.appConfig.acceptBtnText || "Aceptar";
+                el('cfg-video-title').value = window.appConfig.videoTitleText || "Ver Video"; 
+                el('cfg-dashboard-subtitle').value = window.appConfig.dashboardSubtitle || "";
+                el('cfg-roulette-bg').value = window.appConfig.rouletteBg || ""; 
+                el('cfg-roulette-center').value = window.appConfig.rouletteCenter || "";
+                el('cfg-video').value = window.appConfig.videoLink || ""; 
+                el('cfg-admin-pass').value = window.appConfig.adminPassword || "admin";
                 if(el('cfg-video-loop')) el('cfg-video-loop').checked = window.appConfig.videoLoop !== false;
                 if(el('admin-event-type')) el('admin-event-type').value = window.appConfig.eventType || 'boda';
             }
@@ -711,7 +706,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { initializeFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBxE8t9sEWalMO_i0bFDjGp5I95iuYj5Io",
@@ -725,9 +720,8 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         
-        const db = initializeFirestore(app, {
-            experimentalForceLongPolling: true
-        });
+        // Habilitamos WebSockets directos para actualización INMEDIATA (Removemos Long Polling)
+        const db = getFirestore(app);
 
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhwV00ZSwM8mPhI4k3Cg4ztmd3TGC1HqLm32gdhGepFhKZp0dS-P5WyAi-tRplcapVPw/exec'; 
 
@@ -836,10 +830,15 @@
                 allowAnonymous: document.getElementById('cfg-anonymous').checked, qrLogo: document.getElementById('cfg-qr-logo').value,
                 homeLogoUrl: document.getElementById('cfg-home-logo').value
             };
+
+            // Forzar actualización local en el mismo milisegundo en que se da "Guardar"
+            window.appConfig = { ...window.appConfig, ...newConfig };
+            window.aplicarConfiguracion();
+
             try {
                 await setDoc(doc(db, "configuracion", "general"), newConfig, { merge: true });
-                alert("¡Configuración guardada! Si quieres que cargue en 0 segundos, no olvides darle al botón 'Descargar HTML'.");
-            } catch (error) { alert("Error al guardar."); }
+                alert("✅ ¡Configuración guardada en vivo!\n\nTodos los celulares conectados se acaban de actualizar.\n\nRecuerda: Si quieres que los NUEVOS invitados sigan cargando en 0 segundos, dale a 'Descargar HTML' y actualiza tu servidor.");
+            } catch (error) { alert("Error al guardar en la nube."); }
         };
 
         window.changeEventType = async function() {
