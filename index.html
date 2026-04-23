@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App de Eventos y Bodas</title>
+    <title>DINASTIA</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- JSZip para descargar todas las fotos -->
@@ -29,10 +29,9 @@
     </script>
 
     <style>
-        /* Oculta los elementos visuales base hasta que se decida qué vista mostrar */
-        .hidden-view {
-            display: none !important;
-        }
+        /* Clases de utilidad */
+        .hidden-view { display: none !important; }
+        
         /* Animación para el conteo regresivo y modales */
         @keyframes pop-in {
             0% { transform: scale(0.5); opacity: 0; }
@@ -42,6 +41,7 @@
         .animate-pop {
             animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
+        
         /* Scrollbar personalizado para TVs/Desktop */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -52,7 +52,7 @@
 <body class="text-stone-800 font-sans antialiased relative min-h-[100dvh]">
 
     <!-- ==========================================
-         OPTIMIZACIÓN DE ICONOS (SVG SPRITE SHEET NATIVO)
+         OPTIMIZACIÓN DE ICONOS (SVG SPRITE SHEET)
          ========================================== -->
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <defs>
@@ -238,7 +238,7 @@
     </div>
 
     <!-- ==========================================
-         VISTA 1: TÓTEM (ENTRADA PRINCIPAL) - SE MUESTRA INMEDIATAMENTE
+         VISTA 1: TÓTEM (ENTRADA PRINCIPAL)
          ========================================== -->
     <div id="view-totem" class="view min-h-[100dvh] w-full flex flex-col justify-between items-center px-4 md:px-6 py-4 md:py-6 lg:py-8 relative z-10 overflow-y-auto">
         <div class="w-full flex-grow flex flex-col items-center justify-center max-w-2xl lg:max-w-4xl 2xl:max-w-6xl space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10 2xl:space-y-12 my-2 md:my-4">
@@ -301,7 +301,7 @@
                     </div>
                 </div>
             </div>
-            <p class="text-stone-500 font-medium tracking-wide text-center text-lg sm:text-xl lg:text-3xl 2xl:text-5xl uppercase">App de Eventos</p>
+            <p class="text-stone-500 font-medium tracking-wide text-center text-lg sm:text-xl lg:text-3xl 2xl:text-5xl uppercase">DINASTIA</p>
         </div>
     </div>
 
@@ -323,11 +323,13 @@
             <p id="table-label-text" class="text-sm md:text-base lg:text-xl 2xl:text-3xl text-stone-500 font-bold uppercase tracking-widest mb-2 lg:mb-6"></p>
             <p id="guest-table-display" class="text-8xl md:text-9xl lg:text-[10rem] 2xl:text-[14rem] font-serif text-amber-600 drop-shadow-sm leading-none">--</p>
         </div>
+        
         <div id="active-challenge-banner" class="hidden w-full">
             <div class="bg-amber-50/70 backdrop-blur-md border-2 border-amber-200/50 rounded-[2rem] lg:rounded-[3rem] p-8 lg:p-12 2xl:p-16 shadow-sm text-center">
                 <p class="text-sm lg:text-xl 2xl:text-2xl font-bold uppercase tracking-widest text-amber-600 mb-4 lg:mb-8 flex items-center justify-center gap-2 lg:gap-4"><svg class="w-5 h-5 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10"><use href="#icon-star"></use></svg> Tu Reto Activo</p>
                 <p id="active-challenge-text" class="text-stone-800 italic font-medium text-2xl md:text-3xl lg:text-5xl 2xl:text-6xl mb-6 lg:mb-10 leading-relaxed">...</p>
                 <p class="text-sm lg:text-lg 2xl:text-2xl text-amber-800 mb-8 lg:mb-12 font-medium px-4 lg:px-8 py-3 lg:py-5 rounded-xl lg:rounded-2xl inline-block border border-amber-200/50">🎁 Sube la foto para completarlo y gana oportunidades.</p>
+                
                 <div id="challenge-action-container" class="space-y-4 lg:space-y-6 2xl:space-y-8">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 2xl:gap-8">
                         <button onclick="window.triggerCameraUpload()" class="w-full bg-amber-600 text-white py-4 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl font-semibold text-lg lg:text-2xl 2xl:text-3xl hover:bg-amber-700 transition-colors flex md:flex-col items-center justify-center gap-2 lg:gap-4 active:scale-95 shadow-md">
@@ -341,7 +343,9 @@
                         <svg class="w-5 h-5 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10"><use href="#icon-clock"></use></svg> Posponer y pedir otro
                     </button>
                 </div>
+                
                 <p id="pending-challenges-text" class="text-sm lg:text-lg 2xl:text-xl text-stone-500 mt-4 lg:mt-8 hidden text-center font-medium">Tienes <span id="pending-count" class="text-amber-600 font-bold">0</span> retos pendientes.</p>
+                
                 <div id="next-challenge-container" class="hidden space-y-4 lg:space-y-8 mt-6 lg:mt-10">
                     <p class="text-lg lg:text-2xl 2xl:text-3xl font-bold text-green-600 flex items-center justify-center gap-2 lg:gap-4">
                         <svg class="w-6 h-6 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-party-popper"></use></svg> ¡Reto superado excelente!
@@ -352,6 +356,7 @@
                 </div>
             </div>
         </div>
+        
         <div class="w-full bg-white/60 backdrop-blur-md rounded-[2.5rem] lg:rounded-[3rem] border border-white/50 p-8 lg:p-12 2xl:p-16 text-center shadow-sm">
             <h3 class="font-serif text-2xl lg:text-4xl 2xl:text-5xl text-stone-800 mb-2 lg:mb-6">Ayúdanos a capturar el momento</h3>
             <p class="text-stone-600 text-lg lg:text-2xl 2xl:text-3xl mb-6 lg:mb-10">Sube las fotos y videos que tomes hoy a nuestra galería compartida.</p>
@@ -422,6 +427,7 @@
                             <button type="submit" class="w-full bg-stone-800 text-white py-4 lg:py-6 2xl:py-8 rounded-xl lg:rounded-2xl hover:bg-stone-900 transition-colors font-semibold text-lg lg:text-2xl 2xl:text-3xl flex items-center justify-center mt-4 lg:mt-8 shadow-md active:scale-95">Guardar Invitado</button>
                         </form>
                     </div>
+                    
                     <div class="bg-white/60 backdrop-blur-xl border border-white/50 p-6 lg:p-10 2xl:p-12 rounded-3xl lg:rounded-[2.5rem] shadow-sm">
                         <h3 class="font-serif text-2xl lg:text-3xl 2xl:text-4xl mb-2 lg:mb-6 text-stone-800 flex items-center gap-2 lg:gap-4"><svg class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10 text-amber-600"><use href="#icon-party-popper"></use></svg> Tipo de Evento</h3>
                         <select id="admin-event-type" class="w-full p-4 lg:p-6 2xl:p-8 rounded-xl lg:rounded-2xl border-2 border-white bg-white/50 focus:bg-white focus:border-amber-400 focus:ring-0 outline-none transition-colors text-base sm:text-lg lg:text-xl 2xl:text-2xl mb-4 lg:mb-8 font-medium text-stone-700">
@@ -445,7 +451,7 @@
                 </div>
             </div>
 
-            <!-- GALERÍA -->
+            <!-- GALERÍA DE FOTOS -->
             <div class="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl lg:rounded-[3rem] overflow-hidden shadow-sm p-6 md:p-8 lg:p-12 2xl:p-16 mt-8 lg:mt-16 2xl:mt-24">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 lg:gap-8 mb-8 lg:mb-12">
                     <div>
@@ -555,14 +561,18 @@
 
 
     <!-- ==========================================
-         SCRIPT DE VARIABLES GLOBALES BASE Y FAIL-SAFE
+         SCRIPT DE LÓGICA DE INTERFAZ Y UTILIDADES
          ========================================== -->
     <script>
-        window.guests = []; window.photos = [];
-        window.currentGuest = null; window.challengeAccepted = false; 
-        window.currentPhotoUrl = ''; window.currentPhotoName = '';
-        window.selectedChallenge = ''; window.pendingChallenges = [];
-        
+        // --- 1. VARIABLES GLOBALES DE ESTADO ---
+        window.guests = []; 
+        window.photos = [];
+        window.currentGuest = null; 
+        window.challengeAccepted = false; 
+        window.currentPhotoUrl = ''; 
+        window.currentPhotoName = '';
+        window.selectedChallenge = ''; 
+        window.pendingChallenges = [];
         window.firebaseConnected = false;
         
         window.RETOS_DB = {
@@ -572,7 +582,7 @@
             porcicultura: ["Selfie con un cerdo.", "Foto con el conferencista.", "Captura comiendo chicharrón.", "Selfie con veterinario.", "Stand innovador."]
         };
 
-        // LEER CACHÉ PARA USUARIOS RECURRENTES
+        // --- 2. RECUPERACIÓN CACHÉ LOCAL ---
         try {
             const cachedConfig = localStorage.getItem('eventAppConfig');
             if (cachedConfig) {
@@ -582,102 +592,138 @@
             if (cachedGuests) {
                 window.guests = JSON.parse(cachedGuests);
             }
-        } catch (e) {}
+        } catch (e) {
+            console.warn("No se pudo leer el localStorage", e);
+        }
 
+        // --- 3. FUNCIÓN: APLICAR CONFIGURACIÓN AL DOM ---
         window.aplicarConfiguracion = function() {
-            const el = (id) => document.getElementById(id);
-            if(el('totem-title')) el('totem-title').innerText = window.appConfig.title || "";
-            if(el('totem-subtitle')) el('totem-subtitle').innerText = window.appConfig.subtitle || "";
-            if(el('btn-search')) el('btn-search').innerText = window.appConfig.searchBtnText || "Buscar";
-            if(el('roulette-desc-text')) el('roulette-desc-text').innerText = window.appConfig.rouletteText || "";
-            if(el('table-label-text')) el('table-label-text').innerText = window.appConfig.tableLabelText || "";
-            if(el('btn-accept-challenge')) el('btn-accept-challenge').innerText = window.appConfig.acceptBtnText || "Aceptar";
-            if(el('totem-video-btn-text')) el('totem-video-btn-text').innerText = window.appConfig.videoTitleText || "Ver Video";
-            if(el('dashboard-subtitle')) el('dashboard-subtitle').innerText = window.appConfig.dashboardSubtitle || "";
-            if(el('roulette-wheel')) el('roulette-wheel').style.backgroundImage = window.appConfig.rouletteBg ? `url('${window.appConfig.rouletteBg}')` : "none";
-            if(el('roulette-center-img')) el('roulette-center-img').src = window.appConfig.rouletteCenter || "";
+            // Helper para evitar errores si el elemento no existe
+            const safeSetText = (id, text) => { 
+                const el = document.getElementById(id); 
+                if (el) el.innerText = text; 
+            };
+            const safeSetValue = (id, val) => { 
+                const el = document.getElementById(id); 
+                if (el) el.value = val; 
+            };
+            
+            // Textos Principales
+            safeSetText('totem-title', window.appConfig.title || "");
+            safeSetText('totem-subtitle', window.appConfig.subtitle || "");
+            safeSetText('btn-search', window.appConfig.searchBtnText || "Buscar");
+            safeSetText('roulette-desc-text', window.appConfig.rouletteText || "");
+            safeSetText('table-label-text', window.appConfig.tableLabelText || "");
+            safeSetText('btn-accept-challenge', window.appConfig.acceptBtnText || "Aceptar");
+            safeSetText('totem-video-btn-text', window.appConfig.videoTitleText || "Ver Video");
+            safeSetText('dashboard-subtitle', window.appConfig.dashboardSubtitle || "");
+            
+            // Imágenes y Fondos
+            const rouletteWheel = document.getElementById('roulette-wheel');
+            if (rouletteWheel) rouletteWheel.style.backgroundImage = window.appConfig.rouletteBg ? `url('${window.appConfig.rouletteBg}')` : "none";
+            
+            const rouletteCenter = document.getElementById('roulette-center-img');
+            if (rouletteCenter) rouletteCenter.src = window.appConfig.rouletteCenter || "";
+            
+            // Panel de Configuración - Checkboxes
+            const cfgAnonymous = document.getElementById('cfg-anonymous');
+            if (cfgAnonymous) cfgAnonymous.checked = window.appConfig.allowAnonymous === true;
+            
+            const cfgShowVideo = document.getElementById('cfg-show-video');
+            if (cfgShowVideo) cfgShowVideo.checked = window.appConfig.showVideoBtn !== false;
 
-            if(el('cfg-anonymous')) el('cfg-anonymous').checked = window.appConfig.allowAnonymous === true;
-            if(el('cfg-show-video')) el('cfg-show-video').checked = window.appConfig.showVideoBtn !== false;
-            if(el('cfg-home-logo')) el('cfg-home-logo').value = window.appConfig.homeLogoUrl || "";
-            if(el('cfg-qr-logo')) el('cfg-qr-logo').value = window.appConfig.qrLogo || "";
+            const cfgVideoLoop = document.getElementById('cfg-video-loop');
+            if (cfgVideoLoop) cfgVideoLoop.checked = window.appConfig.videoLoop !== false;
+            
+            // Panel de Configuración - Inputs Text/URL
+            safeSetValue('cfg-home-logo', window.appConfig.homeLogoUrl || "");
+            safeSetValue('cfg-qr-logo', window.appConfig.qrLogo || "");
+            safeSetValue('cfg-title', window.appConfig.title || ""); 
+            safeSetValue('cfg-subtitle', window.appConfig.subtitle || "");
+            safeSetValue('cfg-search-btn', window.appConfig.searchBtnText || ""); 
+            safeSetValue('cfg-roulette-text', window.appConfig.rouletteText || "");
+            safeSetValue('cfg-table-label', window.appConfig.tableLabelText || ""); 
+            safeSetValue('cfg-accept-btn', window.appConfig.acceptBtnText || "Aceptar");
+            safeSetValue('cfg-video-title', window.appConfig.videoTitleText || "Ver Video"); 
+            safeSetValue('cfg-dashboard-subtitle', window.appConfig.dashboardSubtitle || "");
+            safeSetValue('cfg-roulette-bg', window.appConfig.rouletteBg || ""); 
+            safeSetValue('cfg-roulette-center', window.appConfig.rouletteCenter || "");
+            safeSetValue('cfg-video', window.appConfig.videoLink || ""); 
+            safeSetValue('cfg-admin-pass', window.appConfig.adminPassword || "admin");
+            safeSetValue('cfg-theme-color', window.appConfig.themeColor || window.baseFileTheme);
+            safeSetValue('admin-event-type', window.appConfig.eventType || 'boda');
 
-            const totemSearchSection = el('totem-search-section');
-            const totemAnonymousSection = el('totem-anonymous-section');
+            // --- Lógica Condicional de UI ---
+            
+            // 1. Ocultar Búsqueda si es modo "Acceso Directo"
+            const totemSearchSection = document.getElementById('totem-search-section');
+            const totemAnonymousSection = document.getElementById('totem-anonymous-section');
             if (window.appConfig.allowAnonymous) {
-                if(totemSearchSection) totemSearchSection.classList.add('hidden');
-                if(totemAnonymousSection) totemAnonymousSection.classList.remove('hidden');
+                if (totemSearchSection) { totemSearchSection.classList.add('hidden'); }
+                if (totemAnonymousSection) { totemAnonymousSection.classList.remove('hidden'); }
             } else {
-                if(totemSearchSection) totemSearchSection.classList.remove('hidden');
-                if(totemAnonymousSection) totemAnonymousSection.classList.add('hidden');
+                if (totemSearchSection) { totemSearchSection.classList.remove('hidden'); }
+                if (totemAnonymousSection) { totemAnonymousSection.classList.add('hidden'); }
             }
 
-            const videoBtn = el('totem-video-btn');
+            // 2. Visibilidad Botón de Video
+            const videoBtn = document.getElementById('totem-video-btn');
             if (videoBtn) {
                 if (window.appConfig.showVideoBtn === false) {
-                    videoBtn.classList.add('hidden'); videoBtn.classList.remove('inline-flex');
+                    videoBtn.classList.add('hidden'); 
+                    videoBtn.classList.remove('inline-flex');
                 } else {
-                    videoBtn.classList.remove('hidden'); videoBtn.classList.add('inline-flex');
+                    videoBtn.classList.remove('hidden'); 
+                    videoBtn.classList.add('inline-flex');
                 }
             }
 
-            const homeLogoImg = el('totem-home-logo');
+            // 3. Logo Home
+            const homeLogoImg = document.getElementById('totem-home-logo');
             if (homeLogoImg) {
                 if (window.appConfig.homeLogoUrl && window.appConfig.homeLogoUrl.trim() !== "") {
-                    homeLogoImg.src = window.appConfig.homeLogoUrl; homeLogoImg.classList.remove('hidden');
+                    homeLogoImg.src = window.appConfig.homeLogoUrl; 
+                    homeLogoImg.classList.remove('hidden');
                 } else {
                     homeLogoImg.classList.add('hidden');
                 }
             }
 
-            const qrWatermarkBg = el('qr-watermark-bg');
+            // 4. Marca de Agua QR
+            const qrWatermarkBg = document.getElementById('qr-watermark-bg');
             if (qrWatermarkBg) {
                 if (window.appConfig.qrLogo && window.appConfig.qrLogo.trim() !== "") {
                     qrWatermarkBg.style.backgroundImage = `url('${window.appConfig.qrLogo}')`;
-                } else { qrWatermarkBg.style.backgroundImage = 'none'; }
+                } else { 
+                    qrWatermarkBg.style.backgroundImage = 'none'; 
+                }
             }
 
-            if(el('cfg-title')) {
-                el('cfg-title').value = window.appConfig.title || ""; 
-                el('cfg-subtitle').value = window.appConfig.subtitle || "";
-                el('cfg-search-btn').value = window.appConfig.searchBtnText || ""; 
-                el('cfg-roulette-text').value = window.appConfig.rouletteText || "";
-                el('cfg-table-label').value = window.appConfig.tableLabelText || ""; 
-                el('cfg-accept-btn').value = window.appConfig.acceptBtnText || "Aceptar";
-                el('cfg-video-title').value = window.appConfig.videoTitleText || "Ver Video"; 
-                el('cfg-dashboard-subtitle').value = window.appConfig.dashboardSubtitle || "";
-                el('cfg-roulette-bg').value = window.appConfig.rouletteBg || ""; 
-                el('cfg-roulette-center').value = window.appConfig.rouletteCenter || "";
-                el('cfg-video').value = window.appConfig.videoLink || ""; 
-                el('cfg-admin-pass').value = window.appConfig.adminPassword || "admin";
-                if(el('cfg-theme-color')) el('cfg-theme-color').value = window.appConfig.themeColor || window.baseFileTheme;
-                if(el('cfg-video-loop')) el('cfg-video-loop').checked = window.appConfig.videoLoop !== false;
-                if(el('admin-event-type')) el('admin-event-type').value = window.appConfig.eventType || 'boda';
-            }
-
-            // APLICACIÓN DE SISTEMA DE COLOR EN VIVO (Búsqueda y Reemplazo DOM)
+            // --- SISTEMA DE COLOR EN VIVO (Mejorado para mejor rendimiento) ---
             const newTheme = window.appConfig.themeColor || window.baseFileTheme;
             if (window.currentDOMTheme !== newTheme) {
-                // Generamos una expresión regular para encontrar clases previas (ej. text-amber-500, bg-amber-600)
+                // Buscamos solo los elementos que tengan alguna clase que contenga el color actual
+                const elements = document.querySelectorAll(`[class*="${window.currentDOMTheme}"]`);
+                // Regex precisa para reemplazar exactamente las clases de tailwind
                 const regex = new RegExp(`\\b([a-z]+-)?${window.currentDOMTheme}(-\\d{1,3}(?:\\/\\d+)?)\\b`, 'g');
-                const elements = [document.body, ...document.body.querySelectorAll('*')];
                 
                 elements.forEach(element => {
-                    if (typeof element.className === 'string' && element.className.includes(window.currentDOMTheme)) {
+                    if (typeof element.className === 'string') {
                         const newClass = element.className.replace(regex, `$1${newTheme}$2`);
-                        if (newClass !== element.className) element.className = newClass;
+                        if (newClass !== element.className) {
+                            element.className = newClass;
+                        }
                     }
                 });
+                // Actualizamos el estado de color actual
                 window.currentDOMTheme = newTheme;
             }
         };
 
-        // Renderizado INMEDIATO con la información del respaldo (0 segundos de espera)
+        // Renderizado INMEDIATO (0 segundos)
         window.aplicarConfiguracion();
 
-        // ==========================================
-        // LÓGICA DE EXPORTACIÓN (CARGA INSTANTÁNEA Y TEMA ESTÁTICO)
-        // ==========================================
+        // --- 4. FUNCIÓN: EXPORTAR HTML OPTIMIZADO ---
         window.descargarHTMLOptimizado = async function() {
             const btn = document.getElementById('btn-export-html');
             const originalText = btn.innerHTML;
@@ -685,28 +731,26 @@
             btn.disabled = true;
 
             try {
-                // Preparamos el objeto con la marca "isOptimized"
+                // Preparar configuración exportable
                 const configParaExportar = { ...window.appConfig, isOptimized: true };
-                // Formateamos para inyectarlo en el código
                 const configString = JSON.stringify(configParaExportar, null, 8);
                 const newScript = `window.appConfig = ${configString};`;
 
-                // Obtenemos el código fuente de esta misma página
+                // Descargar propio código fuente
                 const response = await fetch(window.location.href.split('?')[0]);
                 let htmlText = await response.text();
 
-                // 1. Modificar el tema estático en el código HTML de origen para que nazca con el nuevo color
+                // Reemplazar color de sistema estático
                 const baseTheme = window.baseFileTheme || 'amber';
                 const newTheme = window.appConfig.themeColor || 'amber';
                 
                 if (baseTheme !== newTheme) {
                     const regexSource = new RegExp(`\\b([a-z]+-)?${baseTheme}(-\\d{1,3}(?:\\/\\d+)?)\\b`, 'g');
                     htmlText = htmlText.replace(regexSource, `$1${newTheme}$2`);
-                    // Actualizamos la variable base interna en el código fuente exportado
                     htmlText = htmlText.replace(`window.baseFileTheme = '${baseTheme}';`, `window.baseFileTheme = '${newTheme}';`);
                 }
 
-                // 2. Reemplazamos solo el diccionario de configuración
+                // Inyectar el nuevo diccionario de configuración
                 const startMarker = "// --- INICIO_RESPALDO ---";
                 const endMarker = "// --- FIN_RESPALDO ---";
                 const regexConfig = new RegExp(startMarker + "[\\s\\S]*?" + endMarker);
@@ -714,7 +758,7 @@
                 if (regexConfig.test(htmlText)) {
                     htmlText = htmlText.replace(regexConfig, startMarker + "\n        " + newScript + "\n        " + endMarker);
                     
-                    // Disparamos la descarga del nuevo HTML
+                    // Crear archivo y forzar descarga
                     const blob = new Blob([htmlText], { type: 'text/html;charset=utf-8' });
                     const link = document.createElement('a');
                     link.href = URL.createObjectURL(blob);
@@ -725,92 +769,33 @@
                     
                     alert("✅ ¡HTML Generado con éxito!\n\nSe ha descargado el archivo 'index.html'. Reemplázalo en tu hosting. Al hacerlo, cualquier invitado que escanee el QR cargará los textos y colores al instante.");
                 } else {
-                    alert("Error interno: No se encontraron los marcadores en el código.");
+                    alert("Error interno: No se encontraron los marcadores de código.");
                 }
 
             } catch (error) {
-                console.error(error);
-                alert("Error al generar el HTML. Asegúrate de estar ejecutando esto en un entorno de servidor web y no como un archivo local en tu computadora.");
+                console.error("Error al exportar:", error);
+                alert("Error al generar el HTML. Asegúrate de ejecutar esto desde tu servidor web y no como un archivo local.");
             } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
             }
         };
-    </script>
 
-    <!-- ==========================================
-         SCRIPT PRINCIPAL FIREBASE
-         ========================================== -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBxE8t9sEWalMO_i0bFDjGp5I95iuYj5Io",
-            authDomain: "dinastiamesas.firebaseapp.com",
-            projectId: "dinastiamesas",
-            storageBucket: "dinastiamesas.firebasestorage.app",
-            messagingSenderId: "23829938113",
-            appId: "1:23829938113:web:d0d791c86b5b8c1df63940"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        
-        // Habilitamos WebSockets directos para actualización INMEDIATA (Removemos Long Polling)
-        const db = getFirestore(app);
-
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhwV00ZSwM8mPhI4k3Cg4ztmd3TGC1HqLm32gdhGepFhKZp0dS-P5WyAi-tRplcapVPw/exec'; 
-
-        function cargarConfiguracionBackground() {
-            onSnapshot(doc(db, "configuracion", "general"), (docSnap) => {
-                if (docSnap.exists()) {
-                    const newData = docSnap.data();
-                    window.appConfig = { ...window.appConfig, ...newData };
-                    try { localStorage.setItem('eventAppConfig', JSON.stringify(window.appConfig)); } catch (e) {}
-                }
-                
-                window.aplicarConfiguracion();
-            }, (error) => {
-                console.error("Error cargando configuración:", error);
-            });
-        }
-
-        function cargarInvitadosBackground() {
-            onSnapshot(collection(db, "invitados"), (snapshot) => {
-                window.firebaseConnected = true; 
-                window.guests = [];
-                snapshot.forEach((docu) => { window.guests.push({ id: docu.id, ...docu.data() }); });
-                try { localStorage.setItem('eventAppGuests', JSON.stringify(window.guests)); } catch (e) {}
-                renderAdminList();
-            }, (error) => {
-                console.error("Error cargando invitados:", error);
-            });
-        }
-
-        function cargarGaleriaBackground() {
-            onSnapshot(collection(db, "galeria"), (snapshot) => {
-                window.photos = [];
-                snapshot.forEach((docu) => { window.photos.push({ id: docu.id, ...docu.data() }); });
-                window.photos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                
-                if (!document.getElementById('view-admin').classList.contains('hidden-view')) {
-                    renderAdminList();
-                    renderGallery();
-                }
-            });
-        }
-
+        // --- 5. FUNCIONES AUXILIARES DE UI (Modales, Navegación, etc) ---
         window.switchView = function(viewId) {
             document.querySelectorAll('.view').forEach(el => el.classList.add('hidden-view'));
-            document.getElementById(viewId).classList.remove('hidden-view');
+            const targetView = document.getElementById(viewId);
+            if (targetView) targetView.classList.remove('hidden-view');
+            
             if (viewId === 'view-show-qr') renderDynamicQR();
             if (viewId === 'view-admin-login') {
                 document.getElementById('admin-password-input').value = '';
                 document.getElementById('admin-login-error').classList.add('hidden');
             }
-            if (viewId === 'view-admin') { renderAdminList(); renderGallery(); }
+            if (viewId === 'view-admin') { 
+                renderAdminList(); 
+                renderGallery(); 
+            }
         };
 
         window.videoBtnTimeout = null;
@@ -837,7 +822,9 @@
                 if (link.includes('youtube.com') || link.includes('youtu.be')) {
                     let ytLink = link;
                     const videoIdMatch = link.match(/(?:v=|youtu\.be\/|embed\/)([^&?]+)/);
-                    if (videoIdMatch && videoIdMatch[1]) ytLink = `https://www.youtube.com/embed/${videoIdMatch[1]}?autoplay=1${isLoop ? `&loop=1&playlist=${videoIdMatch[1]}` : ''}`;
+                    if (videoIdMatch && videoIdMatch[1]) {
+                        ytLink = `https://www.youtube.com/embed/${videoIdMatch[1]}?autoplay=1${isLoop ? `&loop=1&playlist=${videoIdMatch[1]}` : ''}`;
+                    }
                     videoWrapper.innerHTML = `<iframe src="${ytLink}" class="w-full h-full border-0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
                 } else if (link.match(/\.(mp4|webm|ogg)$/i) || link.includes('uc?export=download')) {
                     videoWrapper.innerHTML = `<video src="${link}" class="w-full h-full object-contain" controls autoplay ${loopAttr} playsinline></video>`;
@@ -845,52 +832,24 @@
                     videoWrapper.innerHTML = `<iframe src="${link}" class="w-full h-full border-0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
                 }
             }
-            modal.classList.remove('hidden'); modal.classList.add('flex'); window.resetVideoBtnTimer();
+            modal.classList.remove('hidden'); 
+            modal.classList.add('flex'); 
+            window.resetVideoBtnTimer();
         };
 
         window.closeWelcomeVideo = function() {
-            document.getElementById('modal-welcome-video').classList.add('hidden');
-            document.getElementById('modal-welcome-video').classList.remove('flex');
+            const modal = document.getElementById('modal-welcome-video');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
             const videoWrapper = document.getElementById('video-wrapper');
-            if (videoWrapper) videoWrapper.innerHTML = '';
-        };
-
-        window.handleSaveConfig = async function(event) {
-            event.preventDefault();
-            const newConfig = {
-                title: document.getElementById('cfg-title').value, subtitle: document.getElementById('cfg-subtitle').value,
-                searchBtnText: document.getElementById('cfg-search-btn').value, rouletteText: document.getElementById('cfg-roulette-text').value,
-                tableLabelText: document.getElementById('cfg-table-label').value, acceptBtnText: document.getElementById('cfg-accept-btn').value,
-                videoTitleText: document.getElementById('cfg-video-title').value, dashboardSubtitle: document.getElementById('cfg-dashboard-subtitle').value,
-                rouletteBg: document.getElementById('cfg-roulette-bg').value, rouletteCenter: document.getElementById('cfg-roulette-center').value,
-                videoLink: document.getElementById('cfg-video').value, videoLoop: document.getElementById('cfg-video-loop').checked,
-                showVideoBtn: document.getElementById('cfg-show-video').checked, adminPassword: document.getElementById('cfg-admin-pass').value,
-                allowAnonymous: document.getElementById('cfg-anonymous').checked, qrLogo: document.getElementById('cfg-qr-logo').value,
-                homeLogoUrl: document.getElementById('cfg-home-logo').value,
-                themeColor: document.getElementById('cfg-theme-color').value
-            };
-
-            // Forzar actualización local en el mismo milisegundo en que se da "Guardar"
-            window.appConfig = { ...window.appConfig, ...newConfig };
-            window.aplicarConfiguracion();
-
-            try {
-                await setDoc(doc(db, "configuracion", "general"), newConfig, { merge: true });
-                alert("✅ ¡Configuración guardada en vivo!\n\nTodos los celulares conectados se acaban de actualizar.\n\nRecuerda: Si quieres que los NUEVOS invitados sigan cargando en 0 segundos, dale a 'Descargar HTML' y actualiza tu servidor.");
-            } catch (error) { alert("Error al guardar en la nube."); }
-        };
-
-        window.changeEventType = async function() {
-            const newType = document.getElementById('admin-event-type').value;
-            try {
-                await setDoc(doc(db, "configuracion", "general"), { eventType: newType }, { merge: true });
-                alert("Retos actualizados.");
-            } catch (error) { alert("Error actualizando retos."); }
+            if (videoWrapper) videoWrapper.innerHTML = ''; // Detiene el video automáticamente
         };
 
         let secretClicks = 0; let clickTimer;
         window.handleSecretClick = function() {
-            secretClicks++; clearTimeout(clickTimer); clickTimer = setTimeout(() => { secretClicks = 0; }, 2000);
+            secretClicks++; 
+            clearTimeout(clickTimer); 
+            clickTimer = setTimeout(() => { secretClicks = 0; }, 2000);
             if (secretClicks >= 5) {
                 secretClicks = 0;
                 const pass = prompt("Acceso Especial a Configuración. Ingresa la clave:");
@@ -900,7 +859,9 @@
         };
 
         window.logout = function() {
-            window.currentGuest = null; window.challengeAccepted = false; window.pendingChallenges = []; 
+            window.currentGuest = null; 
+            window.challengeAccepted = false; 
+            window.pendingChallenges = []; 
             document.getElementById('pending-challenges-text').classList.add('hidden');
             document.getElementById('active-challenge-banner').classList.add('hidden');
             document.getElementById('challenge-action-container').classList.remove('hidden');
@@ -908,56 +869,33 @@
             window.switchView('view-totem');
         };
 
-        window.triggerCameraUpload = function() { document.getElementById('camera-file-input').click(); };
-        window.triggerGalleryUpload = function() { document.getElementById('gallery-file-input').click(); };
-
-        window.deleteGuest = async function(id) {
-            if(confirm("¿Eliminar a este invitado?")) { try { await deleteDoc(doc(db, "invitados", id)); } catch (e) {} }
-        };
-
-        window.deleteAllGuests = async function() {
-            if(window.guests.length === 0) { alert("No hay invitados."); return; }
-            if(confirm("⚠️ ATENCIÓN ⚠️\n\n¿Estás seguro de eliminar a TODOS los invitados?")) {
-                try {
-                    await Promise.all(window.guests.map(g => deleteDoc(doc(db, "invitados", g.id))));
-                    alert("Todos los invitados eliminados.");
-                } catch (error) { alert("Error al vaciar."); }
-            }
-        };
-
-        window.deletePhoto = async function(id) {
-            if(confirm("⚠️ ATENCIÓN ⚠️\n\n¿Eliminar esta foto?")) {
-                try { await deleteDoc(doc(db, "galeria", id)); alert("Foto eliminada."); } catch (error) {}
-            }
-        };
-
-        window.deleteAllPhotos = async function() {
-            if(window.photos.length === 0) { alert("No hay fotos."); return; }
-            if(confirm("⚠️ ATENCIÓN ⚠️\n\n¿Eliminar TODAS las fotos?")) {
-                try {
-                    await Promise.all(window.photos.map(p => deleteDoc(doc(db, "galeria", p.id))));
-                    alert("Todas las fotos eliminadas.");
-                } catch (error) {}
-            }
-        };
+        // Inputs y Modales
+        window.triggerCameraUpload = () => document.getElementById('camera-file-input').click();
+        window.triggerGalleryUpload = () => document.getElementById('gallery-file-input').click();
 
         window.enterAnonymous = function() {
             document.getElementById('anonymous-name-input').value = ''; 
             const modal = document.getElementById('modal-anonymous-register');
-            modal.classList.remove('hidden'); modal.classList.add('flex');
+            modal.classList.remove('hidden'); 
+            modal.classList.add('flex');
         };
 
         window.closeAnonymousRegister = function() {
-            document.getElementById('modal-anonymous-register').classList.add('hidden');
-            document.getElementById('modal-anonymous-register').classList.remove('flex');
+            const modal = document.getElementById('modal-anonymous-register');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
         };
 
         window.submitAnonymousRegister = function(event) {
             event.preventDefault();
             const nameInput = document.getElementById('anonymous-name-input');
             const nameVal = nameInput.value.trim();
-            if (!nameVal) { alert("Por favor, ingresa tu nombre y apellido."); return; }
+            if (!nameVal) { 
+                alert("Por favor, ingresa tu nombre y apellido."); 
+                return; 
+            }
 
+            // Registro puramente local para la sesión
             window.currentGuest = { name: nameVal, id: "anon_" + Date.now(), table: "-" };
             document.getElementById('guest-name-display').innerText = window.currentGuest.name;
             const tableContainer = document.getElementById('guest-table-container');
@@ -965,60 +903,85 @@
             
             window.closeAnonymousRegister();
             const rouletteModal = document.getElementById('modal-roulette');
-            rouletteModal.classList.remove('hidden'); rouletteModal.classList.add('flex');
+            rouletteModal.classList.remove('hidden'); 
+            rouletteModal.classList.add('flex');
         };
 
         window.handleAdminLogin = function(event) {
             event.preventDefault();
             const passInput = document.getElementById('admin-password-input');
             const errorMsg = document.getElementById('admin-login-error');
+            
             if (passInput.value === window.appConfig.adminPassword) {
-                passInput.value = ''; errorMsg.classList.add('hidden'); window.switchView('view-admin');
+                passInput.value = ''; 
+                errorMsg.classList.add('hidden'); 
+                window.switchView('view-admin');
             } else {
-                errorMsg.classList.remove('hidden'); passInput.value = ''; passInput.focus();
+                errorMsg.classList.remove('hidden'); 
+                passInput.value = ''; 
+                passInput.focus();
             }
         };
 
+        // Ruleta y Retos
         window.spinRoulette = function() {
             const btn = document.getElementById('btn-spin');
             const wheel = document.getElementById('roulette-wheel');
-            btn.disabled = true; btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btn.disabled = true; 
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
             
             const type = window.appConfig.eventType || 'boda';
             const currentRetosList = window.RETOS_DB[type] || window.RETOS_DB['boda'];
             window.selectedChallenge = currentRetosList[Math.floor(Math.random() * currentRetosList.length)];
 
+            // Rotación aleatoria visual (múltiplos de 360 + ángulo al azar)
             const totalDeg = 3600 + Math.floor(Math.random() * 360); 
             wheel.style.transform = `rotate(${totalDeg}deg)`;
 
             setTimeout(() => {
                 document.getElementById('modal-roulette').classList.add('hidden');
                 document.getElementById('modal-roulette').classList.remove('flex');
+                
                 const countdownModal = document.getElementById('modal-countdown');
                 const countdownText = document.getElementById('countdown-text');
                 
-                countdownModal.classList.remove('hidden'); countdownModal.classList.add('flex');
-                let count = 3; countdownText.innerText = count;
-                countdownText.classList.remove('animate-pop'); void countdownText.offsetWidth; countdownText.classList.add('animate-pop');
+                countdownModal.classList.remove('hidden'); 
+                countdownModal.classList.add('flex');
+                
+                let count = 3; 
+                countdownText.innerText = count;
+                countdownText.classList.remove('animate-pop'); 
+                void countdownText.offsetWidth; // Reflow for animation restart
+                countdownText.classList.add('animate-pop');
 
                 const interval = setInterval(() => {
                     count--;
                     if (count > 0) {
-                        countdownText.innerText = count; countdownText.classList.remove('animate-pop'); void countdownText.offsetWidth; countdownText.classList.add('animate-pop');
+                        countdownText.innerText = count; 
+                        countdownText.classList.remove('animate-pop'); 
+                        void countdownText.offsetWidth; 
+                        countdownText.classList.add('animate-pop');
                     } else {
                         clearInterval(interval);
-                        countdownModal.classList.add('hidden'); countdownModal.classList.remove('flex');
+                        countdownModal.classList.add('hidden'); 
+                        countdownModal.classList.remove('flex');
                         
                         const instructionModal = document.getElementById('modal-challenge-instruction');
-                        instructionModal.classList.remove('hidden'); instructionModal.classList.add('flex');
+                        instructionModal.classList.remove('hidden'); 
+                        instructionModal.classList.add('flex');
                         
                         document.getElementById('challenge-reveal-text').innerText = `"${window.selectedChallenge}"`;
                         document.getElementById('active-challenge-text').innerText = `"${window.selectedChallenge}"`;
                         
+                        // Reset Ruleta Visual en background
                         setTimeout(() => {
-                            wheel.style.transition = 'none'; wheel.style.transform = 'rotate(0deg)';
-                            btn.disabled = false; btn.classList.remove('opacity-50', 'cursor-not-allowed');
-                            setTimeout(() => wheel.style.transition = 'transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)', 50);
+                            wheel.style.transition = 'none'; 
+                            wheel.style.transform = 'rotate(0deg)';
+                            btn.disabled = false; 
+                            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                            setTimeout(() => {
+                                wheel.style.transition = 'transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)';
+                            }, 50);
                         }, 500);
                     }
                 }, 1000);
@@ -1026,21 +989,33 @@
         };
 
         window.skipRoulette = function() {
-            document.getElementById('modal-roulette').classList.add('hidden'); document.getElementById('modal-roulette').classList.remove('flex');
-            window.challengeAccepted = false; window.switchView('view-guest-dashboard');
+            const modal = document.getElementById('modal-roulette');
+            modal.classList.add('hidden'); 
+            modal.classList.remove('flex');
+            window.challengeAccepted = false; 
+            window.switchView('view-guest-dashboard');
         };
 
         window.showChallengeReveal = function() {
-            document.getElementById('modal-challenge-instruction').classList.add('hidden'); document.getElementById('modal-challenge-instruction').classList.remove('flex');
-            const revealModal = document.getElementById('modal-challenge-reveal'); revealModal.classList.remove('hidden'); revealModal.classList.add('flex');
+            const instructModal = document.getElementById('modal-challenge-instruction');
+            instructModal.classList.add('hidden'); 
+            instructModal.classList.remove('flex');
+            
+            const revealModal = document.getElementById('modal-challenge-reveal'); 
+            revealModal.classList.remove('hidden'); 
+            revealModal.classList.add('flex');
         };
 
         window.closeChallengeReveal = function() {
-            document.getElementById('modal-challenge-reveal').classList.add('hidden'); document.getElementById('modal-challenge-reveal').classList.remove('flex');
+            const modal = document.getElementById('modal-challenge-reveal');
+            modal.classList.add('hidden'); 
+            modal.classList.remove('flex');
+            
             window.challengeAccepted = true;
             document.getElementById('active-challenge-banner').classList.remove('hidden');
             document.getElementById('challenge-action-container').classList.remove('hidden');
             document.getElementById('next-challenge-container').classList.add('hidden');
+            
             window.switchView('view-guest-dashboard');
         };
 
@@ -1050,11 +1025,15 @@
         };
 
         window.declineNextChallenge = function() {
-            document.getElementById('modal-challenge-success').classList.add('hidden'); document.getElementById('modal-challenge-success').classList.remove('flex');
+            const successModal = document.getElementById('modal-challenge-success');
+            successModal.classList.add('hidden'); 
+            successModal.classList.remove('flex');
         };
 
         window.acceptNextChallenge = function() {
-            document.getElementById('modal-challenge-success').classList.add('hidden'); document.getElementById('modal-challenge-success').classList.remove('flex');
+            const successModal = document.getElementById('modal-challenge-success');
+            successModal.classList.add('hidden'); 
+            successModal.classList.remove('flex');
             window.getNewChallenge();
         };
 
@@ -1064,8 +1043,11 @@
 
             if (window.pendingChallenges && window.pendingChallenges.length > 0) {
                 window.selectedChallenge = window.pendingChallenges.shift(); 
-                if (window.pendingChallenges.length === 0) document.getElementById('pending-challenges-text').classList.add('hidden');
-                else document.getElementById('pending-count').innerText = window.pendingChallenges.length;
+                if (window.pendingChallenges.length === 0) {
+                    document.getElementById('pending-challenges-text').classList.add('hidden');
+                } else {
+                    document.getElementById('pending-count').innerText = window.pendingChallenges.length;
+                }
             } else {
                 window.selectedChallenge = currentRetosList[Math.floor(Math.random() * currentRetosList.length)];
             }
@@ -1076,53 +1058,75 @@
         };
 
         window.postponeChallenge = function() {
-            if (window.selectedChallenge) window.pendingChallenges.push(window.selectedChallenge);
+            if (window.selectedChallenge) {
+                window.pendingChallenges.push(window.selectedChallenge);
+            }
             const type = window.appConfig.eventType || 'boda';
             const currentRetosList = window.RETOS_DB[type] || window.RETOS_DB['boda'];
 
             window.selectedChallenge = currentRetosList[Math.floor(Math.random() * currentRetosList.length)];
             document.getElementById('active-challenge-text').innerText = `"${window.selectedChallenge}"`;
-            document.getElementById('pending-challenges-text').classList.remove('hidden');
+            
+            const pendingText = document.getElementById('pending-challenges-text');
+            pendingText.classList.remove('hidden');
             document.getElementById('pending-count').innerText = window.pendingChallenges.length;
         };
 
+        // Modal Fotos HD
         window.openPhotoModal = function(url, guestName, challengeText) {
-            window.currentPhotoUrl = url; window.currentPhotoName = guestName;
+            window.currentPhotoUrl = url; 
+            window.currentPhotoName = guestName;
             document.getElementById('modal-image').src = url;
             document.getElementById('modal-guest-name').innerText = `📸 Compartida por: ${guestName}`;
             
             const challengeEl = document.getElementById('modal-challenge-name');
             if (challengeText && challengeText !== "null") {
-                challengeEl.innerText = `🎯 Reto: ${challengeText}`; challengeEl.classList.remove('hidden');
-            } else { challengeEl.classList.add('hidden'); }
+                challengeEl.innerText = `🎯 Reto: ${challengeText}`; 
+                challengeEl.classList.remove('hidden');
+            } else { 
+                challengeEl.classList.add('hidden'); 
+            }
             
             const modal = document.getElementById('photo-modal');
-            modal.classList.remove('hidden'); modal.classList.add('flex');
+            modal.classList.remove('hidden'); 
+            modal.classList.add('flex');
         };
 
         window.closePhotoModal = function() {
             const modal = document.getElementById('photo-modal');
-            modal.classList.add('hidden'); modal.classList.remove('flex');
-            window.currentPhotoUrl = ''; window.currentPhotoName = '';
-            document.getElementById('modal-image').src = ''; document.getElementById('modal-challenge-name').classList.add('hidden');
+            modal.classList.add('hidden'); 
+            modal.classList.remove('flex');
+            window.currentPhotoUrl = ''; 
+            window.currentPhotoName = '';
+            document.getElementById('modal-image').src = ''; 
+            document.getElementById('modal-challenge-name').classList.add('hidden');
         };
 
         window.downloadCurrentPhoto = function() {
             if(!window.currentPhotoUrl) return;
-            const a = document.createElement('a'); a.href = window.currentPhotoUrl;
+            const a = document.createElement('a'); 
+            a.href = window.currentPhotoUrl;
             const safeName = window.currentPhotoName ? window.currentPhotoName.replace(/[^a-zA-Z0-9]/g, '_') : 'Anonimo';
-            a.download = `Evento_${safeName}_${Date.now()}.jpg`; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            a.download = `Evento_${safeName}_${Date.now()}.jpg`; 
+            document.body.appendChild(a); 
+            a.click(); 
+            document.body.removeChild(a);
         };
 
         window.downloadAllPhotosZip = async function() {
-            if (window.photos.length === 0) { alert("No hay fotos para descargar."); return; }
+            if (window.photos.length === 0) { 
+                alert("No hay fotos para descargar."); 
+                return; 
+            }
+            
             const btn = document.querySelector('button[onclick="window.downloadAllPhotosZip()"]');
             const originalText = btn.innerHTML;
             btn.innerHTML = `<svg class="w-4 h-4 animate-spin"><use href="#icon-loader-2"></use></svg> Comprimiendo...`;
             btn.disabled = true;
 
             try {
-                const zip = new JSZip(); const folder = zip.folder("Fotos_Evento");
+                const zip = new JSZip(); 
+                const folder = zip.folder("Fotos_Evento");
                 window.photos.forEach((photo, index) => {
                     const base64Data = photo.url.split(',')[1];
                     const safeGuestName = (photo.guestName || 'Anonimo').replace(/[^a-zA-Z0-9]/g, '_');
@@ -1130,31 +1134,36 @@
                 });
                 const content = await zip.generateAsync({type:"blob"});
                 const link = document.createElement('a');
-                link.href = URL.createObjectURL(content); link.download = `Fotos_Evento_${Date.now()}.zip`;
-                document.body.appendChild(link); link.click(); document.body.removeChild(link);
-            } catch (error) { alert("Error al comprimir las fotos."); } finally { btn.innerHTML = originalText; btn.disabled = false; }
+                link.href = URL.createObjectURL(content); 
+                link.download = `Fotos_Evento_${Date.now()}.zip`;
+                document.body.appendChild(link); 
+                link.click(); 
+                document.body.removeChild(link);
+            } catch (error) { 
+                console.error(error);
+                alert("Error al comprimir las fotos."); 
+            } finally { 
+                btn.innerHTML = originalText; 
+                btn.disabled = false; 
+            }
         };
 
-        window.handleAddGuest = async function(event) {
-            event.preventDefault();
-            const nameInput = document.getElementById('admin-input-name'); const tableInput = document.getElementById('admin-input-table');
-            if (!nameInput.value.trim() || !tableInput.value.trim()) { alert("Completa ambos campos."); return; }
-            try {
-                await addDoc(collection(db, "invitados"), { name: nameInput.value.trim(), table: tableInput.value.trim() });
-                nameInput.value = ''; tableInput.value = '';
-            } catch (error) { alert("Error guardando invitado."); }
-        };
-
+        // Renderizados Dinámicos (DOM)
         function renderAdminList() {
             const list = document.getElementById('admin-guest-list');
-            if (!list) return; list.innerHTML = "";
+            if (!list) return; 
+            list.innerHTML = "";
 
             if (window.guests.length === 0) {
-                list.innerHTML = `<li class="p-4 lg:p-8 text-center text-stone-500 font-medium">No hay invitados registrados aún.</li>`; return;
+                list.innerHTML = `<li class="p-4 lg:p-8 text-center text-stone-500 font-medium">No hay invitados registrados aún.</li>`; 
+                return;
             }
 
             const guestsWithCounts = window.guests.map(g => {
-                return { ...g, photoCount: window.photos.filter(p => p.guestId === g.id || (p.guestName && p.guestName.trim() === g.name)).length };
+                return { 
+                    ...g, 
+                    photoCount: window.photos.filter(p => p.guestId === g.id || (p.guestName && p.guestName.trim() === g.name)).length 
+                };
             }).sort((a, b) => b.photoCount - a.photoCount);
 
             const maxPhotos = Math.max(...guestsWithCounts.map(g => g.photoCount));
@@ -1162,6 +1171,7 @@
             guestsWithCounts.forEach(g => {
                 const li = document.createElement("li");
                 li.className = "flex justify-between items-center p-4 lg:p-6 2xl:p-8 hover:bg-white/40 transition-colors";
+                
                 const isWinner = g.photoCount > 0 && g.photoCount === maxPhotos;
                 const crownBadge = isWinner ? `<svg class="w-5 h-5 lg:w-6 lg:h-6 2xl:w-8 2xl:h-8 text-amber-500 fill-amber-500 animate-bounce"><use href="#icon-crown"></use></svg>` : '';
                 const photoBadge = `<span class="inline-flex items-center gap-1 px-3 py-1 ${isWinner ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-white/50 text-stone-700 border border-white'} text-xs lg:text-sm 2xl:text-base rounded-full uppercase tracking-wide font-bold shadow-sm"><svg class="w-3 h-3 lg:w-4 lg:h-4"><use href="#icon-camera"></use></svg> ${g.photoCount}</span>`;
@@ -1174,7 +1184,7 @@
                         ${photoBadge}
                     </div>
                 </div>
-                <button onclick="window.deleteGuest('${g.id}')" class="text-red-400 hover:text-red-600 bg-white/50 hover:bg-white p-3 lg:p-4 2xl:p-5 rounded-xl border border-transparent hover:border-red-100 transition-all shadow-sm">
+                <button onclick="window.deleteGuest('${g.id}')" class="text-red-400 hover:text-red-600 bg-white/50 hover:bg-white p-3 lg:p-4 2xl:p-5 rounded-xl border border-transparent hover:border-red-100 transition-all shadow-sm" title="Eliminar Invitado">
                     <svg class="w-5 h-5 lg:w-6 lg:h-6 2xl:w-8 2xl:h-8"><use href="#icon-trash-2"></use></svg>
                 </button>
                 `;
@@ -1182,98 +1192,16 @@
             });
         }
 
-        function renderDynamicQR() {
-            const currentUrl = window.location.href.split('?')[0]; 
-            const dynamicUrl = `${currentUrl}?v=${Date.now()}`;
-            document.getElementById('dynamic-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(dynamicUrl)}`;
-        }
-
-        window.handleSearch = function() {
-            const searchInput = document.getElementById('search-input');
-            const query = searchInput.value.trim().toLowerCase();
-            if (query === '') return;
-            
-            // Protección: Si el invitado escribe antes de que Firebase se conecte
-            if (window.guests.length === 0 && !window.firebaseConnected) {
-                alert('Sincronizando la lista de invitados... Por favor, intenta de nuevo en un par de segundos.');
-                return;
-            }
-            
-            const found = window.guests.find(g => g.name.toLowerCase().includes(query));
-
-            if (found) {
-                window.currentGuest = found;
-                document.getElementById('guest-name-display').innerText = found.name;
-                document.getElementById('guest-table-display').innerText = found.table;
-                const tableContainer = document.getElementById('guest-table-container');
-                if (tableContainer) tableContainer.classList.remove('hidden');
-                searchInput.value = ''; 
-                
-                const rouletteModal = document.getElementById('modal-roulette');
-                rouletteModal.classList.remove('hidden'); rouletteModal.classList.add('flex');
-            } else { 
-                alert('Invitado no encontrado. Por favor, verifica que tu nombre esté bien escrito o contacta al organizador.'); 
-            }
-        };
-
-        window.handlePhotoUpload = function(event) {
-            const file = event.target.files[0]; if (!file) return;
-
-            const isChallengePending = !document.getElementById('challenge-action-container').classList.contains('hidden');
-            let wasChallenge = false;
-
-            if (window.challengeAccepted && isChallengePending) { wasChallenge = true; window.completeChallenge(); }
-            
-            event.target.value = ''; 
-            if (wasChallenge) {
-                const successModal = document.getElementById('modal-challenge-success');
-                successModal.classList.remove('hidden'); successModal.classList.add('flex');
-            } else { alert('¡Foto compartida con éxito! Gracias por capturar este momento.'); }
-
-            const reader = new FileReader();
-            reader.onloadend = async () => {
-                const originalBase64 = reader.result;
-                const safeName = window.currentGuest ? window.currentGuest.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Anonimo';
-                const fileName = `${safeName}_${Date.now()}.jpg`;
-
-                if (GOOGLE_SCRIPT_URL !== '') {
-                    try {
-                        const base64Data = originalBase64.split(',')[1];
-                        fetch(GOOGLE_SCRIPT_URL, {
-                            method: 'POST', mode: 'no-cors',
-                            body: JSON.stringify({ name: fileName, mimeType: file.type, data: base64Data, folderId: '1JUGN6O_x5iRlb92nc-W5G132VyFRcQ12' })
-                        });
-                    } catch (error) {}
-                }
-
-                const img = new Image(); img.src = originalBase64;
-                img.onload = async () => {
-                    const canvas = document.createElement('canvas'); const MAX_WIDTH = 800; let scaleSize = 1;
-                    if (img.width > MAX_WIDTH) scaleSize = MAX_WIDTH / img.width;
-                    canvas.width = img.width * scaleSize; canvas.height = img.height * scaleSize;
-                    
-                    const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
-
-                    try {
-                        await addDoc(collection(db, "galeria"), {
-                            url: compressedBase64,
-                            guestName: window.currentGuest ? window.currentGuest.name : 'Anónimo',
-                            guestId: window.currentGuest ? window.currentGuest.id : null,
-                            challenge: wasChallenge ? window.selectedChallenge : null,
-                            timestamp: Date.now()
-                        });
-                    } catch (e) {}
-                };
-            };
-            reader.readAsDataURL(file);
-        };
-
         function renderGallery() {
             const container = document.getElementById('admin-gallery-container');
             const countSpan = document.getElementById('admin-photo-count');
-            if (!container) return; container.innerHTML = '';
-            if(countSpan) countSpan.innerText = `${window.photos.length} Fotos Totales`;
+            
+            if (!container) return; 
+            container.innerHTML = '';
+            
+            if (countSpan) {
+                countSpan.innerText = `${window.photos.length} Fotos Totales`;
+            }
 
             if (window.photos.length === 0) {
                 container.innerHTML = `
@@ -1287,11 +1215,12 @@
                     const item = document.createElement('div');
                     item.className = 'relative aspect-square rounded-2xl lg:rounded-3xl overflow-hidden shadow-sm group cursor-pointer border-[3px] border-white/80 hover:border-amber-400 transition-all';
                     item.onclick = () => window.openPhotoModal(photo.url, photo.guestName, photo.challenge);
+                    
                     const challengeText = photo.challenge ? `<p class="text-amber-300 text-[10px] md:text-xs lg:text-sm 2xl:text-base truncate mt-1 drop-shadow-md font-medium">🎯 ${photo.challenge}</p>` : '';
 
                     item.innerHTML = `
                         <img src="${photo.url}" alt="Momento del evento" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        <button onclick="event.stopPropagation(); window.deletePhoto('${photo.id}')" class="absolute top-3 right-3 bg-red-500/90 hover:bg-red-600 text-white p-2 rounded-xl backdrop-blur-md z-10">
+                        <button onclick="event.stopPropagation(); window.deletePhoto('${photo.id}')" class="absolute top-3 right-3 bg-red-500/90 hover:bg-red-600 text-white p-2 rounded-xl backdrop-blur-md z-10" title="Borrar foto">
                             <svg class="w-4 h-4 lg:w-6 lg:h-6"><use href="#icon-trash-2"></use></svg>
                         </button>
                         <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 lg:p-6 pt-12 pointer-events-none">
@@ -1304,7 +1233,315 @@
             }
         }
 
-        // EVENT LISTENERS FINALES
+        function renderDynamicQR() {
+            const currentUrl = window.location.href.split('?')[0]; 
+            const dynamicUrl = `${currentUrl}?v=${Date.now()}`;
+            document.getElementById('dynamic-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(dynamicUrl)}`;
+        }
+
+        // --- BÚSQUEDA Y UTILIDADES ---
+        window.handleSearch = function() {
+            const searchInput = document.getElementById('search-input');
+            const query = searchInput.value.trim().toLowerCase();
+            if (query === '') return;
+            
+            // Protección: Si escribe antes de que Firebase sincronice
+            if (window.guests.length === 0 && !window.firebaseConnected) {
+                alert('Sincronizando la lista de invitados... Por favor, intenta de nuevo en un par de segundos.');
+                return;
+            }
+            
+            const found = window.guests.find(g => g.name.toLowerCase().includes(query));
+
+            if (found) {
+                window.currentGuest = found;
+                document.getElementById('guest-name-display').innerText = found.name;
+                document.getElementById('guest-table-display').innerText = found.table;
+                
+                const tableContainer = document.getElementById('guest-table-container');
+                if (tableContainer) tableContainer.classList.remove('hidden');
+                
+                searchInput.value = ''; 
+                
+                const rouletteModal = document.getElementById('modal-roulette');
+                rouletteModal.classList.remove('hidden'); 
+                rouletteModal.classList.add('flex');
+            } else { 
+                alert('Invitado no encontrado. Por favor, verifica que tu nombre esté bien escrito o contacta al organizador.'); 
+            }
+        };
+
+        // DOM Listeners de Mouse/Touch para reactivar botón en Video
+        document.addEventListener('mousemove', () => { 
+            if (!document.getElementById('modal-welcome-video').classList.contains('hidden')) window.resetVideoBtnTimer(); 
+        });
+        document.addEventListener('touchstart', () => { 
+            if (!document.getElementById('modal-welcome-video').classList.contains('hidden')) window.resetVideoBtnTimer(); 
+        });
+    </script>
+
+
+    <!-- ==========================================
+         SCRIPT PRINCIPAL FIREBASE Y GUARDADO
+         ========================================== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Configuración original del usuario
+        const originalConfig = {
+            apiKey: "AIzaSyBxE8t9sEWalMO_i0bFDjGp5I95iuYj5Io",
+            authDomain: "dinastiamesas.firebaseapp.com",
+            projectId: "dinastiamesas",
+            storageBucket: "dinastiamesas.firebasestorage.app",
+            messagingSenderId: "23829938113",
+            appId: "1:23829938113:web:d0d791c86b5b8c1df63940"
+        };
+
+        // Detección automática para funcionar tanto en Canvas como en hosting externo
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : originalConfig;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const isPreview = typeof __firebase_config !== 'undefined';
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Helpers de Rutas: Garantizan que en Canvas se use la ruta aislada permitida,
+        // pero vuelve a apuntar a la raíz cuando se exporta el HTML.
+        const getPublicCollection = (colName) => isPreview ? collection(db, 'artifacts', appId, 'public', 'data', colName) : collection(db, colName);
+        const getPublicDoc = (colName, docId) => isPreview ? doc(db, 'artifacts', appId, 'public', 'data', colName, docId) : doc(db, colName, docId);
+
+        // Script de Respaldo de Google Drive (Opcional)
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhwV00ZSwM8mPhI4k3Cg4ztmd3TGC1HqLm32gdhGepFhKZp0dS-P5WyAi-tRplcapVPw/exec'; 
+
+        // --- LISTENERS DE FIREBASE BACKGROUND ---
+        function cargarConfiguracionBackground() {
+            onSnapshot(getPublicDoc("configuracion", "general"), (docSnap) => {
+                if (docSnap.exists()) {
+                    const newData = docSnap.data();
+                    window.appConfig = { ...window.appConfig, ...newData };
+                    try { localStorage.setItem('eventAppConfig', JSON.stringify(window.appConfig)); } catch (e) {}
+                }
+                window.aplicarConfiguracion();
+            }, (error) => console.error("Error cargando configuración:", error));
+        }
+
+        function cargarInvitadosBackground() {
+            onSnapshot(getPublicCollection("invitados"), (snapshot) => {
+                window.firebaseConnected = true; 
+                window.guests = [];
+                snapshot.forEach((docu) => { window.guests.push({ id: docu.id, ...docu.data() }); });
+                try { localStorage.setItem('eventAppGuests', JSON.stringify(window.guests)); } catch (e) {}
+                
+                if (typeof renderAdminList === 'function') renderAdminList();
+            }, (error) => console.error("Error cargando invitados:", error));
+        }
+
+        function cargarGaleriaBackground() {
+            onSnapshot(getPublicCollection("galeria"), (snapshot) => {
+                window.photos = [];
+                snapshot.forEach((docu) => { window.photos.push({ id: docu.id, ...docu.data() }); });
+                window.photos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                
+                if (!document.getElementById('view-admin').classList.contains('hidden-view')) {
+                    if (typeof renderAdminList === 'function') renderAdminList();
+                    if (typeof renderGallery === 'function') renderGallery();
+                }
+            }, (error) => console.error("Error cargando galería:", error));
+        }
+
+        // --- FUNCIONES ASÍNCRONAS EXPORTADAS ---
+        
+        window.handleSaveConfig = async function(event) {
+            event.preventDefault();
+            const newConfig = {
+                title: document.getElementById('cfg-title').value, 
+                subtitle: document.getElementById('cfg-subtitle').value,
+                searchBtnText: document.getElementById('cfg-search-btn').value, 
+                rouletteText: document.getElementById('cfg-roulette-text').value,
+                tableLabelText: document.getElementById('cfg-table-label').value, 
+                acceptBtnText: document.getElementById('cfg-accept-btn').value,
+                videoTitleText: document.getElementById('cfg-video-title').value, 
+                dashboardSubtitle: document.getElementById('cfg-dashboard-subtitle').value,
+                rouletteBg: document.getElementById('cfg-roulette-bg').value, 
+                rouletteCenter: document.getElementById('cfg-roulette-center').value,
+                videoLink: document.getElementById('cfg-video').value, 
+                videoLoop: document.getElementById('cfg-video-loop').checked,
+                showVideoBtn: document.getElementById('cfg-show-video').checked, 
+                adminPassword: document.getElementById('cfg-admin-pass').value,
+                allowAnonymous: document.getElementById('cfg-anonymous').checked, 
+                qrLogo: document.getElementById('cfg-qr-logo').value,
+                homeLogoUrl: document.getElementById('cfg-home-logo').value,
+                themeColor: document.getElementById('cfg-theme-color').value
+            };
+
+            // Reflejo instantáneo en RAM
+            window.appConfig = { ...window.appConfig, ...newConfig };
+            window.aplicarConfiguracion();
+
+            try {
+                await setDoc(getPublicDoc("configuracion", "general"), newConfig, { merge: true });
+                alert("✅ ¡Configuración guardada en la nube!\n\nTodos los celulares conectados en vivo se acaban de actualizar.\n\nRecuerda: Si cambiaste el tema de color o quieres que nuevos invitados carguen instantáneo al escanear, usa 'Descargar HTML' y actualiza tu servidor.");
+            } catch (error) { 
+                console.error("Error guardando en Firebase:", error);
+                alert("Error al intentar guardar en la nube."); 
+            }
+        };
+
+        window.changeEventType = async function() {
+            const newType = document.getElementById('admin-event-type').value;
+            try {
+                await setDoc(getPublicDoc("configuracion", "general"), { eventType: newType }, { merge: true });
+                alert("Tipos de retos actualizados correctamente.");
+            } catch (error) { 
+                console.error("Error actualizando retos:", error);
+                alert("Error al actualizar tipo de evento."); 
+            }
+        };
+
+        window.deleteGuest = async function(id) {
+            if(confirm("¿Estás seguro de eliminar a este invitado permanentemente?")) { 
+                try { 
+                    await deleteDoc(getPublicDoc("invitados", id)); 
+                } catch (e) { console.error("Error al borrar invitado:", e); } 
+            }
+        };
+
+        window.deleteAllGuests = async function() {
+            if(window.guests.length === 0) { alert("La lista de invitados ya está vacía."); return; }
+            if(confirm("⚠️ ATENCIÓN PELIGRO ⚠️\n\n¿Estás completamente seguro de eliminar a TODOS los invitados de la base de datos?")) {
+                try {
+                    await Promise.all(window.guests.map(g => deleteDoc(getPublicDoc("invitados", g.id))));
+                    alert("Todos los invitados han sido borrados.");
+                } catch (error) { 
+                    console.error("Error vaciando invitados:", error);
+                    alert("Ocurrió un error al vaciar la lista."); 
+                }
+            }
+        };
+
+        window.deletePhoto = async function(id) {
+            if(confirm("¿Eliminar definitivamente esta foto?")) {
+                try { 
+                    await deleteDoc(getPublicDoc("galeria", id)); 
+                    alert("La foto ha sido eliminada."); 
+                } catch (error) { console.error("Error al borrar foto:", error); }
+            }
+        };
+
+        window.deleteAllPhotos = async function() {
+            if(window.photos.length === 0) { alert("La galería ya está vacía."); return; }
+            if(confirm("⚠️ ATENCIÓN PELIGRO ⚠️\n\n¿Estás seguro de eliminar TODAS las fotos capturadas? Esta acción es irreversible.")) {
+                try {
+                    await Promise.all(window.photos.map(p => deleteDoc(getPublicDoc("galeria", p.id))));
+                    alert("Todas las fotos han sido eliminadas permanentemente.");
+                } catch (error) { console.error("Error vaciando fotos:", error); }
+            }
+        };
+
+        window.handleAddGuest = async function(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById('admin-input-name'); 
+            const tableInput = document.getElementById('admin-input-table');
+            
+            if (!nameInput.value.trim() || !tableInput.value.trim()) { 
+                alert("Por favor completa tanto el nombre como el número de mesa."); 
+                return; 
+            }
+            
+            try {
+                await addDoc(getPublicCollection("invitados"), { 
+                    name: nameInput.value.trim(), 
+                    table: tableInput.value.trim() 
+                });
+                // Limpiar inputs
+                nameInput.value = ''; 
+                tableInput.value = '';
+            } catch (error) { 
+                console.error("Error guardando invitado:", error);
+                alert("Ocurrió un error guardando el invitado. Revisa tu conexión."); 
+            }
+        };
+
+        window.handlePhotoUpload = function(event) {
+            const file = event.target.files[0]; 
+            if (!file) return;
+
+            const isChallengePending = !document.getElementById('challenge-action-container').classList.contains('hidden');
+            let wasChallenge = false;
+
+            if (window.challengeAccepted && isChallengePending) { 
+                wasChallenge = true; 
+                window.completeChallenge(); 
+            }
+            
+            event.target.value = ''; // Limpiar input
+            
+            if (wasChallenge) {
+                const successModal = document.getElementById('modal-challenge-success');
+                successModal.classList.remove('hidden'); 
+                successModal.classList.add('flex');
+            } else { 
+                alert('¡Foto compartiendo en la galería! Gracias por capturar este momento.'); 
+            }
+
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+                const originalBase64 = reader.result;
+                const safeName = window.currentGuest ? window.currentGuest.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Anonimo';
+                const fileName = `${safeName}_${Date.now()}.jpg`;
+
+                // Subida opcional a Google Drive (Si aplica)
+                if (GOOGLE_SCRIPT_URL !== '') {
+                    try {
+                        const base64Data = originalBase64.split(',')[1];
+                        fetch(GOOGLE_SCRIPT_URL, {
+                            method: 'POST', mode: 'no-cors',
+                            body: JSON.stringify({ 
+                                name: fileName, 
+                                mimeType: file.type, 
+                                data: base64Data, 
+                                folderId: '1JUGN6O_x5iRlb92nc-W5G132VyFRcQ12' 
+                            })
+                        });
+                    } catch (error) { console.warn("Aviso Drive", error); }
+                }
+
+                // Compresión de la imagen antes de subir a Firebase
+                const img = new Image(); 
+                img.src = originalBase64;
+                img.onload = async () => {
+                    const canvas = document.createElement('canvas'); 
+                    const MAX_WIDTH = 800; 
+                    let scaleSize = 1;
+                    
+                    if (img.width > MAX_WIDTH) scaleSize = MAX_WIDTH / img.width;
+                    
+                    canvas.width = img.width * scaleSize; 
+                    canvas.height = img.height * scaleSize;
+                    
+                    const ctx = canvas.getContext('2d'); 
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6); // 60% calidad JPEG
+
+                    try {
+                        await addDoc(getPublicCollection("galeria"), {
+                            url: compressedBase64,
+                            guestName: window.currentGuest ? window.currentGuest.name : 'Anónimo',
+                            guestId: window.currentGuest ? window.currentGuest.id : null,
+                            challenge: wasChallenge ? window.selectedChallenge : null,
+                            timestamp: Date.now()
+                        });
+                    } catch (e) { console.error("Error al subir a Firebase Galería:", e); }
+                };
+            };
+            reader.readAsDataURL(file);
+        };
+
+        // --- ASIGNACIÓN DE EVENTOS DEL DOM ---
         document.getElementById('btn-search').addEventListener('click', window.handleSearch);
         document.getElementById('search-input').addEventListener('keypress', e => { if (e.key === 'Enter') window.handleSearch(); });
         document.getElementById('admin-form').addEventListener('submit', window.handleAddGuest);
@@ -1313,16 +1550,19 @@
         document.getElementById('gallery-file-input').addEventListener('change', window.handlePhotoUpload);
         document.getElementById('admin-login-form').addEventListener('submit', window.handleAdminLogin);
         
-        document.addEventListener('mousemove', () => { if (!document.getElementById('modal-welcome-video').classList.contains('hidden')) window.resetVideoBtnTimer(); });
-        document.addEventListener('touchstart', () => { if (!document.getElementById('modal-welcome-video').classList.contains('hidden')) window.resetVideoBtnTimer(); });
-
+        // --- INICIALIZACIÓN ---
         async function iniciarApp() {
             try {
-                signInAnonymously(auth).then(() => {
-                    cargarConfiguracionBackground(); 
-                    cargarInvitadosBackground();
-                    cargarGaleriaBackground();
-                }).catch(e => console.error(e));
+                // Validación para entornos mixtos
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                
+                cargarConfiguracionBackground(); 
+                cargarInvitadosBackground();
+                cargarGaleriaBackground();
             } catch (error) {
                 console.error("Error de inicialización de Firebase:", error);
             }
