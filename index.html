@@ -26,7 +26,8 @@
             instagramUrl: "https://instagram.com/",
             prizeOptions: "Bebida Gratis,Descuento 10%,Foto Especial,Intenta de Nuevo",
             specialPassword: "1234",
-            enablePrizeRoulette: true
+            enablePrizeRoulette: true,
+            homeLogoSize: 250 // Tamaño base en píxeles
         };
         // --- FIN_RESPALDO ---
         
@@ -386,7 +387,10 @@
          ========================================== -->
     <div id="view-totem" class="view min-h-[100dvh] w-full flex flex-col justify-between items-center px-4 md:px-6 py-4 md:py-6 lg:py-8 relative z-10 overflow-y-auto">
         <div class="w-full flex-grow flex flex-col items-center justify-center max-w-2xl lg:max-w-4xl 2xl:max-w-6xl space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10 2xl:space-y-12 my-2 md:my-4">
-            <img id="totem-home-logo" src="" alt="Logo del Evento" class="hidden max-h-20 sm:max-h-28 md:max-h-40 lg:max-h-56 2xl:max-h-64 object-contain drop-shadow-md -mb-2 sm:-mb-4 lg:-mb-6 px-4" />
+            
+            <!-- CAMBIO: Logo principal controlado por JavaScript y su tamaño dinámico -->
+            <img id="totem-home-logo" src="" alt="Logo del Evento" class="hidden object-contain drop-shadow-md -mb-2 sm:-mb-4 lg:-mb-6 px-4 transition-all duration-300" style="height: 250px;" />
+            
             <div class="space-y-2 sm:space-y-3 lg:space-y-4 2xl:space-y-6 text-center w-full px-2 sm:px-4">
                 <h1 id="totem-title" class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl 2xl:text-[8rem] font-serif text-amber-700 tracking-tight drop-shadow-sm leading-tight min-h-[1em]"></h1>
                 <p id="totem-subtitle" class="text-lg sm:text-xl md:text-2xl lg:text-3xl 2xl:text-5xl text-stone-600 font-medium px-4 min-h-[1em]"></p>
@@ -430,7 +434,6 @@
          ========================================== -->
     <div id="view-show-qr" class="view hidden-view min-h-[100dvh] w-full flex flex-col items-center justify-center p-4 sm:p-6 relative z-10 overflow-hidden">
         
-        <!-- CAMBIO: Contenedor del fondo repetitivo (mosaico) -->
         <div id="qr-watermark-bg" class="absolute inset-0 z-[-1] opacity-15 md:opacity-20 pointer-events-none transition-all" style="background-image: none;"></div>
         
         <button onclick="window.switchView('view-totem')" class="absolute top-6 right-6 sm:top-8 sm:right-8 lg:top-12 lg:right-12 2xl:top-16 2xl:right-16 text-stone-800 p-3 lg:p-5 2xl:p-6 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm">
@@ -645,9 +648,26 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Título Principal</label><input id="cfg-title" type="text" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" required></div>
                     <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Subtítulo</label><input id="cfg-subtitle" type="text" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" required></div>
-                    <div class="md:col-span-2"><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">URL Logo Inicio (Opcional)</label><input id="cfg-home-logo" type="url" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base"></div>
+                    
+                    <!-- CAMBIO: Campo de Logo + Tamaño -->
+                    <div class="md:col-span-2 flex gap-4 items-end">
+                        <div class="flex-grow">
+                            <label class="block text-xs font-bold text-stone-700 mb-1 uppercase flex items-center justify-between">URL Logo Inicio (Opcional) <span class="text-stone-400 font-normal lowercase italic hidden sm:inline">Ej: png, jpg...</span></label>
+                            <input id="cfg-home-logo" type="url" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base">
+                        </div>
+                        <div class="w-1/3">
+                            <label class="block text-xs font-bold text-stone-700 mb-1 uppercase" title="De 50 a 800 píxeles">Tamaño (px)</label>
+                            <input id="cfg-home-logo-size" type="number" min="50" max="800" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" placeholder="250">
+                        </div>
+                    </div>
+                    
                     <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Botón Búsqueda</label><input id="cfg-search-btn" type="text" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" required></div>
                     <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Texto Ruleta</label><input id="cfg-roulette-text" type="text" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" required></div>
+                    
+                    <!-- CAMBIO: Campos de URL de Ruleta -->
+                    <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">URL Fondo Ruleta (Opcional)</label><input id="cfg-roulette-bg" type="url" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base"></div>
+                    <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">URL Centro Ruleta (Opcional)</label><input id="cfg-roulette-center" type="url" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base"></div>
+
                     <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Texto Mesa</label><input id="cfg-table-label" type="text" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" required></div>
                     <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Botón Aceptar</label><input id="cfg-accept-btn" type="text" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" required></div>
                     <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">URL Marca de Agua (QR)</label><input id="cfg-qr-logo" type="url" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base"></div>
@@ -778,25 +798,34 @@
             safeSetText('totem-video-btn-text', window.appConfig.videoTitleText || "Ver Video");
             safeSetText('dashboard-subtitle', window.appConfig.dashboardSubtitle || "");
             
-            if(document.getElementById('roulette-wheel')) document.getElementById('roulette-wheel').style.backgroundImage = window.appConfig.rouletteBg ? `url('${window.appConfig.rouletteBg}')` : "none";
-            if(document.getElementById('roulette-center-img')) document.getElementById('roulette-center-img').src = window.appConfig.rouletteCenter || "";
+            // Aplicar imágenes de la ruleta si existen en la configuración
+            if(document.getElementById('roulette-wheel')) {
+                document.getElementById('roulette-wheel').style.backgroundImage = window.appConfig.rouletteBg ? `url('${window.appConfig.rouletteBg}')` : "none";
+            }
+            if(document.getElementById('roulette-center-img')) {
+                document.getElementById('roulette-center-img').src = window.appConfig.rouletteCenter || "";
+            }
             
             // Checkboxes
             if(document.getElementById('cfg-anonymous')) document.getElementById('cfg-anonymous').checked = window.appConfig.allowAnonymous === true;
             if(document.getElementById('cfg-req-registration')) document.getElementById('cfg-req-registration').checked = window.appConfig.requireRegistration === true;
             if(document.getElementById('cfg-show-video')) document.getElementById('cfg-show-video').checked = window.appConfig.showVideoBtn !== false;
-            
             if(document.getElementById('cfg-enable-prize-roulette')) {
                 document.getElementById('cfg-enable-prize-roulette').checked = window.appConfig.enablePrizeRoulette !== false;
             }
 
             // Inputs
             safeSetValue('cfg-home-logo', window.appConfig.homeLogoUrl || "");
+            safeSetValue('cfg-home-logo-size', window.appConfig.homeLogoSize || 250); // Valor del tamaño del logo
             safeSetValue('cfg-qr-logo', window.appConfig.qrLogo || "");
             safeSetValue('cfg-title', window.appConfig.title || ""); 
             safeSetValue('cfg-subtitle', window.appConfig.subtitle || "");
             safeSetValue('cfg-search-btn', window.appConfig.searchBtnText || ""); 
+            safeSetValue('cfg-roulette-text', window.appConfig.rouletteText || "");
+            safeSetValue('cfg-roulette-bg', window.appConfig.rouletteBg || ""); 
+            safeSetValue('cfg-roulette-center', window.appConfig.rouletteCenter || ""); 
             safeSetValue('cfg-table-label', window.appConfig.tableLabelText || ""); 
+            safeSetValue('cfg-accept-btn', window.appConfig.acceptBtnText || "Aceptar");
             safeSetValue('cfg-admin-pass', window.appConfig.adminPassword || "admin");
             safeSetValue('cfg-theme-color', window.appConfig.themeColor || window.baseFileTheme);
             safeSetValue('cfg-instagram-url', window.appConfig.instagramUrl || "");
@@ -806,18 +835,17 @@
             // === LÓGICA DEL CÓDIGO QR ===
             const qrImg = document.getElementById('dynamic-qr-img');
             if (qrImg) {
-                // Genera el QR automáticamente apuntando a la URL del evento
                 const targetUrl = "https://eventosdinastia.vercel.app";
                 qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=2&data=${encodeURIComponent(targetUrl)}`;
             }
 
-            // CAMBIO: Aplica el logo repetido como mosaico de fondo
+            // Logo repetido como mosaico de fondo en la vista QR
             const qrWatermark = document.getElementById('qr-watermark-bg');
             if (qrWatermark) {
                 if (window.appConfig.qrLogo) {
                     qrWatermark.style.backgroundImage = `url('${window.appConfig.qrLogo}')`;
                     qrWatermark.style.backgroundRepeat = 'repeat';
-                    qrWatermark.style.backgroundSize = '120px'; // Ajusta esto si los logos se ven muy grandes o pequeños
+                    qrWatermark.style.backgroundSize = '120px'; 
                     qrWatermark.style.backgroundPosition = 'center';
                 } else {
                     qrWatermark.style.backgroundImage = 'none';
@@ -834,9 +862,14 @@
                 document.getElementById('totem-anonymous-section')?.classList.add('hidden');
             }
 
+            // Aplicar tamaño y URL del logo principal
             if (window.appConfig.homeLogoUrl) {
                 const img = document.getElementById('totem-home-logo');
-                if(img) { img.src = window.appConfig.homeLogoUrl; img.classList.remove('hidden'); }
+                if(img) { 
+                    img.src = window.appConfig.homeLogoUrl; 
+                    img.classList.remove('hidden'); 
+                    img.style.height = (window.appConfig.homeLogoSize || 250) + "px";
+                }
             } else {
                 document.getElementById('totem-home-logo')?.classList.add('hidden');
             }
@@ -1628,6 +1661,9 @@
                 enablePrizeRoulette: document.getElementById('cfg-enable-prize-roulette')?.checked ?? true,
                 qrLogo: document.getElementById('cfg-qr-logo')?.value || "",
                 homeLogoUrl: document.getElementById('cfg-home-logo')?.value || "",
+                homeLogoSize: parseInt(document.getElementById('cfg-home-logo-size')?.value) || 250, // <-- NUEVO
+                rouletteBg: document.getElementById('cfg-roulette-bg')?.value || "", // <-- NUEVO
+                rouletteCenter: document.getElementById('cfg-roulette-center')?.value || "", // <-- NUEVO
                 themeColor: document.getElementById('cfg-theme-color')?.value || "amber"
             };
 
