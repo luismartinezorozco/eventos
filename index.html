@@ -25,7 +25,8 @@
             requireRegistration: false,
             instagramUrl: "https://instagram.com/",
             prizeOptions: "Bebida Gratis,Descuento 10%,Foto Especial,Intenta de Nuevo",
-            specialPassword: "1234"
+            specialPassword: "1234",
+            enablePrizeRoulette: true // Nueva opción para toggle de ruleta de premios
         };
         // --- FIN_RESPALDO ---
         
@@ -182,7 +183,7 @@
                 <svg class="w-10 h-10 lg:w-12 lg:h-12 text-white"><use href="#icon-instagram"></use></svg>
             </div>
             <h2 class="text-3xl md:text-4xl font-serif text-stone-800 mb-4">¡Síguenos en Instagram!</h2>
-            <p class="text-stone-600 text-lg mb-8">Apóyanos siguiendo nuestra cuenta oficial para desbloquear tu ruleta de premios.</p>
+            <p class="text-stone-600 text-lg mb-8">Apóyanos siguiendo nuestra cuenta oficial para desbloquear los siguientes pasos.</p>
             
             <button onclick="window.trackInstagramClick()" class="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-4 lg:py-6 rounded-2xl font-bold text-xl hover:opacity-90 transition-opacity shadow-xl active:scale-95 flex justify-center items-center gap-3 mb-6">
                 <svg class="w-6 h-6"><use href="#icon-instagram"></use></svg> Seguir Cuenta
@@ -682,6 +683,17 @@
                     </div>
                 </div>
 
+                <!-- Toggle Ruleta de Premios -->
+                <div class="flex items-start gap-3 bg-white/80 p-4 rounded-xl border-2 border-stone-200 mt-4 shadow-sm">
+                    <div class="pt-1">
+                        <input id="cfg-enable-prize-roulette" type="checkbox" class="w-6 h-6 rounded text-amber-600 cursor-pointer focus:ring-amber-500">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="cfg-enable-prize-roulette" class="font-bold text-stone-800 cursor-pointer">3. Mostrar Ruleta de Premios Inicial</label>
+                        <span class="text-xs text-stone-500 mt-1">Si está activo, al completar el registro e Instagram, los usuarios jugarán la ruleta de premios. Si se desactiva, irán directo a la ruleta de los retos sorpresa.</span>
+                    </div>
+                </div>
+
                 <hr class="border-stone-300/40 my-6">
 
                 <!-- Configuración de Redes y Premios -->
@@ -770,6 +782,11 @@
             if(document.getElementById('cfg-anonymous')) document.getElementById('cfg-anonymous').checked = window.appConfig.allowAnonymous === true;
             if(document.getElementById('cfg-req-registration')) document.getElementById('cfg-req-registration').checked = window.appConfig.requireRegistration === true;
             if(document.getElementById('cfg-show-video')) document.getElementById('cfg-show-video').checked = window.appConfig.showVideoBtn !== false;
+            
+            if(document.getElementById('cfg-enable-prize-roulette')) {
+                // Habilitado por defecto si no existe la propiedad
+                document.getElementById('cfg-enable-prize-roulette').checked = window.appConfig.enablePrizeRoulette !== false;
+            }
 
             // Inputs
             safeSetValue('cfg-home-logo', window.appConfig.homeLogoUrl || "");
@@ -1047,9 +1064,18 @@
         };
 
         window.continueAfterInstagram = function() {
-            // CIERRA INSTAGRAM Y ABRE RULETA DE PREMIOS
+            // CIERRA INSTAGRAM 
             document.getElementById('modal-instagram-flow').classList.replace('flex', 'hidden');
-            document.getElementById('modal-prize-roulette').classList.replace('hidden', 'flex');
+            
+            // Revisa si la ruleta de premios está habilitada
+            if (window.appConfig.enablePrizeRoulette !== false) {
+                // ABRE RULETA DE PREMIOS
+                document.getElementById('modal-prize-roulette').classList.replace('hidden', 'flex');
+            } else {
+                // SALTA DIRECTO A LA RULETA DE RETOS
+                document.getElementById('active-challenge-banner').classList.add('hidden');
+                document.getElementById('modal-roulette').classList.replace('hidden', 'flex');
+            }
         };
 
         // --- RULETA DE PREMIOS (BIENVENIDA) ---
@@ -1575,6 +1601,7 @@
                 showVideoBtn: document.getElementById('cfg-show-video')?.checked || false,
                 adminPassword: document.getElementById('cfg-admin-pass')?.value || "admin",
                 allowAnonymous: document.getElementById('cfg-anonymous')?.checked || false,
+                enablePrizeRoulette: document.getElementById('cfg-enable-prize-roulette')?.checked ?? true,
                 qrLogo: document.getElementById('cfg-qr-logo')?.value || "",
                 homeLogoUrl: document.getElementById('cfg-home-logo')?.value || "",
                 themeColor: document.getElementById('cfg-theme-color')?.value || "amber"
