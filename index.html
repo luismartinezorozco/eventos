@@ -83,7 +83,7 @@
             <symbol id="icon-party-popper" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12v0c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11v0c-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98v0C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></symbol>
             <symbol id="icon-video" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></symbol>
             <symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
-            <symbol id="icon-log-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></symbol>
+            <symbol id="icon-log-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></symbol>
             <symbol id="icon-list-ordered" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></symbol>
             <symbol id="icon-trash-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></symbol>
             <symbol id="icon-folder-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/><path d="M12 10v6"/><path d="m15 13-3 3-3-3"/></symbol>
@@ -133,7 +133,7 @@
     </div>
 
     <!-- ==========================================
-         NUEVO: MODAL REGISTRO OBLIGATORIO (PASO 1)
+         MODAL REGISTRO OBLIGATORIO (PASO 1)
          ========================================== -->
     <div id="modal-registration-flow" class="fixed inset-0 bg-stone-900/95 backdrop-blur-md z-[120] hidden flex-col items-center justify-center p-4 sm:p-6 overflow-y-auto">
         <div class="max-w-xl w-full bg-white/95 backdrop-blur-xl border border-white/50 rounded-[2rem] lg:rounded-[3rem] shadow-2xl p-6 md:p-10 text-center relative animate-pop my-auto">
@@ -144,12 +144,12 @@
                 <svg class="w-8 h-8 lg:w-10 lg:h-10 text-amber-600"><use href="#icon-users"></use></svg>
             </div>
             <h2 class="text-2xl md:text-3xl lg:text-4xl font-serif text-stone-800 mb-2">Registro de Invitado</h2>
-            <p class="text-stone-600 text-sm md:text-base lg:text-lg mb-6">Por favor, completa tus datos para acceder a tu mesa, retos y premios especiales.</p>
+            <p class="text-stone-600 text-sm md:text-base lg:text-lg mb-6">Por favor, completa tus datos para acceder a los retos y premios especiales.</p>
             
             <form id="full-registration-form" onsubmit="window.submitFullRegistration(event)" class="space-y-4 text-left">
                 <div>
                     <label class="block text-sm font-bold text-stone-700 mb-1">Nombres y Apellidos *</label>
-                    <input type="text" id="reg-name" required class="w-full p-4 rounded-xl border-2 border-stone-200 bg-stone-50 focus:bg-white focus:border-amber-400 outline-none text-lg transition-all">
+                    <input type="text" id="reg-name" required class="w-full p-4 rounded-xl border-2 border-stone-200 bg-stone-50 focus:bg-white focus:border-amber-400 outline-none text-lg transition-all" placeholder="Escribe tu nombre completo">
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-stone-700 mb-1">Número de WhatsApp *</label>
@@ -174,7 +174,7 @@
     </div>
 
     <!-- ==========================================
-         NUEVO: MODAL SEGUIMIENTO INSTAGRAM (PASO 2)
+         MODAL SEGUIMIENTO INSTAGRAM (PASO 2)
          ========================================== -->
     <div id="modal-instagram-flow" class="fixed inset-0 bg-stone-900/95 backdrop-blur-md z-[120] hidden flex-col items-center justify-center p-4">
         <div class="max-w-md w-full bg-white/95 backdrop-blur-xl border border-white/50 rounded-[2rem] lg:rounded-[3rem] shadow-2xl p-8 lg:p-12 text-center relative animate-pop">
@@ -195,7 +195,7 @@
     </div>
 
     <!-- ==========================================
-         NUEVO: MODAL RULETA DE PREMIOS (PASO 3)
+         MODAL RULETA DE PREMIOS (PASO 3)
          ========================================== -->
     <div id="modal-prize-roulette" class="fixed inset-0 bg-stone-900/95 backdrop-blur-md z-[120] hidden flex-col items-center justify-center p-4">
         <div class="max-w-md lg:max-w-xl w-full bg-white/95 backdrop-blur-xl border border-white/50 rounded-[2rem] shadow-2xl p-8 text-center space-y-6 relative">
@@ -227,7 +227,7 @@
     </div>
 
     <!-- ==========================================
-         NUEVO: MODAL GRAN RULETA FINAL (PREMIO MAYOR)
+         MODAL GRAN RULETA FINAL (PREMIO MAYOR)
          ========================================== -->
     <div id="modal-grand-roulette" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[150] hidden flex-col items-center justify-center p-4 overflow-hidden">
         <button onclick="window.closeGrandRoulette()" class="absolute top-6 right-6 text-white/50 hover:text-white p-2 transition-colors z-50">
@@ -262,7 +262,7 @@
             <h3 class="text-white text-3xl md:text-5xl font-medium mb-4 uppercase tracking-widest opacity-90">Tenemos un ganador</h3>
             <span id="grand-winner-name" class="text-6xl md:text-[8rem] font-black text-stone-900 drop-shadow-2xl font-serif text-center leading-tight"></span>
             <button onclick="window.closeGrandWinner()" class="mt-12 bg-white text-amber-700 py-4 px-8 rounded-full font-bold text-2xl shadow-xl hover:bg-stone-100 transition-colors">Volver</button>
-            <div class="absolute inset-0 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxjaXJjbGUgY3g9IjEwJSIgY3k9IjIwJSIgcj0iNSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuNSIvPjxjaXJjbGUgY3g9Ij৯০JSIgY3k9IjE1JSIgcj0iNSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuNSIvPjxjaXJjbGUgY3g9IjMwJSIgY3k9IjgwJSIgcj0iNSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuNSIvPjwvc3ZnPg==')] opacity-50 mix-blend-overlay"></div>
+            <div class="absolute inset-0 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxjaXJjbGUgY3g9IjEwJSIgY3k9IjIwJSIgcj0iNSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuNSIvPjxjaXJjbGUgY3g9IjkwJSIgY3k9IjE1JSIgcj0iNSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuNSIvPjxjaXJjbGUgY3g9IjMwJSIgY3k9IjgwJSIgcj0iNSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuNSIvPjwvc3ZnPg==')] opacity-50 mix-blend-overlay"></div>
         </div>
     </div>
 
@@ -276,7 +276,7 @@
                 <svg class="w-8 h-8 lg:w-12 lg:h-12 text-amber-600"><use href="#icon-users"></use></svg>
             </div>
             <h2 class="text-2xl md:text-3xl lg:text-4xl font-serif text-stone-800">¿Quién eres?</h2>
-            <p class="text-stone-600 text-base lg:text-xl">Por favor, ingresa tu <span class="font-bold">nombre y apellido</span> para guardar tus fotos en la galería.</p>
+            <p class="text-stone-600 text-base lg:text-xl">Por favor, ingresa tu <span class="font-bold">nombre completo</span> para participar y guardar tus fotos.</p>
             <form id="anonymous-register-form" onsubmit="window.submitAnonymousRegister(event)" class="space-y-4 lg:space-y-6 pt-4">
                 <input type="text" id="anonymous-name-input" placeholder="Ej. Ana Pérez" required minlength="3" class="w-full p-4 lg:p-6 rounded-xl lg:rounded-2xl border-2 border-white bg-stone-50 focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-500/20 outline-none text-lg lg:text-2xl transition-all shadow-inner text-center">
                 <button type="submit" class="w-full bg-amber-600 text-white py-4 lg:py-6 rounded-xl lg:rounded-2xl font-semibold text-lg lg:text-2xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95 flex justify-center items-center gap-2">
@@ -397,7 +397,7 @@
             <div id="totem-search-section" class="w-full space-y-3 sm:space-y-4 lg:space-y-6 2xl:space-y-8 pt-2 lg:pt-4 2xl:px-12">
                 <div class="relative text-left">
                     <svg class="absolute left-4 sm:left-6 top-1/2 transform -translate-y-1/2 text-stone-400 w-5 h-5 sm:w-7 sm:h-7 lg:w-9 lg:h-9 2xl:w-12 2xl:h-12 pointer-events-none"><use href="#icon-search"></use></svg>
-                    <input type="text" id="search-input" placeholder="Escribe tu nombre..." class="w-full pl-12 sm:pl-16 lg:pl-20 2xl:pl-28 pr-4 sm:pr-6 py-4 sm:py-5 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl border-2 border-white/50 bg-white/60 backdrop-blur-md focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-500/20 text-lg sm:text-xl lg:text-2xl 2xl:text-4xl transition-all shadow-sm outline-none" />
+                    <input type="text" id="search-input" placeholder="Escribe tu nombre para buscar..." class="w-full pl-12 sm:pl-16 lg:pl-20 2xl:pl-28 pr-4 sm:pr-6 py-4 sm:py-5 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl border-2 border-white/50 bg-white/60 backdrop-blur-md focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-500/20 text-lg sm:text-xl lg:text-2xl 2xl:text-4xl transition-all shadow-sm outline-none" />
                 </div>
                 <button id="btn-search" class="w-full bg-amber-600 text-white py-4 sm:py-5 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl font-semibold text-lg sm:text-xl lg:text-2xl 2xl:text-4xl hover:bg-amber-700 transition-colors shadow-lg active:scale-95"></button>
             </div>
@@ -666,8 +666,8 @@
                         <input id="cfg-anonymous" type="checkbox" class="w-6 h-6 rounded cursor-pointer text-stone-600 focus:ring-stone-500">
                     </div>
                     <div class="flex flex-col">
-                        <label for="cfg-anonymous" class="font-bold text-stone-800 cursor-pointer">Modo: Acceso Directo (Invitados Libres)</label>
-                        <span class="text-xs text-stone-500 mt-1">Oculta la barra de búsqueda. Cualquiera puede entrar escribiendo solo su nombre. (Ideal para eventos sin lista).</span>
+                        <label for="cfg-anonymous" class="font-bold text-stone-800 cursor-pointer">1. Activar Entrada Libre (Ocultar buscador)</label>
+                        <span class="text-xs text-stone-500 mt-1">Habilita el botón de acceso directo para que cualquier persona ingrese sin necesidad de tener una base de datos o buscar su nombre.</span>
                     </div>
                 </div>
 
@@ -677,8 +677,8 @@
                         <input id="cfg-req-registration" type="checkbox" class="w-6 h-6 rounded text-amber-600 cursor-pointer focus:ring-amber-500">
                     </div>
                     <div class="flex flex-col">
-                        <label for="cfg-req-registration" class="font-bold text-stone-800 cursor-pointer">Modo: Registro Obligatorio (Lista de Invitados)</label>
-                        <span class="text-xs text-stone-500 mt-1">Aplica SOLO a la barra de búsqueda. Pide WhatsApp y Correo a los invitados de la lista antes de poder ver su mesa.</span>
+                        <label for="cfg-req-registration" class="font-bold text-stone-800 cursor-pointer">2. Exigir Formulario Completo de Registro</label>
+                        <span class="text-xs text-stone-500 mt-1">Obliga al invitado a llenar su Correo y WhatsApp. <strong class="text-amber-700 font-bold">Se puede combinar con la opción 1</strong> para tener "Entrada Libre pero con Formulario".</span>
                     </div>
                 </div>
 
@@ -784,7 +784,7 @@
             safeSetValue('cfg-prize-options', window.appConfig.prizeOptions || "Sigue participando");
             safeSetValue('cfg-special-pass', window.appConfig.specialPassword || "1234");
             
-            // UI Toggles
+            // UI Toggles - Si anónimo está activo, oculta buscador.
             if (window.appConfig.allowAnonymous) {
                 document.getElementById('totem-search-section')?.classList.add('hidden');
                 document.getElementById('totem-anonymous-section')?.classList.remove('hidden');
@@ -910,10 +910,10 @@
             if (found) {
                 window.currentGuest = found;
                 
-                // EL REGISTRO OBLIGATORIO SOLO APLICA AQUÍ (A LOS DE LA LISTA)
                 const isRegisteredLocally = localStorage.getItem('dinastia_registrado_' + (window.appConfig.title || 'default'));
 
                 if (window.appConfig.requireRegistration && (!found.registered && !isRegisteredLocally)) {
+                    // MODO 3: Buscador + Registro Obligatorio (Pide formulario completo pre-llenando el nombre)
                     document.getElementById('full-registration-form').reset();
                     document.getElementById('reg-name').value = found.name;
                     if(found.whatsapp) document.getElementById('reg-whatsapp').value = found.whatsapp;
@@ -922,7 +922,7 @@
                     
                     document.getElementById('modal-registration-flow').classList.replace('hidden', 'flex');
                 } else {
-                    // Flujo libre o ya registrado
+                    // MODO 1: Solo buscador. Encuentra el nombre y entra sin formulario.
                     document.getElementById('guest-name-display').innerText = found.name;
                     document.getElementById('guest-table-display').innerText = found.table || '-';
                     document.getElementById('search-input').value = ''; 
@@ -948,15 +948,22 @@
                 }
             }
 
-            // FLUJO BÁSICO ANÓNIMO TOTALMENTE INDEPENDIENTE (Nunca pide Registro Completo)
-            document.getElementById('anonymous-name-input').value = ''; 
-            document.getElementById('modal-anonymous-register').classList.replace('hidden', 'flex');
+            if (window.appConfig.requireRegistration) {
+                // MODO 4: Entrada Libre + Formulario Completo
+                window.currentGuest = null; // No viene de ninguna lista
+                document.getElementById('full-registration-form').reset();
+                document.getElementById('modal-registration-flow').classList.replace('hidden', 'flex');
+            } else {
+                // MODO 2: Entrada Libre + Formulario Corto (Solo pide el nombre)
+                document.getElementById('anonymous-name-input').value = ''; 
+                document.getElementById('modal-anonymous-register').classList.replace('hidden', 'flex');
+            }
         };
 
         window.closeRegistrationFlow = () => document.getElementById('modal-registration-flow').classList.replace('flex', 'hidden');
         window.closeAnonymousRegister = () => document.getElementById('modal-anonymous-register').classList.replace('flex', 'hidden');
 
-        // Registro Básico Original
+        // Registro Básico (Cuando NO es obligatorio el formulario largo)
         window.submitAnonymousRegister = function(event) {
             event.preventDefault();
             const nameVal = document.getElementById('anonymous-name-input').value.trim();
@@ -999,7 +1006,7 @@
             btn.innerText = 'Guardando...';
             btn.disabled = true;
 
-            // Guardar en Firebase
+            // Guardar en Firebase (Si currentGuest es null, lo crea como nuevo documento)
             if (typeof window.handleSaveGuestData === 'function') {
                 const savedId = await window.handleSaveGuestData(window.currentGuest?.id, guestData);
                 window.currentGuest = { id: savedId, ...guestData };
@@ -1296,12 +1303,14 @@
         };
 
         window.showChallengeReveal = () => { document.getElementById('modal-challenge-instruction').classList.replace('flex', 'hidden'); document.getElementById('modal-challenge-reveal').classList.replace('hidden', 'flex'); };
+        
         window.closeChallengeReveal = () => { 
             document.getElementById('modal-challenge-reveal').classList.replace('flex', 'hidden');
             window.challengeAccepted = true;
             document.getElementById('active-challenge-banner').classList.remove('hidden');
             window.switchView('view-guest-dashboard');
         };
+        
         window.skipRoulette = () => { document.getElementById('modal-roulette').classList.replace('flex', 'hidden'); window.switchView('view-guest-dashboard'); };
         
         // Modal Fotos HD
@@ -1585,10 +1594,12 @@
 
         window.handleSaveGuestData = async function(guestId, data) {
             try {
-                if (guestId && guestId.toString().startsWith('anon_') === false) {
+                // Chequear si el ID existe y no es uno temporal/anónimo
+                if (guestId && guestId.toString().startsWith('anon_') === false && guestId.toString().startsWith('local_') === false) {
                     await setDoc(getPublicDoc("invitados", guestId), data, { merge: true });
                     return guestId;
                 } else {
+                    // Si es un ID temporal o viene nulo (usuario nuevo), lo creamos en Firebase
                     const docRef = await addDoc(getPublicCollection("invitados"), data);
                     return docRef.id;
                 }
