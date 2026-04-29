@@ -26,7 +26,7 @@
             instagramUrl: "https://instagram.com/",
             prizeOptions: "Bebida Gratis,Descuento 10%,Foto Especial,Intenta de Nuevo",
             specialPassword: "1234",
-            enablePrizeRoulette: true // Nueva opción para toggle de ruleta de premios
+            enablePrizeRoulette: true
         };
         // --- FIN_RESPALDO ---
         
@@ -784,7 +784,6 @@
             if(document.getElementById('cfg-show-video')) document.getElementById('cfg-show-video').checked = window.appConfig.showVideoBtn !== false;
             
             if(document.getElementById('cfg-enable-prize-roulette')) {
-                // Habilitado por defecto si no existe la propiedad
                 document.getElementById('cfg-enable-prize-roulette').checked = window.appConfig.enablePrizeRoulette !== false;
             }
 
@@ -801,6 +800,20 @@
             safeSetValue('cfg-prize-options', window.appConfig.prizeOptions || "Sigue participando");
             safeSetValue('cfg-special-pass', window.appConfig.specialPassword || "1234");
             
+            // === LÓGICA DEL CÓDIGO QR ===
+            const qrImg = document.getElementById('dynamic-qr-img');
+            if (qrImg) {
+                // Genera el QR automáticamente apuntando a la URL del evento
+                const targetUrl = "https://eventosdinastia.vercel.app";
+                qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=2&data=${encodeURIComponent(targetUrl)}`;
+            }
+
+            const qrWatermark = document.getElementById('qr-watermark-bg');
+            if (qrWatermark) {
+                qrWatermark.style.backgroundImage = window.appConfig.qrLogo ? `url('${window.appConfig.qrLogo}')` : 'none';
+            }
+            // ============================
+
             // UI Toggles - Si anónimo está activo, oculta buscador.
             if (window.appConfig.allowAnonymous) {
                 document.getElementById('totem-search-section')?.classList.add('hidden');
