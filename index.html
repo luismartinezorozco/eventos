@@ -388,7 +388,6 @@
     <div id="view-totem" class="view min-h-[100dvh] w-full flex flex-col justify-between items-center px-4 md:px-6 py-4 md:py-6 lg:py-8 relative z-10 overflow-y-auto">
         <div class="w-full flex-grow flex flex-col items-center justify-center max-w-2xl lg:max-w-4xl 2xl:max-w-6xl space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10 2xl:space-y-12 my-2 md:my-4">
             
-            <!-- CAMBIO: Logo principal controlado por JavaScript y su tamaño dinámico -->
             <img id="totem-home-logo" src="" alt="Logo del Evento" class="hidden object-contain drop-shadow-md -mb-2 sm:-mb-4 lg:-mb-6 px-4 transition-all duration-300" style="height: 250px;" />
             
             <div class="space-y-2 sm:space-y-3 lg:space-y-4 2xl:space-y-6 text-center w-full px-2 sm:px-4">
@@ -591,6 +590,8 @@
                             <option value="cumpleanos">Cumpleaños</option>
                             <option value="cristiano">Encuentro Cristiano</option>
                             <option value="porcicultura">Evento Porcicultura</option>
+                            <!-- NUEVA OPCIÓN AGREGADA AQUÍ -->
+                            <option value="lab_veterinario">Conferencia Lab Veterinario</option>
                         </select>
                         <button onclick="window.changeEventType()" class="w-full bg-amber-600 text-white py-4 lg:py-6 rounded-xl hover:bg-amber-700 transition-colors font-semibold text-lg flex items-center justify-center shadow-md active:scale-95">Actualizar Retos</button>
                     </div>
@@ -649,7 +650,6 @@
                     <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Título Principal</label><input id="cfg-title" type="text" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" required></div>
                     <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Subtítulo</label><input id="cfg-subtitle" type="text" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" required></div>
                     
-                    <!-- CAMBIO: Campo de Logo + Tamaño -->
                     <div class="md:col-span-2 flex gap-4 items-end">
                         <div class="flex-grow">
                             <label class="block text-xs font-bold text-stone-700 mb-1 uppercase flex items-center justify-between">URL Logo Inicio (Opcional) <span class="text-stone-400 font-normal lowercase italic hidden sm:inline">Ej: png, jpg...</span></label>
@@ -664,7 +664,6 @@
                     <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Botón Búsqueda</label><input id="cfg-search-btn" type="text" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" required></div>
                     <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Texto Ruleta</label><input id="cfg-roulette-text" type="text" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" required></div>
                     
-                    <!-- CAMBIO: Campos de URL de Ruleta -->
                     <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">URL Fondo Ruleta (Opcional)</label><input id="cfg-roulette-bg" type="url" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base"></div>
                     <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">URL Centro Ruleta (Opcional)</label><input id="cfg-roulette-center" type="url" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base"></div>
 
@@ -773,7 +772,60 @@
             boda: ["Tómate una selfie con la novia.", "Tómate una selfie con el novio.", "Fotografía un beso apasionado.", "Captura una lágrima de felicidad.", "Toma una foto del centro de mesa."],
             cumpleanos: ["Tómate una selfie con el cumpleañero/a.", "Toma una foto del pastel.", "Captura soplar las velas.", "Foto del mejor regalo.", "Selfie con gorrito."],
             cristiano: ["Selfie con tu sonrisa.", "Foto haciendo pose divertida con 3 personas.", "Foto con alguien nuevo.", "Foto haciendo corazón ❤️.", "Foto abrazando."],
-            porcicultura: ["Selfie con un cerdo.", "Foto con el conferencista.", "Captura comiendo chicharrón.", "Selfie con veterinario.", "Stand innovador."]
+            porcicultura: ["Selfie con un cerdo.", "Foto con el conferencista.", "Captura comiendo chicharrón.", "Selfie con veterinario.", "Stand innovador."],
+            // === 50 RETOS NUEVOS PARA LABORATORIO VETERINARIO ===
+            lab_veterinario: [
+                "Selfie con el ponente principal del evento.",
+                "Foto de un tubo de ensayo o muestra simulada.",
+                "Selfie grupal con 3 colegas de diferentes ciudades o clínicas.",
+                "Foto creativa con el logo del laboratorio organizador.",
+                "Captura la diapositiva más interesante de una charla.",
+                "Selfie con cara de 'analizando una muestra en el microscopio'.",
+                "Foto de tu café (el verdadero reactivo del laboratorio).",
+                "Selfie con un asesor de ventas o soporte comercial.",
+                "Foto usando guantes de látex o nitrilo.",
+                "Foto de tu libreta de apuntes con el dato más importante subrayado.",
+                "Selfie con el stand de exhibición más llamativo.",
+                "Foto de un paciente peludo (si hay perros/gatos en el evento).",
+                "Selfie haciendo el símbolo de la paz con un tubo de recolección.",
+                "Foto de cerca a un microscopio o equipo de laboratorio.",
+                "Selfie luciendo con orgullo tu credencial o escarapela del evento.",
+                "Foto de una infografía científica o póster técnico.",
+                "Selfie con un colega que acabas de conocer hoy.",
+                "Foto a los resultados de un caso clínico en pantalla.",
+                "Selfie posando junto a un analizador de hematología o química.",
+                "Foto artística del refrigerio o coffee break.",
+                "Selfie con alguien del comité organizador.",
+                "Foto grupal imitando la forma de una bacteria o parásito.",
+                "Selfie con cara de sorpresa al ver un diagnóstico difícil.",
+                "Foto divertida con todos tus colegas de mesa.",
+                "Selfie apuntando al nombre del laboratorio en un banner.",
+                "Foto del folleto técnico o brochure más interesante que te dieron.",
+                "Selfie con un veterinario especialista (Patólogo, Dermatólogo, etc.).",
+                "Foto panorámica del auditorio lleno.",
+                "Selfie cruzando los dedos simulando evitar un 'falso positivo'.",
+                "Foto de un reactivo o producto nuevo lanzado en el congreso.",
+                "Selfie con el colega que más preguntas hace en las charlas.",
+                "Foto tuya haciendo una pregunta al ponente.",
+                "Selfie simulando que extraes una muestra de sangre.",
+                "Foto de un pin, bolígrafo o merch genial que te regalaron.",
+                "Selfie con el colega que llegó más temprano al evento.",
+                "Foto de una gráfica estadística impresionante proyectada.",
+                "Selfie 'analizando microscópicamente' tu almuerzo.",
+                "Foto con el equipo logístico o staff del evento.",
+                "Selfie mostrando orgullo por ser del área de laboratorio veterinario.",
+                "Foto de un caso de citología o dermatología proyectado.",
+                "Selfie con el colega que siempre pierde los lapiceros en el lab.",
+                "Foto mostrando tu mejor 'outfit de congreso científico'.",
+                "Selfie con tu cara de máxima concentración durante una ponencia.",
+                "Foto chocando los cinco con un colega por resolver un caso.",
+                "Selfie sosteniendo un libro o manual técnico veterinario.",
+                "Foto escaneando un código QR importante del evento.",
+                "Selfie con la mejor decoración o backing del salón.",
+                "Foto fingiendo que centrifugas una muestra con tus manos.",
+                "Selfie grupal donde todos simulen gritar '¡Ciencia!'.",
+                "Foto de la clausura o entrega de tu certificado de asistencia."
+            ]
         };
 
         // --- 2. RECUPERACIÓN CACHÉ ---
@@ -831,6 +883,11 @@
             safeSetValue('cfg-instagram-url', window.appConfig.instagramUrl || "");
             safeSetValue('cfg-prize-options', window.appConfig.prizeOptions || "Sigue participando");
             safeSetValue('cfg-special-pass', window.appConfig.specialPassword || "1234");
+            
+            // Establecer el tipo de evento actual en el panel de admin si existe
+            if(document.getElementById('admin-event-type')) {
+                document.getElementById('admin-event-type').value = window.appConfig.eventType || "boda";
+            }
             
             // === LÓGICA DEL CÓDIGO QR ===
             const qrImg = document.getElementById('dynamic-qr-img');
@@ -1661,9 +1718,9 @@
                 enablePrizeRoulette: document.getElementById('cfg-enable-prize-roulette')?.checked ?? true,
                 qrLogo: document.getElementById('cfg-qr-logo')?.value || "",
                 homeLogoUrl: document.getElementById('cfg-home-logo')?.value || "",
-                homeLogoSize: parseInt(document.getElementById('cfg-home-logo-size')?.value) || 250, // <-- NUEVO
-                rouletteBg: document.getElementById('cfg-roulette-bg')?.value || "", // <-- NUEVO
-                rouletteCenter: document.getElementById('cfg-roulette-center')?.value || "", // <-- NUEVO
+                homeLogoSize: parseInt(document.getElementById('cfg-home-logo-size')?.value) || 250, 
+                rouletteBg: document.getElementById('cfg-roulette-bg')?.value || "", 
+                rouletteCenter: document.getElementById('cfg-roulette-center')?.value || "", 
                 themeColor: document.getElementById('cfg-theme-color')?.value || "amber"
             };
 
