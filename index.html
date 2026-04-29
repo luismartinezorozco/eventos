@@ -660,14 +660,26 @@
                     </div>
                 </div>
 
-                <div class="flex items-center gap-3 bg-amber-50 p-4 rounded-xl border-2 border-amber-200 mt-6 shadow-sm">
-                    <input id="cfg-anonymous" type="checkbox" class="w-6 h-6 rounded cursor-pointer text-amber-600 focus:ring-amber-500">
-                    <label for="cfg-anonymous" class="font-bold text-stone-800 cursor-pointer">Habilitar "Acceso Directo" (Ocultar búsqueda)</label>
+                <!-- Toggle Acceso Directo -->
+                <div class="flex items-start gap-3 bg-stone-100 p-4 rounded-xl border-2 border-stone-300 mt-6 shadow-sm">
+                    <div class="pt-1">
+                        <input id="cfg-anonymous" type="checkbox" class="w-6 h-6 rounded cursor-pointer text-stone-600 focus:ring-stone-500">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="cfg-anonymous" class="font-bold text-stone-800 cursor-pointer">Modo: Acceso Directo (Invitados Libres)</label>
+                        <span class="text-xs text-stone-500 mt-1">Oculta la barra de búsqueda. Cualquiera puede entrar escribiendo solo su nombre. (Ideal para eventos sin lista).</span>
+                    </div>
                 </div>
 
-                <div class="flex items-center gap-3 bg-stone-100 p-4 rounded-xl border-2 border-stone-300 mt-4 shadow-sm">
-                    <input id="cfg-req-registration" type="checkbox" class="w-6 h-6 rounded text-stone-800 cursor-pointer focus:ring-stone-600">
-                    <label for="cfg-req-registration" class="font-bold text-stone-800 cursor-pointer">Habilitar "Formulario de Registro Obligatorio"</label>
+                <!-- Toggle Registro Obligatorio -->
+                <div class="flex items-start gap-3 bg-amber-50 p-4 rounded-xl border-2 border-amber-200 mt-4 shadow-sm">
+                    <div class="pt-1">
+                        <input id="cfg-req-registration" type="checkbox" class="w-6 h-6 rounded text-amber-600 cursor-pointer focus:ring-amber-500">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="cfg-req-registration" class="font-bold text-stone-800 cursor-pointer">Modo: Registro Obligatorio (Lista de Invitados)</label>
+                        <span class="text-xs text-stone-500 mt-1">Aplica SOLO a la barra de búsqueda. Pide WhatsApp y Correo a los invitados de la lista antes de poder ver su mesa.</span>
+                    </div>
                 </div>
 
                 <hr class="border-stone-300/40 my-6">
@@ -888,7 +900,7 @@
             if (videoWrapper) videoWrapper.innerHTML = '';
         };
 
-        // --- FLUJO DE REGISTRO / ENTRADA (CON INTERCEPTOR LOCALSTORAGE) ---
+        // --- FLUJO DE REGISTRO / ENTRADA ---
 
         window.handleSearch = function() {
             const query = document.getElementById('search-input').value.trim().toLowerCase();
@@ -897,11 +909,12 @@
 
             if (found) {
                 window.currentGuest = found;
-                // INTERCEPTOR: Si está obligando registro, comprobamos si no tiene DB o si no tiene registro local en este celular
+                
+                // EL REGISTRO OBLIGATORIO SOLO APLICA AQUÍ (A LOS DE LA LISTA)
                 const isRegisteredLocally = localStorage.getItem('dinastia_registrado_' + (window.appConfig.title || 'default'));
 
                 if (window.appConfig.requireRegistration && (!found.registered && !isRegisteredLocally)) {
-                    // Frenamos el acceso y mostramos el formulario completo
+                    document.getElementById('full-registration-form').reset();
                     document.getElementById('reg-name').value = found.name;
                     if(found.whatsapp) document.getElementById('reg-whatsapp').value = found.whatsapp;
                     if(found.email) document.getElementById('reg-email').value = found.email;
@@ -921,8 +934,6 @@
         };
 
         window.enterAnonymous = function() {
-            // INTERCEPTOR PARA ANONIMOS
-            const isRegisteredLocally = localStorage.getItem('dinastia_registrado_' + (window.appConfig.title || 'default'));
             const localGuestId = localStorage.getItem('dinastia_guest_id');
 
             // Intento de restaurar usuario si ya se registró antes en este celular
@@ -937,15 +948,9 @@
                 }
             }
 
-            // Si exige registro y no está registrado en el celular
-            if (window.appConfig.requireRegistration && !isRegisteredLocally) {
-                document.getElementById('full-registration-form').reset();
-                document.getElementById('modal-registration-flow').classList.replace('hidden', 'flex');
-            } else {
-                // Flujo básico original
-                document.getElementById('anonymous-name-input').value = ''; 
-                document.getElementById('modal-anonymous-register').classList.replace('hidden', 'flex');
-            }
+            // FLUJO BÁSICO ANÓNIMO TOTALMENTE INDEPENDIENTE (Nunca pide Registro Completo)
+            document.getElementById('anonymous-name-input').value = ''; 
+            document.getElementById('modal-anonymous-register').classList.replace('hidden', 'flex');
         };
 
         window.closeRegistrationFlow = () => document.getElementById('modal-registration-flow').classList.replace('flex', 'hidden');
