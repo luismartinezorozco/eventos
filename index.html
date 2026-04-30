@@ -605,6 +605,14 @@
                             <button onclick="window.deleteAllGuests()" class="flex-1 sm:flex-none text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 border border-red-200 px-4 py-2 lg:px-6 lg:py-4 rounded-xl text-sm lg:text-base font-semibold transition-colors flex items-center justify-center gap-2 shadow-sm"><svg class="w-4 h-4"><use href="#icon-trash-2"></use></svg> Borrar Todo</button>
                         </div>
                     </div>
+                    
+                    <div class="mb-4 px-2">
+                        <div class="relative w-full">
+                            <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 text-stone-400 w-5 h-5"><use href="#icon-search"></use></svg>
+                            <input type="text" id="admin-search-guest" oninput="renderAdminList()" placeholder="Buscar invitado por nombre..." class="w-full pl-12 pr-4 py-3 md:py-4 rounded-xl border border-white bg-white/60 focus:bg-white focus:border-amber-400 outline-none text-sm md:text-base transition-colors shadow-sm text-stone-700 placeholder-stone-500">
+                        </div>
+                    </div>
+
                     <div class="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl overflow-hidden shadow-sm flex-grow">
                         <ul id="admin-guest-list" class="flex flex-col min-h-[300px] lg:min-h-[500px] max-h-[60vh] lg:max-h-[800px] overflow-y-auto p-2 lg:p-4"></ul>
                     </div>
@@ -1057,7 +1065,19 @@
                     document.getElementById('guest-name-display').innerText = found.name;
                     document.getElementById('guest-table-display').innerText = found.table || '-';
                     document.getElementById('search-input').value = ''; 
-                    document.getElementById('modal-roulette').classList.replace('hidden', 'flex');
+                    
+                    // Verifica si el usuario tiene giros extra de la ruleta de premios
+                    if (found.extraPrizeSpins && found.extraPrizeSpins > 0) {
+                        const newSpins = found.extraPrizeSpins - 1;
+                        window.currentGuest.extraPrizeSpins = newSpins;
+                        if (typeof window.handleSaveGuestData === 'function') {
+                            window.handleSaveGuestData(window.currentGuest.id, { extraPrizeSpins: newSpins });
+                        }
+                        window.resetPrizeRouletteUI();
+                        document.getElementById('modal-prize-roulette').classList.replace('hidden', 'flex');
+                    } else {
+                        document.getElementById('modal-roulette').classList.replace('hidden', 'flex');
+                    }
                 }
             } else { 
                 alert('Invitado no encontrado. Verifica cómo escribiste tu nombre.'); 
@@ -1074,7 +1094,19 @@
                     window.currentGuest = found;
                     document.getElementById('guest-name-display').innerText = found.name;
                     document.getElementById('guest-table-display').innerText = found.table || '-';
-                    document.getElementById('modal-roulette').classList.replace('hidden', 'flex');
+                    
+                    // Verifica giros extra en el login directo
+                    if (found.extraPrizeSpins && found.extraPrizeSpins > 0) {
+                        const newSpins = found.extraPrizeSpins - 1;
+                        window.currentGuest.extraPrizeSpins = newSpins;
+                        if (typeof window.handleSaveGuestData === 'function') {
+                            window.handleSaveGuestData(window.currentGuest.id, { extraPrizeSpins: newSpins });
+                        }
+                        window.resetPrizeRouletteUI();
+                        document.getElementById('modal-prize-roulette').classList.replace('hidden', 'flex');
+                    } else {
+                        document.getElementById('modal-roulette').classList.replace('hidden', 'flex');
+                    }
                     return;
                 }
             }
@@ -1183,6 +1215,7 @@
             
             // Revisa si la ruleta de premios está habilitada
             if (window.appConfig.enablePrizeRoulette !== false) {
+                window.resetPrizeRouletteUI();
                 // ABRE RULETA DE PREMIOS
                 document.getElementById('modal-prize-roulette').classList.replace('hidden', 'flex');
             } else {
@@ -1193,6 +1226,23 @@
         };
 
         // --- RULETA DE PREMIOS (BIENVENIDA) ---
+        window.resetPrizeRouletteUI = function() {
+            const btn = document.getElementById('btn-spin-prize');
+            const wheel = document.getElementById('prize-roulette-wheel');
+            const textResult = document.getElementById('prize-result-text');
+            const btnFinish = document.getElementById('btn-finish-prize');
+            
+            if(btn) { btn.disabled = false; btn.classList.remove('opacity-50', 'cursor-not-allowed'); }
+            if(textResult) textResult.classList.add('hidden');
+            if(btnFinish) btnFinish.classList.add('hidden');
+            if(wheel) {
+                wheel.style.transition = 'none';
+                wheel.style.transform = 'rotate(0deg)';
+                void wheel.offsetWidth; // Refuerza reinicio visual (Reflow)
+                wheel.style.transition = 'transform 4s cubic-bezier(0.25, 0.1, 0.25, 1)';
+            }
+        };
+
         function renderPrizeSegments() {
             const container = document.getElementById('prize-segments-container');
             if(!container) return;
@@ -1357,12 +1407,20 @@
             if (!list) return; 
             list.innerHTML = "";
 
-            if (window.guests.length === 0) {
-                list.innerHTML = `<li class="p-4 lg:p-8 text-center text-stone-500 font-medium">No hay invitados registrados aún.</li>`; 
+            const searchInput = document.getElementById('admin-search-guest');
+            const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+            let filteredGuests = window.guests;
+            if (query !== '') {
+                filteredGuests = window.guests.filter(g => g.name && g.name.toLowerCase().includes(query));
+            }
+
+            if (filteredGuests.length === 0) {
+                list.innerHTML = `<li class="p-4 lg:p-8 text-center text-stone-500 font-medium">No hay invitados registrados aún${query ? ' que coincidan con la búsqueda' : ''}.</li>`; 
                 return;
             }
 
-            const guestsWithCounts = window.guests.map(g => {
+            const guestsWithCounts = filteredGuests.map(g => {
                 return { 
                     ...g, 
                     photoCount: window.photos.filter(p => p.guestId === g.id || (p.guestName && p.guestName.trim() === g.name)).length 
@@ -1381,13 +1439,14 @@
 
                 const regBadge = g.registered ? `<span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded font-bold inline-block ml-2">Registrado</span>` : '';
                 const igBadge = g.igClicks ? `<span class="text-xs text-pink-600 font-bold bg-pink-50 px-2 py-1 rounded inline-block ml-2">IG: ${g.igClicks}</span>` : '';
+                const spinsBadge = g.extraPrizeSpins > 0 ? `<span class="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded font-bold inline-block ml-2" title="Tiros extra disponibles">🎁 Extras: ${g.extraPrizeSpins}</span>` : '';
                 const contactInfo = g.registered ? `<p class="text-xs text-stone-500 font-mono mt-2">📧 ${g.email || '-'} | 📱 ${g.whatsapp || '-'} | 🆔 ${g.cedula || '-'}</p>` : '';
 
                 li.innerHTML = `
                 <div class="flex-grow">
                     <div class="flex items-center flex-wrap gap-1">
                         <span class="font-bold text-stone-800 flex items-center gap-2 text-lg lg:text-2xl">${g.name} ${crownBadge}</span>
-                        ${regBadge} ${igBadge}
+                        ${regBadge} ${igBadge} ${spinsBadge}
                     </div>
                     <div class="flex items-center gap-3 mt-1.5 lg:mt-2">
                         <span class="text-sm font-bold text-amber-600 bg-white/50 px-2 py-0.5 rounded border border-white">Mesa ${g.table}</span>
@@ -1395,9 +1454,14 @@
                     </div>
                     ${contactInfo}
                 </div>
-                <button onclick="window.deleteGuest('${g.id}')" class="text-red-400 hover:text-red-600 bg-white/50 hover:bg-white p-3 lg:p-4 rounded-xl border border-transparent hover:border-red-100 transition-all shadow-sm flex-shrink-0 ml-2" title="Eliminar Invitado">
-                    <svg class="w-5 h-5 lg:w-6 lg:h-6"><use href="#icon-trash-2"></use></svg>
-                </button>
+                <div class="flex flex-col sm:flex-row gap-2 ml-4 flex-shrink-0 items-center justify-center">
+                    <button onclick="window.grantExtraPrizeSpin('${g.id}')" class="text-amber-500 hover:text-amber-600 bg-white/50 hover:bg-white p-3 rounded-xl border border-transparent hover:border-amber-100 transition-all shadow-sm" title="Dar 1 giro extra en Ruleta de Premios">
+                        <svg class="w-5 h-5 lg:w-6 lg:h-6"><use href="#icon-gift"></use></svg>
+                    </button>
+                    <button onclick="window.deleteGuest('${g.id}')" class="text-red-400 hover:text-red-600 bg-white/50 hover:bg-white p-3 rounded-xl border border-transparent hover:border-red-100 transition-all shadow-sm" title="Eliminar Invitado">
+                        <svg class="w-5 h-5 lg:w-6 lg:h-6"><use href="#icon-trash-2"></use></svg>
+                    </button>
+                </div>
                 `;
                 list.appendChild(li);
             });
@@ -1759,6 +1823,25 @@
                 await setDoc(getPublicDoc("configuracion", "general"), { eventType: newType }, { merge: true });
                 alert("Tipos de retos actualizados correctamente.");
             } catch (error) { console.error("Error actualizando retos:", error); }
+        };
+
+        window.grantExtraPrizeSpin = async function(id) {
+            const guest = window.guests.find(g => g.id === id);
+            if (!guest) return;
+            
+            const currentSpins = guest.extraPrizeSpins || 0;
+            const newSpins = currentSpins + 1;
+            
+            if (typeof window.handleSaveGuestData === 'function') {
+                const updatedId = await window.handleSaveGuestData(id, { extraPrizeSpins: newSpins });
+                if(updatedId) {
+                    alert(`¡Se ha concedido 1 oportunidad extra a ${guest.name}!\n\nLa próxima vez que el usuario inicie sesión con su nombre, verá la ruleta de premios antes de entrar a sus retos.`);
+                }
+            } else {
+                guest.extraPrizeSpins = newSpins;
+                renderAdminList();
+                alert(`Oportunidad extra concedida localmente a ${guest.name}.`);
+            }
         };
 
         window.deleteGuest = async function(id) {
