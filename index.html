@@ -1383,12 +1383,15 @@
         window.exportGuestsCSV = function() {
             if (window.guests.length === 0) { alert("No hay datos para exportar."); return; }
             
-            let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "Nombre,Mesa,WhatsApp,Correo,Cedula,Clics_Instagram,Fotos_Subidas\n";
+            // UTF-8 BOM (\uFEFF) para que Excel reconozca tildes y caracteres especiales
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            
+            // Usamos punto y coma (;) como separador para garantizar que en Excel (Español) se abran en celdas separadas
+            csvContent += "Nombres y Apellidos;Número de WhatsApp;Correo Electrónico;Cédula o Documento\n";
             
             window.guests.forEach(g => {
-                const photoCount = window.photos.filter(p => p.guestId === g.id || (p.guestName && p.guestName.trim() === g.name)).length;
-                let row = `"${g.name || ''}","${g.table || ''}","${g.whatsapp || ''}","${g.email || ''}","${g.cedula || ''}","${g.igClicks || 0}","${photoCount}"`;
+                // Generamos la fila con los datos solicitados exactos
+                let row = `"${g.name || ''}";"${g.whatsapp || ''}";"${g.email || ''}";"${g.cedula || ''}"`;
                 csvContent += row + "\n";
             });
 
