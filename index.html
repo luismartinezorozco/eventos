@@ -1,2001 +1,263 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DINASTIA</title>
+    <title>404 - Página no encontrada | EQB Studio</title>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- JSZip para descargar todas las fotos -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts (Outfit for a modern design studio look) -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
     
     <script>
-        // --- INICIO_RESPALDO ---
-        window.appConfig = {
-        "isOptimized": true,
-        "title": "¡Bienvenidos! a mis XV",
-        "subtitle": "SOFIA ARIZA NUÑES",
-        "searchBtnText": "Buscar mi mesa",
-        "rouletteText": "Girar y mira tu reto",
-        "tableLabelText": "TU NUMERO DE MESA ES: ",
-        "acceptBtnText": "Aceptar",
-        "videoTitleText": "Mensaje de poder",
-        "dashboardSubtitle": "Nos alegra mucho que estés aquí.",
-        "rouletteBg": "https://www.image2url.com/r2/default/images/1783601847040-1a6117b6-447c-47aa-be77-ea03a5f12b59.jpg",
-        "rouletteCenter": "https://www.image2url.com/r2/default/images/1783648890851-1bfcfe83-0677-4944-ab14-4eb0eb61bab2.png",
-        "videoLink": "",
-        "videoLoop": true,
-        "showVideoBtn": false,
-        "homeLogoUrl": "https://www.image2url.com/r2/default/images/1783602826755-b215ed2b-7b9d-4793-a1de-c7332a26e656.png",
-        "adminPassword": "admin123",
-        "eventType": "cumpleanos",
-        "allowAnonymous": false,
-        "qrLogo": "https://www.image2url.com/r2/default/images/1783603550797-ff5d71d5-2f89-488f-b293-7498736444be.png",
-        "themeColor": "blue",
-        "requireRegistration": false,
-        "instagramUrl": "https://instagram.com/NELLYSDELUQUEZ",
-        "prizeOptions": "Opción 1, Opción 2,Síguelo intentando",
-        "specialPassword": "1234",
-        "enablePrizeRoulette": true,
-        "homeLogoSize": 500
-};
-        // --- FIN_RESPALDO ---
-        
-        // Variables para el control de temas de color en vivo
-        window.baseFileTheme = 'blue'; 
-        window.currentDOMTheme = window.baseFileTheme;
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        eqb: {
+                            orange: '#FF6400', // EQB Studio brand orange
+                            dark: '#000000',
+                            gray: '#1A1A1A'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
     </script>
-
+    
     <style>
-        /* Clases de utilidad */
-        .hidden-view { display: none !important; }
-        
-        /* Animación para el conteo regresivo y modales */
-        @keyframes pop-in {
-            0% { transform: scale(0.5); opacity: 0; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            margin: 0;
+            overflow-x: hidden;
         }
-        .animate-pop {
-            animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+
+        /* Floating animation for the mascot */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Subtle pulse for the interactive hint */
+        @keyframes gentlePulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        .animate-hint {
+            animation: gentlePulse 2s infinite;
+        }
+
+        /* Button Glow Effects */
+        .btn-glow:hover {
+            box-shadow: 0 0 20px rgba(255, 100, 0, 0.6);
+            transform: translateY(-3px);
         }
         
-        /* Scrollbar personalizado para TVs/Desktop */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(214, 211, 209, 0.5); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(168, 162, 158, 0.8); }
+        .transition-all-custom {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* Background Canvas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Cursor interaction text */
+        .mascot-container {
+            cursor: pointer;
+        }
     </style>
 </head>
-<body class="text-stone-800 font-sans antialiased relative min-h-[100dvh]">
+<body class="antialiased selection:bg-eqb-orange selection:text-white flex items-center justify-center min-h-screen">
 
-    <!-- ==========================================
-         OPTIMIZACIÓN DE ICONOS (SVG SPRITE SHEET)
-         ========================================== -->
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-        <defs>
-            <symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
-            <symbol id="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
-            <symbol id="icon-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
-            <symbol id="icon-triangle" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/></symbol>
-            <symbol id="icon-dices" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="12" height="12" x="2" y="10" rx="2" ry="2"/><path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6"/><path d="M6 18h.01"/><path d="M10 14h.01"/><path d="M15 6h.01"/><path d="M18 9h.01"/></symbol>
-            <symbol id="icon-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
-            <symbol id="icon-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></symbol>
-            <symbol id="icon-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect width="20" height="5" x="2" y="7"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></symbol>
-            <symbol id="icon-shuffle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></symbol>
-            <symbol id="icon-play-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></symbol>
-            <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
-            <symbol id="icon-qr-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></symbol>
-            <symbol id="icon-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
-            <symbol id="icon-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
-            <symbol id="icon-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
-            <symbol id="icon-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></symbol>
-            <symbol id="icon-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></symbol>
-            <symbol id="icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
-            <symbol id="icon-party-popper" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12v0c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11v0c-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98v0C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></symbol>
-            <symbol id="icon-video" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></symbol>
-            <symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
-            <symbol id="icon-log-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></symbol>
-            <symbol id="icon-list-ordered" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></symbol>
-            <symbol id="icon-trash-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></symbol>
-            <symbol id="icon-folder-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/><path d="M12 10v6"/><path d="m15 13-3 3-3-3"/></symbol>
-            <symbol id="icon-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
-            <symbol id="icon-crown" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"/></symbol>
-            <symbol id="icon-loader-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></symbol>
-            <symbol id="icon-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></symbol>
-            <symbol id="icon-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></symbol>
-            <symbol id="icon-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></symbol>
-            <symbol id="icon-file-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></symbol>
-        </defs>
-    </svg>
+    <canvas id="particles-canvas"></canvas>
 
-    <!-- FONDO GLOBAL INMERSIVO -->
-    <div class="fixed inset-0 w-full h-full pointer-events-none z-[-1] bg-gradient-to-br from-blue-50 via-stone-100 to-stone-200">
-        <div class="absolute -top-24 -left-24 w-96 h-96 bg-blue-200/40 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 right-0 w-[30rem] h-[30rem] bg-stone-300/50 rounded-full blur-3xl"></div>
-    </div>
-
-    <!-- INPUTS GLOBAL DE ARCHIVOS (Ocultos) -->
-    <input type="file" id="camera-file-input" accept="image/*" capture="environment" class="hidden">
-    <input type="file" id="gallery-file-input" accept="image/*" class="hidden">
-
-    <!-- MODAL FOTOS -->
-    <div id="photo-modal" class="fixed inset-0 bg-black/95 z-[100] hidden flex-col items-center justify-center p-4">
-        <div class="absolute top-6 right-6 flex gap-4 z-50">
-            <button onclick="window.downloadCurrentPhoto()" class="text-stone-900 bg-blue-500 hover:bg-blue-400 p-3 lg:p-4 rounded-full transition-colors shadow-lg" title="Descargar foto">
-                <svg class="w-6 h-6 lg:w-8 lg:h-8"><use href="#icon-download"></use></svg>
-            </button>
-            <button onclick="window.closePhotoModal()" class="text-white bg-white/20 hover:bg-white/30 p-3 lg:p-4 rounded-full transition-colors shadow-lg backdrop-blur-md" title="Cerrar">
-                <svg class="w-6 h-6 lg:w-8 lg:h-8"><use href="#icon-x"></use></svg>
-            </button>
-        </div>
-        <img id="modal-image" src="" alt="Foto en grande" class="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl">
-        <p id="modal-guest-name" class="text-stone-300 mt-6 text-lg lg:text-2xl 2xl:text-3xl font-medium tracking-wide"></p>
-        <p id="modal-challenge-name" class="text-blue-400 mt-2 text-sm md:text-base lg:text-xl 2xl:text-2xl font-medium tracking-wide hidden text-center max-w-lg lg:max-w-3xl px-4 italic"></p>
-    </div>
-
-    <!-- MODAL VIDEO DE BIENVENIDA -->
-    <div id="modal-welcome-video" class="fixed inset-0 bg-black z-[9999] hidden flex-col items-center justify-center">
-        <button id="welcome-video-close-btn" onclick="window.closeWelcomeVideo()" class="absolute top-6 left-6 md:top-8 md:left-8 text-white p-4 lg:p-6 bg-black/50 hover:bg-black/80 rounded-full transition-all duration-500 z-50 backdrop-blur-md shadow-2xl border border-white/20 flex items-center justify-center transform translate-y-0 opacity-100" title="Volver al inicio">
-            <svg class="w-7 h-7 lg:w-10 lg:h-10"><use href="#icon-arrow-left"></use></svg>
-        </button>
-        <div id="video-wrapper" class="w-full h-full flex justify-center items-center bg-black">
-            <!-- Video inyectado dinámicamente -->
-        </div>
-    </div>
-
-    <!-- ==========================================
-         MODAL REGISTRO OBLIGATORIO (PASO 1)
-         ========================================== -->
-    <div id="modal-registration-flow" class="fixed inset-0 bg-stone-900/95 backdrop-blur-md z-[120] hidden flex-col items-center justify-center p-4 sm:p-6 overflow-y-auto">
-        <div class="max-w-xl w-full bg-white/95 backdrop-blur-xl border border-white/50 rounded-[2rem] lg:rounded-[3rem] shadow-2xl p-6 md:p-10 text-center relative animate-pop my-auto">
-            <button onclick="window.closeRegistrationFlow()" class="absolute top-4 right-4 lg:top-6 lg:right-6 text-stone-400 hover:text-stone-700 transition-colors p-2 bg-stone-100 rounded-full">
-                <svg class="w-6 h-6 lg:w-8 lg:h-8"><use href="#icon-x"></use></svg>
-            </button>
-            <div class="w-16 h-16 lg:w-20 lg:h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8 lg:w-10 lg:h-10 text-blue-600"><use href="#icon-users"></use></svg>
-            </div>
-            <h2 class="text-2xl md:text-3xl lg:text-4xl font-serif text-stone-800 mb-2">Registro de Invitado</h2>
-            <p class="text-stone-600 text-sm md:text-base lg:text-lg mb-6">Por favor, completa tus datos para acceder a los retos y premios especiales.</p>
+    <main class="content-wrapper container mx-auto px-6 py-12 flex flex-col-reverse lg:flex-row items-center justify-between gap-12 lg:gap-24">
+        
+        <!-- Left Side: Text and Buttons -->
+        <div class="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
             
-            <form id="full-registration-form" onsubmit="window.submitFullRegistration(event)" class="space-y-4 text-left">
-                <div>
-                    <label class="block text-sm font-bold text-stone-700 mb-1">Nombres y Apellidos *</label>
-                    <input type="text" id="reg-name" required class="w-full p-4 rounded-xl border-2 border-stone-200 bg-stone-50 focus:bg-white focus:border-blue-400 outline-none text-lg transition-all" placeholder="Escribe tu nombre completo">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-stone-700 mb-1">Número de WhatsApp *</label>
-                    <input type="tel" id="reg-whatsapp" required class="w-full p-4 rounded-xl border-2 border-stone-200 bg-stone-50 focus:bg-white focus:border-blue-400 outline-none text-lg transition-all" placeholder="Ej. +573001234567">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-stone-700 mb-1">Correo Electrónico *</label>
-                    <input type="email" id="reg-email" required class="w-full p-4 rounded-xl border-2 border-stone-200 bg-stone-50 focus:bg-white focus:border-blue-400 outline-none text-lg transition-all" placeholder="tucorreo@ejemplo.com">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-stone-700 mb-1">Cédula o Documento (Opcional)</label>
-                    <input type="text" id="reg-cedula" class="w-full p-4 rounded-xl border-2 border-stone-200 bg-stone-50 focus:bg-white focus:border-blue-400 outline-none text-lg transition-all">
-                </div>
+            <div id="parallax-text" class="relative transition-transform duration-200 ease-out">
+                <h1 class="text-8xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-br from-eqb-orange to-yellow-400 mb-2 drop-shadow-lg">
+                    404
+                </h1>
+            </div>
+            
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                ¡Ups! Te saliste del lienzo.
+            </h2>
+            
+            <p class="text-gray-400 text-lg md:text-xl mb-10 max-w-lg leading-relaxed">
+                Parece que la página que buscas no existe o ha sido movida. Pero no te preocupes, en <strong>EQB Studio</strong> siempre encontramos una solución creativa.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                <!-- Website Button -->
+                <a href="https://eqbstudio.vercel.app" target="_blank" rel="noopener noreferrer" 
+                   class="btn-glow transition-all-custom flex items-center justify-center gap-3 bg-eqb-orange text-white px-8 py-4 rounded-full font-bold text-lg">
+                    <i class="fa-solid fa-globe text-xl"></i>
+                    Volver a la Web
+                </a>
                 
-                <p id="reg-error-msg" class="text-red-500 text-sm font-medium hidden text-center mt-2">Este correo ya está registrado.</p>
-
-                <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition-colors shadow-lg active:scale-95 mt-4">
-                    Continuar
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         MODAL SEGUIMIENTO INSTAGRAM (PASO 2)
-         ========================================== -->
-    <div id="modal-instagram-flow" class="fixed inset-0 bg-stone-900/95 backdrop-blur-md z-[120] hidden flex-col items-center justify-center p-4">
-        <div class="max-w-md w-full bg-white/95 backdrop-blur-xl border border-white/50 rounded-[2rem] lg:rounded-[3rem] shadow-2xl p-8 lg:p-12 text-center relative animate-pop">
-            <div class="w-20 h-20 lg:w-24 lg:h-24 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <svg class="w-10 h-10 lg:w-12 lg:h-12 text-white"><use href="#icon-instagram"></use></svg>
-            </div>
-            <h2 class="text-3xl md:text-4xl font-serif text-stone-800 mb-4">¡Síguenos en Instagram!</h2>
-            <p class="text-stone-600 text-lg mb-8">Apóyanos siguiendo nuestra cuenta oficial para desbloquear los siguientes pasos.</p>
-            
-            <button onclick="window.trackInstagramClick()" class="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-4 lg:py-6 rounded-2xl font-bold text-xl hover:opacity-90 transition-opacity shadow-xl active:scale-95 flex justify-center items-center gap-3 mb-6">
-                <svg class="w-6 h-6"><use href="#icon-instagram"></use></svg> Seguir Cuenta
-            </button>
-            
-            <button id="btn-continue-ig" onclick="window.continueAfterInstagram()" class="w-full bg-stone-200 text-stone-500 py-4 rounded-2xl font-semibold text-lg transition-all opacity-50 cursor-not-allowed" disabled>
-                Ya lo sigo / Continuar
-            </button>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         MODAL RULETA DE PREMIOS (PASO 3)
-         ========================================== -->
-    <div id="modal-prize-roulette" class="fixed inset-0 bg-stone-900/95 backdrop-blur-md z-[120] hidden flex-col items-center justify-center p-4">
-        <div class="max-w-md lg:max-w-xl w-full bg-white/95 backdrop-blur-xl border border-white/50 rounded-[2rem] shadow-2xl p-8 text-center space-y-6 relative">
-            <h2 class="text-3xl md:text-5xl font-serif text-blue-600 drop-shadow-sm">¡Ruleta de Premios!</h2>
-            <p class="text-stone-600 text-lg md:text-xl">Gira la ruleta para descubrir tu sorpresa de bienvenida.</p>
-
-            <div class="relative w-[60vw] h-[60vw] max-w-[300px] max-h-[300px] md:max-w-[400px] md:max-h-[400px] mx-auto my-8">
-                <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 z-30 text-stone-800 drop-shadow-md">
-                    <svg class="w-12 h-12 rotate-180"><use href="#icon-triangle"></use></svg>
-                </div>
-                <div id="prize-roulette-wheel" class="w-full h-full rounded-full border-8 border-blue-500 shadow-[0_0_25px_rgba(245,158,11,0.5)] relative overflow-hidden bg-white" style="transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1);">
-                    <div id="prize-segments-container" class="absolute inset-0 rounded-full overflow-hidden"></div>
-                    <div class="absolute inset-0 flex items-center justify-center z-20">
-                        <div class="w-20 h-20 bg-stone-900 rounded-full shadow-lg border-4 border-blue-500 flex items-center justify-center text-white">
-                            <svg class="w-8 h-8"><use href="#icon-award"></use></svg>
-                        </div>
-                    </div>
+                <!-- Social Buttons Container -->
+                <div class="flex gap-4 justify-center">
+                    <!-- Instagram Button -->
+                    <a href="https://instagram.com/eqbstudio" target="_blank" rel="noopener noreferrer"
+                       class="btn-glow transition-all-custom flex items-center justify-center bg-[#1A1A1A] hover:bg-gradient-to-br hover:from-purple-600 hover:via-pink-500 hover:to-orange-500 text-white w-14 sm:w-16 h-14 sm:h-16 rounded-full text-2xl border border-gray-800">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    
+                    <!-- WhatsApp Button -->
+                    <a href="https://api.whatsapp.com/send?phone=573021192800" target="_blank" rel="noopener noreferrer"
+                       class="btn-glow transition-all-custom flex items-center justify-center bg-[#1A1A1A] hover:bg-[#25D366] text-white w-14 sm:w-16 h-14 sm:h-16 rounded-full text-2xl border border-gray-800">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
                 </div>
             </div>
-
-            <button id="btn-spin-prize" onclick="window.spinPrizeRoulette()" class="w-full bg-stone-900 text-blue-400 py-4 lg:py-6 rounded-2xl font-bold text-xl hover:bg-stone-800 transition-colors shadow-xl active:scale-95 flex items-center justify-center gap-2">
-                <svg class="w-6 h-6"><use href="#icon-dices"></use></svg> ¡GIRAR RULETA!
-            </button>
-            <p id="prize-result-text" class="text-2xl font-bold text-blue-600 hidden mt-4 animate-pop"></p>
-            <button id="btn-finish-prize" onclick="window.finishPrizeFlow()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold text-xl hover:bg-blue-700 transition-colors shadow-lg active:scale-95 hidden mt-4">
-                Ir a los Retos
-            </button>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         MODAL GRAN RULETA FINAL (PREMIO MAYOR)
-         ========================================== -->
-    <div id="modal-grand-roulette" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[150] hidden flex-col items-center justify-center p-4 overflow-hidden">
-        <button onclick="window.closeGrandRoulette()" class="absolute top-6 right-6 text-white/50 hover:text-white p-2 transition-colors z-50">
-            <svg class="w-10 h-10"><use href="#icon-x"></use></svg>
-        </button>
-        
-        <div class="text-center mb-8 z-10 relative">
-            <h2 class="text-5xl md:text-7xl font-serif text-blue-500 drop-shadow-[0_0_15px_rgba(245,158,11,0.8)] tracking-widest uppercase mb-2">Sorteo Mayor</h2>
-            <p class="text-white/80 text-xl md:text-3xl font-light">Buscando al afortunado ganador entre todos los registrados...</p>
         </div>
 
-        <div class="relative w-[90vw] h-[90vw] max-w-[600px] max-h-[600px] 2xl:max-w-[800px] 2xl:max-h-[800px] mx-auto z-10">
-            <div class="absolute -top-10 left-1/2 transform -translate-x-1/2 z-30 text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]">
-                <svg class="w-16 h-16 rotate-180"><use href="#icon-triangle"></use></svg>
+        <!-- Right Side: Mascot Image -->
+        <div class="flex-1 flex flex-col items-center justify-center relative w-full max-w-md lg:max-w-xl mascot-container" onclick="toggleMascot()">
+            <!-- Hint badge -->
+            <div class="absolute -top-6 bg-gray-800 text-eqb-orange px-4 py-1.5 rounded-full text-sm font-bold border border-gray-700 animate-hint z-20 flex items-center gap-2">
+                <i class="fa-solid fa-hand-pointer"></i> ¡Hazme clic!
             </div>
             
-            <div class="w-full h-full rounded-full border-[12px] border-blue-500 shadow-[0_0_50px_rgba(245,158,11,0.6)] relative overflow-hidden bg-stone-900">
-                <canvas id="grand-roulette-canvas" class="w-full h-full rounded-full" style="transition: transform 7s cubic-bezier(0.1, 0, 0.1, 1);"></canvas>
-                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div class="w-24 h-24 bg-white rounded-full shadow-[0_0_20px_rgba(0,0,0,1)] border-8 border-blue-500 flex items-center justify-center text-blue-600">
-                        <svg class="w-10 h-10"><use href="#icon-crown"></use></svg>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <button id="btn-spin-grand" onclick="window.spinGrandRoulette()" class="mt-12 bg-gradient-to-r from-blue-500 to-yellow-600 text-stone-900 py-5 px-12 rounded-full font-black text-2xl lg:text-4xl hover:scale-105 transition-transform shadow-[0_0_30px_rgba(245,158,11,0.5)] active:scale-95 z-10 relative">
-            ¡INICIAR SORTEO!
-        </button>
-
-        <div id="grand-winner-banner" class="absolute inset-0 bg-blue-600/95 z-40 hidden flex-col items-center justify-center p-6 animate-pop">
-            <h3 class="text-white text-3xl md:text-5xl font-medium mb-4 uppercase tracking-widest opacity-90">Tenemos un ganador</h3>
-            <span id="grand-winner-name" class="text-6xl md:text-[8rem] font-black text-stone-900 drop-shadow-2xl font-serif text-center leading-tight"></span>
-            <button onclick="window.closeGrandWinner()" class="mt-12 bg-white text-blue-700 py-4 px-8 rounded-full font-bold text-2xl shadow-xl hover:bg-stone-100 transition-colors">Volver</button>
-            <div class="absolute inset-0 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxjaXJjbGUgY3g9IjEwJSIgY3k9IjIwJSIgcj0iNSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuNSIvPjxjaXJjbGUgY3g9IjkwJSIgY3k9IjE1JSIgcj0iNSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuNSIvPjxjaXJjbGUgY3g9IjMwJSIgY3k9IjgwJSIgcj0iNSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuNSIvPjwvc3ZnPg==')] opacity-50 mix-blend-overlay"></div>
-        </div>
-    </div>
-
-    <!-- MODAL ORIGINAL: REGISTRO DIRECTO (ANONIMO BÁSICO) -->
-    <div id="modal-anonymous-register" class="fixed inset-0 bg-stone-900/90 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
-        <div class="max-w-md w-full bg-white/95 backdrop-blur-xl border border-white/50 rounded-[2rem] lg:rounded-[3rem] shadow-2xl p-8 lg:p-12 text-center space-y-6 lg:space-y-8 relative overflow-hidden animate-pop">
-            <button onclick="window.closeAnonymousRegister()" class="absolute top-4 right-4 lg:top-6 lg:right-6 text-stone-400 hover:text-stone-700 transition-colors p-2 bg-stone-100 rounded-full">
-                <svg class="w-6 h-6 lg:w-8 lg:h-8"><use href="#icon-x"></use></svg>
-            </button>
-            <div class="w-16 h-16 lg:w-24 lg:h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                <svg class="w-8 h-8 lg:w-12 lg:h-12 text-blue-600"><use href="#icon-users"></use></svg>
-            </div>
-            <h2 class="text-2xl md:text-3xl lg:text-4xl font-serif text-stone-800">¿Quién eres?</h2>
-            <p class="text-stone-600 text-base lg:text-xl">Por favor, ingresa tu <span class="font-bold">nombre completo</span> para participar y guardar tus fotos.</p>
-            <form id="anonymous-register-form" onsubmit="window.submitAnonymousRegister(event)" class="space-y-4 lg:space-y-6 pt-4">
-                <input type="text" id="anonymous-name-input" placeholder="Ej. Ana Pérez" required minlength="3" class="w-full p-4 lg:p-6 rounded-xl lg:rounded-2xl border-2 border-white bg-stone-50 focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-500/20 outline-none text-lg lg:text-2xl transition-all shadow-inner text-center">
-                <button type="submit" class="w-full bg-blue-600 text-white py-4 lg:py-6 rounded-xl lg:rounded-2xl font-semibold text-lg lg:text-2xl hover:bg-blue-700 transition-colors shadow-lg active:scale-95 flex justify-center items-center gap-2">
-                    Continuar a los Retos
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- DINÁMICA ORIGINAL DE RETOS (RULETA, CONTEO, REVELACIÓN Y ÉXITO) -->
-    <div id="modal-roulette" class="fixed inset-0 bg-stone-900/90 backdrop-blur-sm z-[100] hidden flex-col items-center justify-center p-4">
-        <div class="max-w-sm md:max-w-md lg:max-w-xl 2xl:max-w-3xl w-full bg-white/90 backdrop-blur-xl border border-white/50 rounded-[2rem] shadow-2xl p-8 lg:p-12 2xl:p-16 text-center space-y-6 lg:space-y-10">
-            <h2 class="text-3xl md:text-4xl lg:text-5xl 2xl:text-6xl font-serif text-stone-800">¡Misión Sorpresa!</h2>
-            <p id="roulette-desc-text" class="text-stone-600 text-sm md:text-base lg:text-xl 2xl:text-2xl"></p>
-
-            <div class="relative w-[60vw] h-[60vw] max-w-[250px] max-h-[250px] md:max-w-[320px] md:max-h-[320px] lg:max-w-[450px] lg:max-h-[450px] 2xl:max-w-[600px] 2xl:max-h-[600px] mx-auto my-6 lg:my-12">
-                <div class="absolute -top-6 md:-top-8 lg:-top-10 2xl:-top-14 left-1/2 transform -translate-x-1/2 z-30 text-blue-600 drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]">
-                    <svg class="w-10 h-10 md:w-14 md:h-14 lg:w-16 lg:h-16 2xl:w-24 2xl:h-24 rotate-180"><use href="#icon-triangle"></use></svg>
-                </div>
-                <div id="roulette-wheel" class="w-full h-full rounded-full border-8 lg:border-[12px] 2xl:border-[16px] border-stone-900 shadow-[0_0_25px_rgba(0,0,0,0.5)] relative overflow-hidden bg-cover bg-center" style="transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1);">
-                    <div class="absolute inset-0" style="background: conic-gradient(rgba(0,0,0,0.4) 0 45deg, rgba(255,255,255,0.15) 45deg 90deg, rgba(0,0,0,0.4) 90deg 135deg, rgba(255,255,255,0.15) 135deg 180deg, rgba(0,0,0,0.4) 180deg 225deg, rgba(255,255,255,0.15) 225deg 270deg, rgba(0,0,0,0.4) 270deg 315deg, rgba(255,255,255,0.15) 315deg 360deg);"></div>
-                    <div class="absolute inset-1.5 md:inset-2 lg:inset-3 rounded-full border-[3px] md:border-[4px] lg:border-[6px] border-blue-500/50 z-10"></div>
-                    <div class="absolute inset-0 flex items-center justify-center z-10">
-                        <div class="w-full h-1 lg:h-1.5 2xl:h-2 bg-stone-900/80 absolute transform rotate-0"></div>
-                        <div class="w-full h-1 lg:h-1.5 2xl:h-2 bg-stone-900/80 absolute transform rotate-45"></div>
-                        <div class="w-full h-1 lg:h-1.5 2xl:h-2 bg-stone-900/80 absolute transform rotate-90"></div>
-                        <div class="w-full h-1 lg:h-1.5 2xl:h-2 bg-stone-900/80 absolute transform rotate-135"></div>
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center z-20">
-                        <div class="w-20 h-20 md:w-28 md:h-28 lg:w-40 lg:h-40 2xl:w-56 2xl:h-56 bg-white rounded-full shadow-[0_0_15px_rgba(0,0,0,0.7)] border-[4px] lg:border-[6px] 2xl:border-[8px] border-blue-500 flex items-center justify-center p-1 md:p-2">
-                            <img id="roulette-center-img" src="" alt="Centro" class="w-full h-full object-contain rounded-full" onerror="this.src='https://via.placeholder.com/150/f59e0b/ffffff?text=Boda'" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <button id="btn-spin" onclick="window.spinRoulette()" class="w-full bg-blue-600 text-white py-4 md:py-5 lg:py-6 2xl:py-8 rounded-xl lg:rounded-2xl font-semibold text-xl lg:text-2xl 2xl:text-4xl hover:bg-blue-700 transition-colors shadow-xl active:scale-95 flex items-center justify-center gap-2 lg:gap-4">
-                <svg class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-12 2xl:h-12"><use href="#icon-dices"></use></svg> ¡GIRAR RULETA!
-            </button>
-            <button onclick="window.skipRoulette()" class="text-stone-500 text-sm md:text-base lg:text-xl 2xl:text-2xl underline mt-2 hover:text-stone-800 transition-colors">
-                Saltar reto e ir a mi panel
-            </button>
-        </div>
-    </div>
-
-    <!-- Modal Conteo -->
-    <div id="modal-countdown" class="fixed inset-0 bg-blue-600/95 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
-        <div class="text-center flex flex-col items-center justify-center w-full">
-            <h3 class="text-white text-xl md:text-3xl lg:text-5xl font-medium mb-4 lg:mb-8 uppercase tracking-widest opacity-80">Preparando reto...</h3>
-            <span id="countdown-text" class="text-9xl md:text-[12rem] lg:text-[16rem] 2xl:text-[24rem] font-black text-white drop-shadow-2xl font-serif mx-auto flex items-center justify-center">3</span>
-        </div>
-    </div>
-
-    <!-- Modal Instrucción -->
-    <div id="modal-challenge-instruction" class="fixed inset-0 bg-stone-900/90 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
-        <div class="max-w-md md:max-w-lg lg:max-w-2xl 2xl:max-w-4xl w-full bg-white/90 backdrop-blur-xl border border-white/50 rounded-[2rem] lg:rounded-[3rem] shadow-2xl p-8 lg:p-12 2xl:p-16 text-center space-y-6 lg:space-y-10 relative overflow-hidden animate-pop">
-            <div class="w-20 h-20 lg:w-32 lg:h-32 2xl:w-40 2xl:h-40 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2 lg:mb-6">
-                <svg class="w-10 h-10 lg:w-16 lg:h-16 2xl:w-20 2xl:h-20 text-blue-600"><use href="#icon-info"></use></svg>
-            </div>
-            <h2 class="text-2xl md:text-3xl lg:text-5xl 2xl:text-6xl font-serif text-stone-800">¡Atención!</h2>
-            <p class="text-stone-600 text-lg md:text-xl lg:text-2xl 2xl:text-4xl">Sube la foto a nuestra galería cuando lo consigas y demuestra que eres el mejor invitado.</p>
-            <button onclick="window.showChallengeReveal()" class="w-full bg-blue-600 text-white py-4 lg:py-6 2xl:py-8 rounded-xl lg:rounded-2xl font-semibold text-lg lg:text-2xl 2xl:text-4xl hover:bg-blue-700 transition-colors shadow-lg mt-4 lg:mt-8 relative z-10">
-                Siguiente
-            </button>
-        </div>
-    </div>
-
-    <!-- Revelación -->
-    <div id="modal-challenge-reveal" class="fixed inset-0 bg-stone-900/90 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
-        <div class="max-w-md md:max-w-lg lg:max-w-3xl 2xl:max-w-5xl w-full bg-white/95 backdrop-blur-xl border border-white/50 rounded-[2rem] lg:rounded-[3rem] shadow-2xl p-8 lg:p-16 2xl:p-24 text-center space-y-6 lg:space-y-10 relative overflow-hidden">
-            <div class="absolute -top-10 -left-10 w-32 h-32 lg:w-64 lg:h-64 bg-blue-100 rounded-full opacity-50 blur-2xl"></div>
-            <div class="absolute -bottom-10 -right-10 w-32 h-32 lg:w-64 lg:h-64 bg-blue-200 rounded-full opacity-50 blur-2xl"></div>
-            <h2 class="text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl font-serif text-blue-600 uppercase tracking-widest relative z-10">Tu Reto Es:</h2>
-            <div class="bg-white/60 rounded-2xl lg:rounded-[2rem] p-6 lg:p-12 2xl:p-16 border border-white shadow-inner relative z-10">
-                <p id="challenge-reveal-text" class="text-2xl md:text-3xl lg:text-5xl 2xl:text-7xl font-medium text-stone-800 italic leading-relaxed">...</p>
-            </div>
-            <button id="btn-accept-challenge" onclick="window.closeChallengeReveal()" class="w-full bg-stone-900 text-white py-4 lg:py-6 2xl:py-8 rounded-xl lg:rounded-2xl font-semibold text-lg lg:text-2xl 2xl:text-4xl hover:bg-stone-800 transition-colors shadow-lg mt-4 lg:mt-8 relative z-10">
-                ¡Aceptar Reto!
-            </button>
-        </div>
-    </div>
-
-    <!-- Éxito -->
-    <div id="modal-challenge-success" class="fixed inset-0 bg-stone-900/90 backdrop-blur-md z-[110] hidden flex-col items-center justify-center p-4">
-        <div class="max-w-sm md:max-w-md lg:max-w-xl 2xl:max-w-3xl w-full bg-white/95 backdrop-blur-xl border border-white/50 rounded-[2rem] lg:rounded-[3rem] shadow-2xl p-8 lg:p-12 2xl:p-16 text-center space-y-6 lg:space-y-8 animate-pop">
-            <div class="w-20 h-20 lg:w-32 lg:h-32 2xl:w-40 2xl:h-40 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                <svg class="w-10 h-10 lg:w-16 lg:h-16 2xl:w-20 2xl:h-20 text-green-600"><use href="#icon-check-circle"></use></svg>
-            </div>
-            <h2 class="text-3xl md:text-4xl lg:text-5xl 2xl:text-6xl font-serif text-stone-800">¡Reto Verificado!</h2>
-            <p class="text-stone-600 text-lg md:text-xl lg:text-2xl 2xl:text-3xl">Tu foto se está subiendo a la galería.</p>
-            <div class="bg-blue-50/80 rounded-2xl lg:rounded-3xl p-4 lg:p-8 border border-blue-200 mt-4 lg:mt-8 backdrop-blur-sm">
-                <p class="text-blue-800 font-semibold mb-2 lg:mb-4 lg:text-xl 2xl:text-3xl flex items-center justify-center gap-2"><svg class="w-5 h-5 lg:w-8 lg:h-8"><use href="#icon-gift"></use></svg> ¡Sigue así!</p>
-                <p class="text-sm md:text-base lg:text-xl 2xl:text-2xl text-blue-700">¿Aceptas el siguiente reto para ganar más oportunidades?</p>
-            </div>
-            <div class="grid grid-cols-2 gap-4 lg:gap-6 pt-2 lg:pt-6">
-                <button onclick="window.declineNextChallenge()" class="w-full bg-white/50 border border-white text-stone-700 py-3 lg:py-5 2xl:py-6 rounded-xl lg:rounded-2xl font-semibold lg:text-xl 2xl:text-2xl hover:bg-white/80 transition-colors shadow-sm">No acepto</button>
-                <button onclick="window.acceptNextChallenge()" class="w-full bg-blue-600 text-white py-3 lg:py-5 2xl:py-6 rounded-xl lg:rounded-2xl font-semibold lg:text-xl 2xl:text-2xl hover:bg-blue-700 transition-colors shadow-lg flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4 lg:w-6 lg:h-6"><use href="#icon-shuffle"></use></svg> ¡Sí, acepto!
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         VISTA 1: TÓTEM (ENTRADA PRINCIPAL)
-         ========================================== -->
-    <div id="view-totem" class="view min-h-[100dvh] w-full flex flex-col justify-between items-center px-4 md:px-6 py-4 md:py-6 lg:py-8 relative z-10 overflow-y-auto">
-        <div class="w-full flex-grow flex flex-col items-center justify-center max-w-2xl lg:max-w-4xl 2xl:max-w-6xl space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10 2xl:space-y-12 my-2 md:my-4">
-            
-            <img id="totem-home-logo" src="" alt="Logo del Evento" class="hidden object-contain drop-shadow-md -mb-2 sm:-mb-4 lg:-mb-6 px-4 transition-all duration-300" style="height: 250px;" />
-            
-            <div class="space-y-2 sm:space-y-3 lg:space-y-4 2xl:space-y-6 text-center w-full px-2 sm:px-4">
-                <h1 id="totem-title" class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl 2xl:text-[8rem] font-serif text-blue-700 tracking-tight drop-shadow-sm leading-tight min-h-[1em]"></h1>
-                <p id="totem-subtitle" class="text-lg sm:text-xl md:text-2xl lg:text-3xl 2xl:text-5xl text-stone-600 font-medium px-4 min-h-[1em]"></p>
-            </div>
-            <button id="totem-video-btn" onclick="window.openWelcomeVideo()" class="inline-flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 2xl:gap-6 bg-stone-900 text-blue-400 px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 2xl:px-14 2xl:py-6 rounded-full font-medium hover:bg-stone-800 transition-colors shadow-xl active:scale-95 text-base sm:text-lg lg:text-xl 2xl:text-3xl w-full max-w-[280px] sm:max-w-none sm:w-auto mx-auto mt-2 hidden">
-                <svg class="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 2xl:w-10 2xl:h-10 flex-shrink-0"><use href="#icon-play-circle"></use></svg>
-                <span id="totem-video-btn-text" class="truncate"></span>
-            </button>
-            <div id="totem-search-section" class="w-full space-y-3 sm:space-y-4 lg:space-y-6 2xl:space-y-8 pt-2 lg:pt-4 2xl:px-12">
-                <div class="relative text-left">
-                    <svg class="absolute left-4 sm:left-6 top-1/2 transform -translate-y-1/2 text-stone-400 w-5 h-5 sm:w-7 sm:h-7 lg:w-9 lg:h-9 2xl:w-12 2xl:h-12 pointer-events-none"><use href="#icon-search"></use></svg>
-                    <input type="text" id="search-input" placeholder="Escribe tu nombre para buscar..." class="w-full pl-12 sm:pl-16 lg:pl-20 2xl:pl-28 pr-4 sm:pr-6 py-4 sm:py-5 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl border-2 border-white/50 bg-white/60 backdrop-blur-md focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-500/20 text-lg sm:text-xl lg:text-2xl 2xl:text-4xl transition-all shadow-sm outline-none" />
-                </div>
-                <button id="btn-search" class="w-full bg-blue-600 text-white py-4 sm:py-5 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl font-semibold text-lg sm:text-xl lg:text-2xl 2xl:text-4xl hover:bg-blue-700 transition-colors shadow-lg active:scale-95"></button>
-            </div>
-            <div id="totem-anonymous-section" class="w-full hidden space-y-3 sm:space-y-4 lg:space-y-6 2xl:space-y-8 pt-2 lg:pt-4 2xl:px-12">
-                <button onclick="window.enterAnonymous()" class="w-full bg-blue-600 text-white py-4 sm:py-5 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl font-semibold text-lg sm:text-xl lg:text-2xl 2xl:text-4xl hover:bg-blue-700 transition-colors shadow-lg active:scale-95 flex items-center justify-center gap-2 sm:gap-3 lg:gap-5">
-                    <svg class="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-star"></use></svg> Entrar a los Retos
-                </button>
-            </div>
-            <div class="w-full relative flex items-center py-2 sm:py-4 lg:py-6 2xl:py-8 2xl:px-12">
-                <div class="flex-grow border-t-2 border-stone-300/60"></div>
-                <span class="flex-shrink-0 mx-3 sm:mx-6 text-stone-500 font-medium cursor-pointer select-none text-sm sm:text-base lg:text-xl 2xl:text-3xl hover:text-stone-600 transition-colors" onclick="window.handleSecretClick()" title="Doble tap secreto">O usa tu celular</span>
-                <div class="flex-grow border-t-2 border-stone-300/60"></div>
-            </div>
-            <div class="w-full 2xl:px-12">
-                <button onclick="window.switchView('view-show-qr')" class="w-full bg-white/50 backdrop-blur-md border-2 border-blue-200/50 text-blue-800 py-3 sm:py-4 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl font-semibold text-lg sm:text-xl lg:text-2xl 2xl:text-4xl hover:bg-white/80 transition-all flex items-center justify-center gap-2 sm:gap-3 lg:gap-5 2xl:gap-8 active:scale-95 shadow-sm">
-                    <svg class="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 2xl:w-12 2xl:h-12"><use href="#icon-qr-code"></use></svg> Mostrar Código QR
-                </button>
-            </div>
-        </div>
-        <div class="w-full flex justify-center mt-auto pt-4 pb-2 sm:pb-4 flex-shrink-0 relative z-20">
-            <button onclick="window.switchView('view-admin-login')" class="text-stone-400 hover:text-stone-600 flex items-center gap-2 text-xs sm:text-sm lg:text-base 2xl:text-xl transition-colors p-2 sm:p-3 rounded-full hover:bg-stone-200/50 bg-white/20 backdrop-blur-sm">
-                <svg class="w-4 h-4 lg:w-5 lg:h-5 2xl:w-7 2xl:h-7"><use href="#icon-users"></use></svg> Acceso Organizador
-            </button>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         VISTA 1.5: MOSTRAR CÓDIGO QR 
-         ========================================== -->
-    <div id="view-show-qr" class="view hidden-view min-h-[100dvh] w-full flex flex-col items-center justify-center p-4 sm:p-6 relative z-10 overflow-hidden">
-        
-        <div id="qr-watermark-bg" class="absolute inset-0 z-[-1] opacity-15 md:opacity-20 pointer-events-none transition-all" style="background-image: none;"></div>
-        
-        <button onclick="window.switchView('view-totem')" class="absolute top-6 right-6 sm:top-8 sm:right-8 lg:top-12 lg:right-12 2xl:top-16 2xl:right-16 text-stone-800 p-3 lg:p-5 2xl:p-6 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm">
-            <svg class="w-6 h-6 sm:w-7 sm:h-7 lg:w-10 lg:h-10 2xl:w-14 2xl:h-14"><use href="#icon-x"></use></svg>
-        </button>
-        <div class="w-full max-w-md lg:max-w-2xl 2xl:max-w-4xl flex flex-col items-center justify-center space-y-6 sm:space-y-10 lg:space-y-16 2xl:space-y-24 text-center my-auto">
-            <div class="space-y-3 sm:space-y-4 lg:space-y-8 px-4">
-                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl 2xl:text-8xl font-serif text-blue-700 drop-shadow-sm">Escanea con tu celular</h2>
-                <p class="text-stone-600 text-lg sm:text-xl lg:text-3xl 2xl:text-4xl">Abre la cámara de tu teléfono y apunta a este código para acceder a tu plataforma.</p>
-            </div>
-            <div class="bg-white/60 backdrop-blur-md p-6 sm:p-8 lg:p-12 2xl:p-16 rounded-[2rem] lg:rounded-[3rem] 2xl:rounded-[4rem] border-2 border-white/50 shadow-xl inline-block relative z-10 mx-4">
-                <div class="bg-white p-3 sm:p-4 lg:p-8 2xl:p-12 rounded-[1.5rem] sm:rounded-3xl lg:rounded-[2.5rem] 2xl:rounded-[3rem] shadow-sm">
-                    <div class="relative flex items-center justify-center w-52 h-52 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-[24rem] lg:h-[24rem] 2xl:w-[36rem] 2xl:h-[36rem]">
-                        <img id="dynamic-qr-img" src="" alt="Código QR" class="w-full h-full relative z-10 object-contain" />
-                    </div>
-                </div>
-            </div>
-            <p class="text-stone-500 font-medium tracking-wide text-center text-lg sm:text-xl lg:text-3xl 2xl:text-5xl uppercase">DINASTIA</p>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         VISTA 2: DASHBOARD DEL INVITADO 
-         ========================================== -->
-    <div id="view-guest-dashboard" class="view hidden-view min-h-[100dvh] w-full flex flex-col px-6 py-12 lg:py-16 2xl:py-24 max-w-3xl lg:max-w-5xl 2xl:max-w-7xl mx-auto space-y-12 lg:space-y-16 2xl:space-y-20 relative z-10">
-        <div class="flex justify-between items-center w-full">
-            <button onclick="window.logout()" class="p-3 lg:p-5 2xl:p-6 bg-white/50 backdrop-blur-md border border-white/50 rounded-full shadow-sm hover:bg-white/80 transition-colors text-stone-700">
-                <svg class="w-6 h-6 lg:w-8 lg:h-8 2xl:w-12 2xl:h-12"><use href="#icon-arrow-left"></use></svg>
-            </button>
-            <div class="p-2 bg-transparent"></div>
-        </div>
-        <div class="text-center space-y-2 lg:space-y-6">
-            <h2 class="text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl font-serif text-blue-700 tracking-tight drop-shadow-sm">¡Hola, <span id="guest-name-display"></span>!</h2>
-            <p id="dashboard-subtitle" class="text-xl lg:text-3xl 2xl:text-4xl text-stone-600"></p>
-        </div>
-        <div id="guest-table-container" class="w-full bg-white/60 backdrop-blur-md border-2 border-white/50 rounded-[2.5rem] lg:rounded-[3rem] p-10 lg:p-16 2xl:p-20 text-center shadow-sm">
-            <p id="table-label-text" class="text-sm md:text-base lg:text-xl 2xl:text-3xl text-stone-500 font-bold uppercase tracking-widest mb-2 lg:mb-6"></p>
-            <p id="guest-table-display" class="text-8xl md:text-9xl lg:text-[10rem] 2xl:text-[14rem] font-serif text-blue-600 drop-shadow-sm leading-none">--</p>
+            <!-- Mascot Image -->
+            <img id="mascot-image" 
+                 src="https://www.image2url.com/r2/default/images/1785201879269-cc23f276-17db-4a0a-b7fb-3c24e371d85b.png" 
+                 alt="Zorro EQB Studio" 
+                 class="w-full h-auto object-contain animate-float drop-shadow-2xl rounded-3xl">
         </div>
         
-        <div id="active-challenge-banner" class="hidden w-full">
-            <div class="bg-blue-50/70 backdrop-blur-md border-2 border-blue-200/50 rounded-[2rem] lg:rounded-[3rem] p-8 lg:p-12 2xl:p-16 shadow-sm text-center">
-                <p class="text-sm lg:text-xl 2xl:text-2xl font-bold uppercase tracking-widest text-blue-600 mb-4 lg:mb-8 flex items-center justify-center gap-2 lg:gap-4"><svg class="w-5 h-5 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10"><use href="#icon-star"></use></svg> Tu Reto Activo</p>
-                <p id="active-challenge-text" class="text-stone-800 italic font-medium text-2xl md:text-3xl lg:text-5xl 2xl:text-6xl mb-6 lg:mb-10 leading-relaxed">...</p>
-                <p class="text-sm lg:text-lg 2xl:text-2xl text-blue-800 mb-8 lg:mb-12 font-medium px-4 lg:px-8 py-3 lg:py-5 rounded-xl lg:rounded-2xl inline-block border border-blue-200/50">🎁 Sube la foto para completarlo y gana oportunidades.</p>
-                
-                <div id="challenge-action-container" class="space-y-4 lg:space-y-6 2xl:space-y-8">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 2xl:gap-8">
-                        <button onclick="window.triggerCameraUpload()" class="w-full bg-blue-600 text-white py-4 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl font-semibold text-lg lg:text-2xl 2xl:text-3xl hover:bg-blue-700 transition-colors flex md:flex-col items-center justify-center gap-2 lg:gap-4 active:scale-95 shadow-md">
-                            <svg class="w-7 h-7 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-camera"></use></svg><span>Tomar Foto</span>
-                        </button>
-                        <button onclick="window.triggerGalleryUpload()" class="w-full bg-stone-800 text-white py-4 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl font-semibold text-lg lg:text-2xl 2xl:text-3xl hover:bg-stone-900 transition-colors flex md:flex-col items-center justify-center gap-2 lg:gap-4 active:scale-95 shadow-md">
-                            <svg class="w-7 h-7 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-image"></use></svg><span>Subir Galería</span>
-                        </button>
-                    </div>
-                    <button onclick="window.postponeChallenge()" class="w-full bg-white/50 backdrop-blur-sm border border-white text-stone-700 py-4 lg:py-6 2xl:py-8 rounded-2xl lg:rounded-3xl font-semibold text-lg lg:text-2xl 2xl:text-3xl hover:bg-white/80 transition-colors shadow-sm flex items-center justify-center gap-2 lg:gap-4 active:scale-95">
-                        <svg class="w-5 h-5 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10"><use href="#icon-clock"></use></svg> Posponer y pedir otro
-                    </button>
-                </div>
-                
-                <p id="pending-challenges-text" class="text-sm lg:text-lg 2xl:text-xl text-stone-500 mt-4 lg:mt-8 hidden text-center font-medium">Tienes <span id="pending-count" class="text-blue-600 font-bold">0</span> retos pendientes.</p>
-                
-                <div id="next-challenge-container" class="hidden space-y-4 lg:space-y-8 mt-6 lg:mt-10">
-                    <p class="text-lg lg:text-2xl 2xl:text-3xl font-bold text-green-600 flex items-center justify-center gap-2 lg:gap-4">
-                        <svg class="w-6 h-6 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-party-popper"></use></svg> ¡Reto superado excelente!
-                    </p>
-                    <button onclick="window.getNewChallenge()" class="w-full bg-blue-500 text-stone-900 py-4 lg:py-8 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-lg lg:text-3xl 2xl:text-4xl hover:bg-blue-400 transition-colors shadow-md flex items-center justify-center gap-2 lg:gap-4 active:scale-95">
-                        <svg class="w-6 h-6 lg:w-10 lg:h-10 2xl:w-12 2xl:h-12"><use href="#icon-shuffle"></use></svg> ¡Dame otro reto!
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <div class="w-full bg-white/60 backdrop-blur-md rounded-[2.5rem] lg:rounded-[3rem] border border-white/50 p-8 lg:p-12 2xl:p-16 text-center shadow-sm">
-            <h3 class="font-serif text-2xl lg:text-4xl 2xl:text-5xl text-stone-800 mb-2 lg:mb-6">Ayúdanos a capturar el momento</h3>
-            <p class="text-stone-600 text-lg lg:text-2xl 2xl:text-3xl mb-6 lg:mb-10">Sube las fotos y videos que tomes hoy a nuestra galería compartida.</p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 2xl:gap-8">
-                <button onclick="window.triggerCameraUpload()" class="w-full bg-blue-600 text-white py-5 lg:py-8 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-lg lg:text-3xl 2xl:text-4xl hover:bg-blue-700 transition-colors flex items-center justify-center gap-3 lg:gap-5 active:scale-95 shadow-md">
-                    <svg class="w-8 h-8 lg:w-12 lg:h-12 2xl:w-16 2xl:h-16"><use href="#icon-camera"></use></svg><span>Tomar Foto</span>
-                </button>
-                <button onclick="window.triggerGalleryUpload()" class="w-full bg-stone-800 text-white py-5 lg:py-8 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-lg lg:text-3xl 2xl:text-4xl hover:bg-stone-900 transition-colors flex items-center justify-center gap-3 lg:gap-5 active:scale-95 shadow-md">
-                    <svg class="w-8 h-8 lg:w-12 lg:h-12 2xl:w-16 2xl:h-16"><use href="#icon-image"></use></svg><span>Subir Galería</span>
-                </button>
-            </div>
-        </div>
-    </div>
+    </main>
 
-    <!-- ==========================================
-         VISTA 3: LOGIN DE ADMINISTRADOR 
-         ========================================== -->
-    <div id="view-admin-login" class="view hidden-view min-h-[100dvh] w-full flex flex-col items-center justify-center p-6 relative z-10">
-        <button onclick="window.switchView('view-totem')" class="absolute top-8 right-8 lg:top-12 lg:right-12 2xl:top-16 2xl:right-16 text-stone-800 p-3 lg:p-5 2xl:p-6 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm">
-            <svg class="w-7 h-7 lg:w-10 lg:h-10 2xl:w-14 2xl:h-14"><use href="#icon-x"></use></svg>
-        </button>
-        <div class="w-full max-w-md lg:max-w-xl 2xl:max-w-2xl flex flex-col items-center justify-center space-y-8 lg:space-y-12 2xl:space-y-16 text-center">
-            <div class="w-20 h-20 lg:w-32 lg:h-32 2xl:w-40 2xl:h-40 bg-white/60 backdrop-blur-md border border-white/50 rounded-full flex items-center justify-center shadow-sm">
-                <svg class="w-10 h-10 lg:w-16 lg:h-16 2xl:w-20 2xl:h-20 text-stone-600"><use href="#icon-lock"></use></svg>
-            </div>
-            <div class="space-y-2 lg:space-y-6">
-                <h2 class="text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-serif text-blue-700 drop-shadow-sm">Acceso Privado</h2>
-                <p class="text-stone-600 text-lg lg:text-2xl 2xl:text-3xl">Ingresa la contraseña del organizador.</p>
-            </div>
-            <form id="admin-login-form" class="space-y-4 lg:space-y-8 w-full pt-4 lg:pt-8">
-                <input type="password" id="admin-password-input" placeholder="Contraseña" class="w-full p-5 lg:p-8 2xl:p-10 rounded-2xl lg:rounded-3xl border-2 border-white/50 bg-white/60 backdrop-blur-md focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-500/20 text-2xl lg:text-4xl 2xl:text-5xl transition-all outline-none text-center tracking-widest shadow-sm" required>
-                <p id="admin-login-error" class="text-red-500 text-sm lg:text-lg 2xl:text-xl hidden font-medium">Contraseña incorrecta. Inténtalo de nuevo.</p>
-                <button type="submit" class="w-full bg-blue-600 text-white py-5 lg:py-8 2xl:py-10 rounded-2xl lg:rounded-3xl font-semibold text-xl lg:text-3xl 2xl:text-4xl hover:bg-blue-700 transition-colors shadow-lg active:scale-95 mt-2 lg:mt-6">
-                    Entrar al Panel
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         VISTA 4: PANEL DE ADMINISTRACIÓN 
-         ========================================== -->
-    <div id="view-admin" class="view hidden-view min-h-[100dvh] w-full p-4 sm:p-6 md:p-12 lg:p-16 2xl:p-24 relative z-10">
-        <div class="max-w-7xl 2xl:max-w-[100rem] mx-auto space-y-8 lg:space-y-12 2xl:space-y-16 mt-4">
-            <div class="bg-white/60 backdrop-blur-xl border border-white/50 p-6 lg:p-8 2xl:p-10 rounded-3xl lg:rounded-[2.5rem] shadow-sm text-stone-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 lg:gap-6 relative overflow-hidden">
-                <div class="flex items-center gap-3 lg:gap-6 z-10">
-                    <svg class="w-8 h-8 lg:w-12 lg:h-12 2xl:w-16 2xl:h-16 text-blue-600"><use href="#icon-users"></use></svg>
-                    <div><h1 class="text-3xl lg:text-4xl 2xl:text-6xl font-bold font-serif text-blue-700">Panel de Organización</h1></div>
-                </div>
-                <div class="flex flex-wrap gap-4 z-10 w-full md:w-auto">
-                    <!-- BOTÓN OCULTO/DISCRETO PARA GRAN RULETA -->
-                    <button onclick="window.promptGrandRoulette()" class="px-5 py-3 lg:px-8 lg:py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl lg:rounded-2xl hover:opacity-90 transition-opacity text-sm lg:text-xl font-bold flex items-center gap-2 shadow-lg active:scale-95 w-full sm:w-auto justify-center" title="Sorteo Final Premio Mayor">
-                        <svg class="w-5 h-5 lg:w-6 lg:h-6"><use href="#icon-award"></use></svg> Sorteo Final
-                    </button>
-                    <button onclick="window.switchView('view-totem')" class="px-5 py-3 lg:px-8 lg:py-4 bg-white/80 border border-stone-200 text-stone-700 rounded-xl lg:rounded-2xl hover:bg-white transition-colors text-sm lg:text-xl font-semibold flex items-center gap-2 shadow-sm active:scale-95 w-full sm:w-auto justify-center">
-                        <svg class="w-5 h-5 lg:w-6 lg:h-6"><use href="#icon-log-out"></use></svg> Salir
-                    </button>
-                </div>
-            </div>
-
-            <div class="grid lg:grid-cols-3 gap-6 lg:gap-12 2xl:gap-16">
-                <div class="lg:col-span-1 flex flex-col gap-6 lg:gap-10 2xl:gap-12">
-                    <div class="bg-white/60 backdrop-blur-xl border border-white/50 p-6 lg:p-10 2xl:p-12 rounded-3xl lg:rounded-[2.5rem] shadow-sm">
-                        <h3 class="font-serif text-2xl lg:text-3xl 2xl:text-4xl mb-4 lg:mb-8 text-stone-800">Agregar Invitado</h3>
-                        <form id="admin-form" class="space-y-4 lg:space-y-6 2xl:space-y-8">
-                            <div>
-                                <label class="block text-sm lg:text-lg font-semibold text-stone-600 mb-1">Nombre Completo</label>
-                                <input id="admin-input-name" placeholder="Ej. Juan Pérez" required class="w-full p-4 lg:p-6 rounded-xl border-2 border-white bg-white/50 focus:bg-white focus:border-blue-400 focus:ring-0 outline-none transition-colors text-base sm:text-lg">
-                            </div>
-                            <div>
-                                <label class="block text-sm lg:text-lg font-semibold text-stone-600 mb-1">Mesa</label>
-                                <input id="admin-input-table" placeholder="Ej. 12" required class="w-full p-4 lg:p-6 rounded-xl border-2 border-white bg-white/50 focus:bg-white focus:border-blue-400 focus:ring-0 outline-none transition-colors text-base sm:text-lg">
-                            </div>
-                            <button type="submit" class="w-full bg-stone-800 text-white py-4 lg:py-6 rounded-xl hover:bg-stone-900 transition-colors font-semibold text-lg lg:text-xl flex items-center justify-center mt-4 shadow-md active:scale-95">Guardar Invitado</button>
-                        </form>
-                    </div>
-                    
-                    <div class="bg-white/60 backdrop-blur-xl border border-white/50 p-6 lg:p-10 2xl:p-12 rounded-3xl lg:rounded-[2.5rem] shadow-sm">
-                        <h3 class="font-serif text-2xl lg:text-3xl mb-2 text-stone-800 flex items-center gap-2"><svg class="w-6 h-6 lg:w-8 lg:h-8 text-blue-600"><use href="#icon-party-popper"></use></svg> Tipo de Evento</h3>
-                        <select id="admin-event-type" class="w-full p-4 lg:p-6 rounded-xl border-2 border-white bg-white/50 focus:bg-white focus:border-blue-400 focus:ring-0 outline-none transition-colors text-base font-medium text-stone-700 mb-4">
-                            <option value="boda">Boda</option>
-                            <option value="cumpleanos">Cumpleaños</option>
-                            <option value="cristiano">Encuentro Cristiano</option>
-                            <option value="porcicultura">Evento Porcicultura</option>
-                            <!-- NUEVA OPCIÓN AGREGADA AQUÍ -->
-                            <option value="lab_veterinario">Conferencia Lab Veterinario</option>
-                        </select>
-                        <button onclick="window.changeEventType()" class="w-full bg-blue-600 text-white py-4 lg:py-6 rounded-xl hover:bg-blue-700 transition-colors font-semibold text-lg flex items-center justify-center shadow-md active:scale-95">Actualizar Retos</button>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-2 flex flex-col">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 lg:mb-8 px-2 gap-4">
-                        <h3 class="font-serif text-2xl lg:text-3xl text-stone-800 flex items-center gap-2"><svg class="w-6 h-6 lg:w-8 lg:h-8 text-blue-600"><use href="#icon-list-ordered"></use></svg> Base de Datos y Posiciones</h3>
-                        <div class="flex gap-2 w-full sm:w-auto">
-                            <button onclick="window.exportGuestsCSV()" class="flex-1 sm:flex-none text-stone-700 hover:text-stone-900 bg-white hover:bg-stone-50 border border-stone-200 px-4 py-2 lg:px-6 lg:py-4 rounded-xl text-sm lg:text-base font-semibold transition-colors flex items-center justify-center gap-2 shadow-sm"><svg class="w-4 h-4"><use href="#icon-file-text"></use></svg> CSV</button>
-                            <button onclick="window.deleteAllGuests()" class="flex-1 sm:flex-none text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 border border-red-200 px-4 py-2 lg:px-6 lg:py-4 rounded-xl text-sm lg:text-base font-semibold transition-colors flex items-center justify-center gap-2 shadow-sm"><svg class="w-4 h-4"><use href="#icon-trash-2"></use></svg> Borrar Todo</button>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-4 px-2">
-                        <div class="relative w-full">
-                            <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 text-stone-400 w-5 h-5"><use href="#icon-search"></use></svg>
-                            <input type="text" id="admin-search-guest" oninput="renderAdminList()" placeholder="Buscar invitado por nombre..." class="w-full pl-12 pr-4 py-3 md:py-4 rounded-xl border border-white bg-white/60 focus:bg-white focus:border-blue-400 outline-none text-sm md:text-base transition-colors shadow-sm text-stone-700 placeholder-stone-500">
-                        </div>
-                    </div>
-
-                    <div class="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl overflow-hidden shadow-sm flex-grow">
-                        <ul id="admin-guest-list" class="flex flex-col min-h-[300px] lg:min-h-[500px] max-h-[60vh] lg:max-h-[800px] overflow-y-auto p-2 lg:p-4"></ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- GALERÍA DE FOTOS -->
-            <div class="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl overflow-hidden shadow-sm p-6 md:p-8 mt-8 lg:mt-16">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-                    <div>
-                        <h3 class="font-serif text-3xl lg:text-4xl text-stone-800 flex items-center gap-2"><svg class="w-8 h-8 text-blue-600"><use href="#icon-image"></use></svg> Galería de Fotos</h3>
-                    </div>
-                    <div class="flex items-center gap-3 flex-wrap w-full md:w-auto">
-                        <span class="bg-blue-100/80 backdrop-blur border border-blue-200 text-blue-800 font-bold px-5 py-3 rounded-xl shadow-sm text-center" id="admin-photo-count">0 Fotos</span>
-                        <div class="flex gap-3 w-full sm:w-auto">
-                            <button onclick="window.downloadAllPhotosZip()" class="flex-1 bg-stone-800 text-white px-5 py-3 rounded-xl font-semibold hover:bg-stone-900 transition-colors flex items-center justify-center gap-2 shadow-md active:scale-95"><svg class="w-5 h-5"><use href="#icon-folder-down"></use></svg> <span class="hidden sm:inline">Descargar ZIP</span><span class="sm:hidden">ZIP</span></button>
-                            <button onclick="window.deleteAllPhotos()" class="flex-1 bg-red-100/80 text-red-700 border border-red-200 px-5 py-3 rounded-xl font-semibold hover:bg-red-200 transition-colors flex items-center justify-center gap-2 shadow-sm active:scale-95"><svg class="w-5 h-5"><use href="#icon-trash-2"></use></svg> <span class="hidden xl:inline">Vaciar</span></button>
-                        </div>
-                    </div>
-                </div>
-                <div id="admin-gallery-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-5"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         VISTA 5: CONFIGURACIÓN 
-         ========================================== -->
-    <div id="view-config" class="view hidden-view min-h-[100dvh] w-full flex flex-col items-center justify-center py-10 px-4 sm:px-6 relative z-10 overflow-y-auto">
-        <button onclick="window.switchView('view-totem')" class="fixed top-6 right-6 sm:top-8 sm:right-8 lg:top-12 lg:right-12 text-stone-800 p-3 lg:p-5 bg-white/50 backdrop-blur-md border border-white/50 rounded-full hover:bg-white/80 transition-colors shadow-sm z-50">
-            <svg class="w-6 h-6"><use href="#icon-x"></use></svg>
-        </button>
-        <div class="w-full max-w-3xl lg:max-w-5xl flex flex-col space-y-8 mt-10">
-            <div class="flex flex-col items-center gap-4 border-b-2 border-stone-300/50 pb-6 text-center">
-                <div class="w-16 h-16 sm:w-20 sm:h-20 bg-white/60 border border-white/50 rounded-full flex items-center justify-center shadow-sm">
-                    <svg class="w-8 h-8 text-blue-600"><use href="#icon-settings"></use></svg>
-                </div>
-                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif text-blue-700 drop-shadow-sm px-2">Configuración General</h2>
-            </div>
-            
-            <form id="config-form" class="space-y-6 bg-white/60 backdrop-blur-xl border border-white/50 p-6 sm:p-8 lg:p-12 rounded-[2rem] shadow-lg">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Título Principal</label><input id="cfg-title" type="text" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" required></div>
-                    <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Subtítulo</label><input id="cfg-subtitle" type="text" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" required></div>
-                    
-                    <div class="md:col-span-2 flex gap-4 items-end">
-                        <div class="flex-grow">
-                            <label class="block text-xs font-bold text-stone-700 mb-1 uppercase flex items-center justify-between">URL Logo Inicio (Opcional) <span class="text-stone-400 font-normal lowercase italic hidden sm:inline">Ej: png, jpg...</span></label>
-                            <input id="cfg-home-logo" type="url" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base">
-                        </div>
-                        <div class="w-1/3">
-                            <label class="block text-xs font-bold text-stone-700 mb-1 uppercase" title="De 50 a 800 píxeles">Tamaño (px)</label>
-                            <input id="cfg-home-logo-size" type="number" min="50" max="800" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" placeholder="250">
-                        </div>
-                    </div>
-                    
-                    <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Botón Búsqueda</label><input id="cfg-search-btn" type="text" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" required></div>
-                    <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Texto Ruleta</label><input id="cfg-roulette-text" type="text" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" required></div>
-                    
-                    <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">URL Fondo Ruleta (Opcional)</label><input id="cfg-roulette-bg" type="url" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base"></div>
-                    <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">URL Centro Ruleta (Opcional)</label><input id="cfg-roulette-center" type="url" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base"></div>
-
-                    <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Texto Mesa</label><input id="cfg-table-label" type="text" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" required></div>
-                    <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Botón Aceptar</label><input id="cfg-accept-btn" type="text" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base" required></div>
-                    <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">URL Marca de Agua (QR)</label><input id="cfg-qr-logo" type="url" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 focus:bg-white outline-none text-base"></div>
-                    <div>
-                        <label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Color del Sistema</label>
-                        <select id="cfg-theme-color" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 outline-none text-base font-medium">
-                            <option value="amber">Ámbar (Original)</option>
-                            <option value="blue">Azul Océano</option>
-                            <option value="red">Rojo Pasión</option>
-                            <option value="green">Verde Naturaleza</option>
-                            <option value="pink">Rosa Delicado</option>
-                            <option value="purple">Púrpura Real</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Toggle Acceso Directo -->
-                <div class="flex items-start gap-3 bg-stone-100 p-4 rounded-xl border-2 border-stone-300 mt-6 shadow-sm">
-                    <div class="pt-1">
-                        <input id="cfg-anonymous" type="checkbox" class="w-6 h-6 rounded cursor-pointer text-stone-600 focus:ring-stone-500">
-                    </div>
-                    <div class="flex flex-col">
-                        <label for="cfg-anonymous" class="font-bold text-stone-800 cursor-pointer">1. Activar Entrada Libre (Ocultar buscador)</label>
-                        <span class="text-xs text-stone-500 mt-1">Habilita el botón de acceso directo para que cualquier persona ingrese sin necesidad de tener una base de datos o buscar su nombre.</span>
-                    </div>
-                </div>
-
-                <!-- Toggle Registro Obligatorio -->
-                <div class="flex items-start gap-3 bg-blue-50 p-4 rounded-xl border-2 border-blue-200 mt-4 shadow-sm">
-                    <div class="pt-1">
-                        <input id="cfg-req-registration" type="checkbox" class="w-6 h-6 rounded text-blue-600 cursor-pointer focus:ring-blue-500">
-                    </div>
-                    <div class="flex flex-col">
-                        <label for="cfg-req-registration" class="font-bold text-stone-800 cursor-pointer">2. Exigir Formulario Completo de Registro</label>
-                        <span class="text-xs text-stone-500 mt-1">Obliga al invitado a llenar su Correo y WhatsApp. <strong class="text-blue-700 font-bold">Se puede combinar con la opción 1</strong> para tener "Entrada Libre pero con Formulario".</span>
-                    </div>
-                </div>
-
-                <!-- Toggle Ruleta de Premios -->
-                <div class="flex items-start gap-3 bg-white/80 p-4 rounded-xl border-2 border-stone-200 mt-4 shadow-sm">
-                    <div class="pt-1">
-                        <input id="cfg-enable-prize-roulette" type="checkbox" class="w-6 h-6 rounded text-blue-600 cursor-pointer focus:ring-blue-500">
-                    </div>
-                    <div class="flex flex-col">
-                        <label for="cfg-enable-prize-roulette" class="font-bold text-stone-800 cursor-pointer">3. Mostrar Ruleta de Premios Inicial</label>
-                        <span class="text-xs text-stone-500 mt-1">Si está activo, al completar el registro e Instagram, los usuarios jugarán la ruleta de premios. Si se desactiva, irán directo a la ruleta de los retos sorpresa.</span>
-                    </div>
-                </div>
-
-                <hr class="border-stone-300/40 my-6">
-
-                <!-- Configuración de Redes y Premios -->
-                <h3 class="font-bold text-lg text-blue-700">Redes y Sorteos</h3>
-                <div class="space-y-4">
-                    <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Cuenta Instagram (URL)</label><input id="cfg-instagram-url" type="url" class="w-full p-3 rounded-xl border-2 border-white bg-white/50 outline-none text-base" required placeholder="https://instagram.com/tu_cuenta"></div>
-                    <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Premios Ruleta (Separados por coma)</label><input id="cfg-prize-options" type="text" class="w-full p-3 rounded-xl border-2 border-white bg-white/50 outline-none text-base" required placeholder="Premio 1, Premio 2, Sigue Participando"></div>
-                    <div><label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Clave Sorteo Final</label><input id="cfg-special-pass" type="text" class="w-full p-3 rounded-xl border-2 border-white bg-white/50 outline-none text-base font-mono tracking-widest text-center" required></div>
-                </div>
-
-                <hr class="border-stone-300/40 my-6">
-
-                <div class="bg-white/80 p-5 rounded-2xl border-2 border-blue-200/50 space-y-4">
-                    <div class="flex items-center gap-3 pb-4 border-b border-blue-200">
-                        <input id="cfg-show-video" type="checkbox" class="w-6 h-6 rounded text-blue-600 focus:ring-blue-500 cursor-pointer">
-                        <label for="cfg-show-video" class="font-bold text-stone-800 cursor-pointer">Mostrar botón de Video</label>
-                    </div>
-                    <div><label class="block text-xs font-bold text-stone-800 mb-1 uppercase">URL Video</label><input id="cfg-video" type="url" class="w-full p-3 rounded-xl border-2 border-white bg-white outline-none"></div>
-                </div>
-                
-                <div class="pt-4">
-                    <label class="block text-xs font-bold text-stone-700 mb-1 uppercase">Contraseña Panel Admin</label>
-                    <input id="cfg-admin-pass" type="text" class="w-full p-3 rounded-xl border-2 border-white/80 bg-white/50 outline-none text-center font-mono tracking-widest" required>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8 pt-6 border-t-2 border-stone-300/50">
-                    <button type="submit" class="w-full bg-stone-900 text-blue-400 py-4 rounded-2xl font-bold hover:bg-stone-800 transition-colors shadow-lg active:scale-95 flex justify-center items-center gap-3">
-                        <svg class="w-6 h-6"><use href="#icon-save"></use></svg> 1. GUARDAR EN VIVO
-                    </button>
-                    <button type="button" onclick="window.descargarHTMLOptimizado()" class="w-full bg-blue-500 text-stone-900 py-4 rounded-2xl font-bold hover:bg-blue-400 transition-colors shadow-lg active:scale-95 flex justify-center items-center gap-3">
-                        <svg class="w-6 h-6"><use href="#icon-download"></use></svg> 2. DESCARGAR HTML
-                    </button>
-                </div>
-
-            </form>
-        </div>
-    </div>
-
-
-    <!-- ==========================================
-         SCRIPT DE LÓGICA DE INTERFAZ Y UTILIDADES
-         ========================================== -->
     <script>
-        // --- 1. VARIABLES GLOBALES ---
-        window.guests = []; 
-        window.photos = [];
-        window.currentGuest = null; 
-        window.challengeAccepted = false; 
-        window.selectedChallenge = ''; 
-        window.pendingChallenges = [];
-        window.firebaseConnected = false;
-        
-        window.RETOS_DB = {
-            boda: ["Tómate una selfie con la novia.", "Tómate una selfie con el novio.", "Fotografía un beso apasionado.", "Captura una lágrima de felicidad.", "Toma una foto del centro de mesa."],
-            cumpleanos: ["Tómate una selfie con el cumpleañero/a.", "Toma una foto del pastel.", "Captura soplar las velas.", "Foto del mejor regalo.", "Selfie con gorrito."],
-            cristiano: ["Selfie con tu sonrisa.", "Foto haciendo pose divertida con 3 personas.", "Foto con alguien nuevo.", "Foto haciendo corazón ❤️.", "Foto abrazando."],
-            porcicultura: ["Selfie con un cerdo.", "Foto con el conferencista.", "Captura comiendo chicharrón.", "Selfie con veterinario.", "Stand innovador."],
-            // === 50 RETOS NUEVOS PARA LABORATORIO VETERINARIO ===
-            lab_veterinario: [
-                "Selfie con el ponente principal del evento.",
-                "Foto de un tubo de ensayo o muestra simulada.",
-                "Selfie grupal con 3 colegas de diferentes ciudades o clínicas.",
-                "Foto creativa con el logo del laboratorio organizador.",
-                "Captura la diapositiva más interesante de una charla.",
-                "Selfie con cara de 'analizando una muestra en el microscopio'.",
-                "Foto de tu café (el verdadero reactivo del laboratorio).",
-                "Selfie con un asesor de ventas o soporte comercial.",
-                "Foto usando guantes de látex o nitrilo.",
-                "Foto de tu libreta de apuntes con el dato más importante subrayado.",
-                "Selfie con el stand de exhibición más llamativo.",
-                "Foto de un paciente peludo (si hay perros/gatos en el evento).",
-                "Selfie haciendo el símbolo de la paz con un tubo de recolección.",
-                "Foto de cerca a un microscopio o equipo de laboratorio.",
-                "Selfie luciendo con orgullo tu credencial o escarapela del evento.",
-                "Foto de una infografía científica o póster técnico.",
-                "Selfie con un colega que acabas de conocer hoy.",
-                "Foto a los resultados de un caso clínico en pantalla.",
-                "Selfie posando junto a un analizador de hematología o química.",
-                "Foto artística del refrigerio o coffee break.",
-                "Selfie con alguien del comité organizador.",
-                "Foto grupal imitando la forma de una bacteria o parásito.",
-                "Selfie con cara de sorpresa al ver un diagnóstico difícil.",
-                "Foto divertida con todos tus colegas de mesa.",
-                "Selfie apuntando al nombre del laboratorio en un banner.",
-                "Foto del folleto técnico o brochure más interesante que te dieron.",
-                "Selfie con un veterinario especialista (Patólogo, Dermatólogo, etc.).",
-                "Foto panorámica del auditorio lleno.",
-                "Selfie cruzando los dedos simulando evitar un 'falso positivo'.",
-                "Foto de un reactivo o producto nuevo lanzado en el congreso.",
-                "Selfie con el colega que más preguntas hace en las charlas.",
-                "Foto tuya haciendo una pregunta al ponente.",
-                "Selfie simulando que extraes una muestra de sangre.",
-                "Foto de un pin, bolígrafo o merch genial que te regalaron.",
-                "Selfie con el colega que llegó más temprano al evento.",
-                "Foto de una gráfica estadística impresionante proyectada.",
-                "Selfie 'analizando microscópicamente' tu almuerzo.",
-                "Foto con el equipo logístico o staff del evento.",
-                "Selfie mostrando orgullo por ser del área de laboratorio veterinario.",
-                "Foto de un caso de citología o dermatología proyectado.",
-                "Selfie con el colega que siempre pierde los lapiceros en el lab.",
-                "Foto mostrando tu mejor 'outfit de congreso científico'.",
-                "Selfie con tu cara de máxima concentración durante una ponencia.",
-                "Foto chocando los cinco con un colega por resolver un caso.",
-                "Selfie sosteniendo un libro o manual técnico veterinario.",
-                "Foto escaneando un código QR importante del evento.",
-                "Selfie con la mejor decoración o backing del salón.",
-                "Foto fingiendo que centrifugas una muestra con tus manos.",
-                "Selfie grupal donde todos simulen gritar '¡Ciencia!'.",
-                "Foto de la clausura o entrega de tu certificado de asistencia."
-            ]
-        };
+        // --- Mascot Interactivity ---
+        const mascotImage = document.getElementById('mascot-image');
+        let isChilling = true;
 
-        // --- 2. RECUPERACIÓN CACHÉ ---
-        try {
-            const cachedConfig = localStorage.getItem('eventAppConfig');
-            if (cachedConfig) window.appConfig = { ...window.appConfig, ...JSON.parse(cachedConfig) };
-            const cachedGuests = localStorage.getItem('eventAppGuests');
-            if (cachedGuests) window.guests = JSON.parse(cachedGuests);
-        } catch (e) { console.warn("No caché local", e); }
-
-        // --- 3. APLICAR CONFIGURACIÓN AL DOM ---
-        window.aplicarConfiguracion = function() {
-            const safeSetText = (id, text) => { const el = document.getElementById(id); if (el) el.innerText = text; };
-            const safeSetValue = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+        // Toggle mascot image
+        function toggleMascot() {
+            // Add a quick pop animation
+            mascotImage.style.transform = 'scale(0.9)';
             
-            safeSetText('totem-title', window.appConfig.title || "");
-            safeSetText('totem-subtitle', window.appConfig.subtitle || "");
-            safeSetText('btn-search', window.appConfig.searchBtnText || "Buscar");
-            safeSetText('roulette-desc-text', window.appConfig.rouletteText || "");
-            safeSetText('table-label-text', window.appConfig.tableLabelText || "");
-            safeSetText('btn-accept-challenge', window.appConfig.acceptBtnText || "Aceptar");
-            safeSetText('totem-video-btn-text', window.appConfig.videoTitleText || "Ver Video");
-            safeSetText('dashboard-subtitle', window.appConfig.dashboardSubtitle || "");
-            
-            // Aplicar imágenes de la ruleta si existen en la configuración
-            if(document.getElementById('roulette-wheel')) {
-                document.getElementById('roulette-wheel').style.backgroundImage = window.appConfig.rouletteBg ? `url('${window.appConfig.rouletteBg}')` : "none";
-            }
-            if(document.getElementById('roulette-center-img')) {
-                document.getElementById('roulette-center-img').src = window.appConfig.rouletteCenter || "";
-            }
-            
-            // Checkboxes
-            if(document.getElementById('cfg-anonymous')) document.getElementById('cfg-anonymous').checked = window.appConfig.allowAnonymous === true;
-            if(document.getElementById('cfg-req-registration')) document.getElementById('cfg-req-registration').checked = window.appConfig.requireRegistration === true;
-            if(document.getElementById('cfg-show-video')) document.getElementById('cfg-show-video').checked = window.appConfig.showVideoBtn !== false;
-            if(document.getElementById('cfg-enable-prize-roulette')) {
-                document.getElementById('cfg-enable-prize-roulette').checked = window.appConfig.enablePrizeRoulette !== false;
-            }
-
-            // Inputs
-            safeSetValue('cfg-home-logo', window.appConfig.homeLogoUrl || "");
-            safeSetValue('cfg-home-logo-size', window.appConfig.homeLogoSize || 250); // Valor del tamaño del logo
-            safeSetValue('cfg-qr-logo', window.appConfig.qrLogo || "");
-            safeSetValue('cfg-title', window.appConfig.title || ""); 
-            safeSetValue('cfg-subtitle', window.appConfig.subtitle || "");
-            safeSetValue('cfg-search-btn', window.appConfig.searchBtnText || ""); 
-            safeSetValue('cfg-roulette-text', window.appConfig.rouletteText || "");
-            safeSetValue('cfg-roulette-bg', window.appConfig.rouletteBg || ""); 
-            safeSetValue('cfg-roulette-center', window.appConfig.rouletteCenter || ""); 
-            safeSetValue('cfg-table-label', window.appConfig.tableLabelText || ""); 
-            safeSetValue('cfg-accept-btn', window.appConfig.acceptBtnText || "Aceptar");
-            safeSetValue('cfg-admin-pass', window.appConfig.adminPassword || "admin");
-            safeSetValue('cfg-theme-color', window.appConfig.themeColor || window.baseFileTheme);
-            safeSetValue('cfg-instagram-url', window.appConfig.instagramUrl || "");
-            safeSetValue('cfg-prize-options', window.appConfig.prizeOptions || "Sigue participando");
-            safeSetValue('cfg-special-pass', window.appConfig.specialPassword || "1234");
-            
-            // Establecer el tipo de evento actual en el panel de admin si existe
-            if(document.getElementById('admin-event-type')) {
-                document.getElementById('admin-event-type').value = window.appConfig.eventType || "boda";
-            }
-            
-            // === LÓGICA DEL CÓDIGO QR ===
-            const qrImg = document.getElementById('dynamic-qr-img');
-            if (qrImg) {
-                const targetUrl = "https://eventosdinastia.vercel.app";
-                qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=2&data=${encodeURIComponent(targetUrl)}`;
-            }
-
-            // Logo repetido como mosaico de fondo en la vista QR
-            const qrWatermark = document.getElementById('qr-watermark-bg');
-            if (qrWatermark) {
-                if (window.appConfig.qrLogo) {
-                    qrWatermark.style.backgroundImage = `url('${window.appConfig.qrLogo}')`;
-                    qrWatermark.style.backgroundRepeat = 'repeat';
-                    qrWatermark.style.backgroundSize = '120px'; 
-                    qrWatermark.style.backgroundPosition = 'center';
+            setTimeout(() => {
+                if (isChilling) {
+                    mascotImage.src = 'https://www.image2url.com/r2/default/images/1785201948750-0a62e402-6462-48a1-b786-60c4450667a6.png';
                 } else {
-                    qrWatermark.style.backgroundImage = 'none';
+                    mascotImage.src = 'https://www.image2url.com/r2/default/images/1785201879269-cc23f276-17db-4a0a-b7fb-3c24e371d85b.png';
                 }
-            }
-            // ============================
-
-            // UI Toggles - Si anónimo está activo, oculta buscador.
-            if (window.appConfig.allowAnonymous) {
-                document.getElementById('totem-search-section')?.classList.add('hidden');
-                document.getElementById('totem-anonymous-section')?.classList.remove('hidden');
-            } else {
-                document.getElementById('totem-search-section')?.classList.remove('hidden');
-                document.getElementById('totem-anonymous-section')?.classList.add('hidden');
-            }
-
-            // Aplicar tamaño y URL del logo principal
-            if (window.appConfig.homeLogoUrl) {
-                const img = document.getElementById('totem-home-logo');
-                if(img) { 
-                    img.src = window.appConfig.homeLogoUrl; 
-                    img.classList.remove('hidden'); 
-                    img.style.height = (window.appConfig.homeLogoSize || 250) + "px";
-                }
-            } else {
-                document.getElementById('totem-home-logo')?.classList.add('hidden');
-            }
-
-            // Temas en vivo
-            const newTheme = window.appConfig.themeColor || window.baseFileTheme;
-            if (window.currentDOMTheme !== newTheme) {
-                const elements = document.querySelectorAll(`[class*="${window.currentDOMTheme}"]`);
-                const regex = new RegExp(`\\b([a-z]+-)?${window.currentDOMTheme}(-\\d{1,3}(?:\\/\\d+)?)\\b`, 'g');
-                elements.forEach(element => {
-                    if (typeof element.className === 'string') {
-                        element.className = element.className.replace(regex, `$1${newTheme}$2`);
-                    }
-                });
-                window.currentDOMTheme = newTheme;
-            }
-
-            // Inyectar segmentos ruleta premios
-            renderPrizeSegments();
-        };
-
-        window.aplicarConfiguracion();
-
-        // --- 4. EXPORTAR HTML OPTIMIZADO ---
-        window.descargarHTMLOptimizado = async function() {
-            const btn = document.querySelector('button[onclick="window.descargarHTMLOptimizado()"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = 'Generando...';
-            try {
-                const configParaExportar = { ...window.appConfig, isOptimized: true };
-                const configString = JSON.stringify(configParaExportar, null, 8);
-                const newScript = `window.appConfig = ${configString};`;
-                const response = await fetch(window.location.href.split('?')[0]);
-                let htmlText = await response.text();
-                const baseTheme = window.baseFileTheme || 'amber';
-                const newTheme = window.appConfig.themeColor || 'amber';
-                if (baseTheme !== newTheme) {
-                    const regexSource = new RegExp(`\\b([a-z]+-)?${baseTheme}(-\\d{1,3}(?:\\/\\d+)?)\\b`, 'g');
-                    htmlText = htmlText.replace(regexSource, `$1${newTheme}$2`);
-                    htmlText = htmlText.replace(`window.baseFileTheme = '${baseTheme}';`, `window.baseFileTheme = '${newTheme}';`);
-                }
-                const startMarker = "// --- INICIO_RESPALDO ---";
-                const endMarker = "// --- FIN_RESPALDO ---";
-                const regexConfig = new RegExp(startMarker + "[\\s\\S]*?" + endMarker);
-                if (regexConfig.test(htmlText)) {
-                    htmlText = htmlText.replace(regexConfig, startMarker + "\n        " + newScript + "\n        " + endMarker);
-                    const blob = new Blob([htmlText], { type: 'text/html;charset=utf-8' });
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob); link.download = `index.html`;
-                    document.body.appendChild(link); link.click(); document.body.removeChild(link);
-                    alert("HTML Descargado. Reemplázalo en tu hosting.");
-                }
-            } catch (error) { console.error(error); alert("Error al exportar el HTML."); } finally { btn.innerHTML = originalText; }
-        };
-
-        // --- 5. NAVEGACIÓN Y VISTAS ---
-        window.switchView = function(viewId) {
-            document.querySelectorAll('.view').forEach(el => el.classList.add('hidden-view'));
-            const targetView = document.getElementById(viewId);
-            if (targetView) targetView.classList.remove('hidden-view');
-            if (viewId === 'view-admin') { renderAdminList(); renderGallery(); }
-        };
-
-        window.logout = function() {
-            window.currentGuest = null; 
-            window.challengeAccepted = false; 
-            window.pendingChallenges = [];
-            window.switchView('view-totem');
-        };
-
-        let secretClicks = 0; let clickTimer;
-        window.handleSecretClick = function() {
-            secretClicks++; 
-            clearTimeout(clickTimer); 
-            clickTimer = setTimeout(() => { secretClicks = 0; }, 2000);
-            if (secretClicks >= 5) {
-                secretClicks = 0;
-                const pass = prompt("Acceso Especial a Configuración. Ingresa la clave:");
-                if (pass === '1705') window.switchView('view-config');
-            }
-        };
-
-        window.openWelcomeVideo = function() {
-            const modal = document.getElementById('modal-welcome-video');
-            const videoWrapper = document.getElementById('video-wrapper');
-            if (videoWrapper) {
-                const link = window.appConfig.videoLink || "";
-                if (link.includes('youtube.com') || link.includes('youtu.be')) {
-                    const videoIdMatch = link.match(/(?:v=|youtu\.be\/|embed\/)([^&?]+)/);
-                    const ytLink = videoIdMatch ? `https://www.youtube.com/embed/${videoIdMatch[1]}?autoplay=1` : link;
-                    videoWrapper.innerHTML = `<iframe src="${ytLink}" class="w-full h-full border-0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
-                } else {
-                    videoWrapper.innerHTML = `<video src="${link}" class="w-full h-full object-contain" controls autoplay playsinline></video>`;
-                }
-            }
-            modal.classList.remove('hidden'); modal.classList.add('flex');
-        };
-        window.closeWelcomeVideo = function() {
-            const modal = document.getElementById('modal-welcome-video');
-            modal.classList.add('hidden'); modal.classList.remove('flex');
-            const videoWrapper = document.getElementById('video-wrapper');
-            if (videoWrapper) videoWrapper.innerHTML = '';
-        };
-
-        // --- FLUJO DE REGISTRO / ENTRADA ---
-
-        window.handleSearch = function() {
-            const query = document.getElementById('search-input').value.trim().toLowerCase();
-            if (query === '') return;
-            const found = window.guests.find(g => g.name.toLowerCase().includes(query));
-
-            if (found) {
-                window.currentGuest = found;
-                
-                const isRegisteredLocally = localStorage.getItem('dinastia_registrado_' + (window.appConfig.title || 'default'));
-
-                if (window.appConfig.requireRegistration && (!found.registered && !isRegisteredLocally)) {
-                    // MODO 3: Buscador + Registro Obligatorio (Pide formulario completo pre-llenando el nombre)
-                    document.getElementById('full-registration-form').reset();
-                    document.getElementById('reg-name').value = found.name;
-                    if(found.whatsapp) document.getElementById('reg-whatsapp').value = found.whatsapp;
-                    if(found.email) document.getElementById('reg-email').value = found.email;
-                    if(found.cedula) document.getElementById('reg-cedula').value = found.cedula;
-                    
-                    document.getElementById('modal-registration-flow').classList.replace('hidden', 'flex');
-                } else {
-                    // MODO 1: Solo buscador. Encuentra el nombre y entra sin formulario.
-                    document.getElementById('guest-name-display').innerText = found.name;
-                    document.getElementById('guest-table-display').innerText = found.table || '-';
-                    document.getElementById('search-input').value = ''; 
-                    
-                    // Verifica si el usuario tiene giros extra de la ruleta de premios
-                    if (found.extraPrizeSpins && found.extraPrizeSpins > 0) {
-                        const newSpins = found.extraPrizeSpins - 1;
-                        window.currentGuest.extraPrizeSpins = newSpins;
-                        if (typeof window.handleSaveGuestData === 'function') {
-                            window.handleSaveGuestData(window.currentGuest.id, { extraPrizeSpins: newSpins });
-                        }
-                        window.resetPrizeRouletteUI();
-                        document.getElementById('modal-prize-roulette').classList.replace('hidden', 'flex');
-                    } else {
-                        document.getElementById('modal-roulette').classList.replace('hidden', 'flex');
-                    }
-                }
-            } else { 
-                alert('Invitado no encontrado. Verifica cómo escribiste tu nombre.'); 
-            }
-        };
-
-        window.enterAnonymous = function() {
-            const localGuestId = localStorage.getItem('dinastia_guest_id');
-
-            // Intento de restaurar usuario si ya se registró antes en este celular
-            if (localGuestId) {
-                const found = window.guests.find(g => g.id === localGuestId);
-                if (found) {
-                    window.currentGuest = found;
-                    document.getElementById('guest-name-display').innerText = found.name;
-                    document.getElementById('guest-table-display').innerText = found.table || '-';
-                    
-                    // Verifica giros extra en el login directo
-                    if (found.extraPrizeSpins && found.extraPrizeSpins > 0) {
-                        const newSpins = found.extraPrizeSpins - 1;
-                        window.currentGuest.extraPrizeSpins = newSpins;
-                        if (typeof window.handleSaveGuestData === 'function') {
-                            window.handleSaveGuestData(window.currentGuest.id, { extraPrizeSpins: newSpins });
-                        }
-                        window.resetPrizeRouletteUI();
-                        document.getElementById('modal-prize-roulette').classList.replace('hidden', 'flex');
-                    } else {
-                        document.getElementById('modal-roulette').classList.replace('hidden', 'flex');
-                    }
-                    return;
-                }
-            }
-
-            if (window.appConfig.requireRegistration) {
-                // MODO 4: Entrada Libre + Formulario Completo
-                window.currentGuest = null; // No viene de ninguna lista
-                document.getElementById('full-registration-form').reset();
-                document.getElementById('modal-registration-flow').classList.replace('hidden', 'flex');
-            } else {
-                // MODO 2: Entrada Libre + Formulario Corto (Solo pide el nombre)
-                document.getElementById('anonymous-name-input').value = ''; 
-                document.getElementById('modal-anonymous-register').classList.replace('hidden', 'flex');
-            }
-        };
-
-        window.closeRegistrationFlow = () => document.getElementById('modal-registration-flow').classList.replace('flex', 'hidden');
-        window.closeAnonymousRegister = () => document.getElementById('modal-anonymous-register').classList.replace('flex', 'hidden');
-
-        // Registro Básico (Cuando NO es obligatorio el formulario largo)
-        window.submitAnonymousRegister = function(event) {
-            event.preventDefault();
-            const nameVal = document.getElementById('anonymous-name-input').value.trim();
-            window.currentGuest = { name: nameVal, id: "anon_" + Date.now(), table: "-" };
-            
-            // Guardar local para no molestar más adelante
-            localStorage.setItem('dinastia_guest_id', window.currentGuest.id);
-
-            document.getElementById('guest-name-display').innerText = nameVal;
-            window.closeAnonymousRegister();
-            document.getElementById('modal-roulette').classList.replace('hidden', 'flex');
-        };
-
-        // --- FLUJO COMPLETO: FORMULARIO -> IG -> RULETA PREMIOS -> EVENTO ---
-        window.submitFullRegistration = async function(event) {
-            event.preventDefault();
-            const name = document.getElementById('reg-name').value.trim();
-            const whatsapp = document.getElementById('reg-whatsapp').value.trim();
-            const email = document.getElementById('reg-email').value.trim().toLowerCase();
-            const cedula = document.getElementById('reg-cedula').value.trim();
-            const errorMsg = document.getElementById('reg-error-msg');
-
-            // Validar correo único (evitar doble cuenta)
-            const isEmailUsed = window.guests.some(g => g.email === email && g.id !== window.currentGuest?.id);
-            if (isEmailUsed) {
-                errorMsg.classList.remove('hidden');
-                return;
-            }
-            errorMsg.classList.add('hidden');
-
-            const guestData = {
-                name, whatsapp, email, cedula, 
-                registered: true,
-                igClicks: window.currentGuest?.igClicks || 0,
-                table: window.currentGuest?.table || '-'
-            };
-
-            const btn = event.target.querySelector('button[type="submit"]');
-            const originalText = btn.innerText;
-            btn.innerText = 'Guardando...';
-            btn.disabled = true;
-
-            // Guardar en Firebase (Si currentGuest es null, lo crea como nuevo documento)
-            if (typeof window.handleSaveGuestData === 'function') {
-                const savedId = await window.handleSaveGuestData(window.currentGuest?.id, guestData);
-                window.currentGuest = { id: savedId, ...guestData };
-            } else {
-                window.currentGuest = { id: "local_" + Date.now(), ...guestData };
-                window.guests.push(window.currentGuest);
-            }
-
-            // --- ESTAMPAR MEMORIA EN EL CELULAR DEL USUARIO ---
-            localStorage.setItem('dinastia_registrado_' + (window.appConfig.title || 'default'), 'true');
-            localStorage.setItem('dinastia_correo', email);
-            localStorage.setItem('dinastia_guest_id', window.currentGuest.id);
-
-            btn.innerText = originalText;
-            btn.disabled = false;
-
-            document.getElementById('guest-name-display').innerText = window.currentGuest.name;
-            document.getElementById('guest-table-display').innerText = window.currentGuest.table;
-
-            // PASO AL SIGUIENTE MODAL (Instagram)
-            window.closeRegistrationFlow();
-            document.getElementById('modal-instagram-flow').classList.replace('hidden', 'flex');
-        };
-
-        window.trackInstagramClick = function() {
-            window.open(window.appConfig.instagramUrl, '_blank');
-            const btnContinue = document.getElementById('btn-continue-ig');
-            btnContinue.disabled = false;
-            btnContinue.classList.remove('opacity-50', 'cursor-not-allowed');
-            btnContinue.classList.add('bg-stone-900', 'text-white', 'hover:bg-stone-800');
-
-            if (window.currentGuest) {
-                window.currentGuest.igClicks = (window.currentGuest.igClicks || 0) + 1;
-                if (typeof window.handleSaveGuestData === 'function') {
-                    window.handleSaveGuestData(window.currentGuest.id, { igClicks: window.currentGuest.igClicks });
-                }
-            }
-        };
-
-        window.continueAfterInstagram = function() {
-            // CIERRA INSTAGRAM 
-            document.getElementById('modal-instagram-flow').classList.replace('flex', 'hidden');
-            
-            // Revisa si la ruleta de premios está habilitada
-            if (window.appConfig.enablePrizeRoulette !== false) {
-                window.resetPrizeRouletteUI();
-                // ABRE RULETA DE PREMIOS
-                document.getElementById('modal-prize-roulette').classList.replace('hidden', 'flex');
-            } else {
-                // SALTA DIRECTO A LA RULETA DE RETOS
-                document.getElementById('active-challenge-banner').classList.add('hidden');
-                document.getElementById('modal-roulette').classList.replace('hidden', 'flex');
-            }
-        };
-
-        // --- RULETA DE PREMIOS (BIENVENIDA) ---
-        window.resetPrizeRouletteUI = function() {
-            const btn = document.getElementById('btn-spin-prize');
-            const wheel = document.getElementById('prize-roulette-wheel');
-            const textResult = document.getElementById('prize-result-text');
-            const btnFinish = document.getElementById('btn-finish-prize');
-            
-            if(btn) { btn.disabled = false; btn.classList.remove('opacity-50', 'cursor-not-allowed'); }
-            if(textResult) textResult.classList.add('hidden');
-            if(btnFinish) btnFinish.classList.add('hidden');
-            if(wheel) {
-                wheel.style.transition = 'none';
-                wheel.style.transform = 'rotate(0deg)';
-                void wheel.offsetWidth; // Refuerza reinicio visual (Reflow)
-                wheel.style.transition = 'transform 4s cubic-bezier(0.25, 0.1, 0.25, 1)';
-            }
-        };
-
-        function renderPrizeSegments() {
-            const container = document.getElementById('prize-segments-container');
-            if(!container) return;
-            const optionsStr = window.appConfig.prizeOptions || "Sigue participando";
-            const options = optionsStr.split(',');
-            const colors = ['#f59e0b', '#d97706', '#fbbf24', '#b45309'];
-            
-            let gradientStr = options.map((opt, i) => {
-                let start = (i / options.length) * 360;
-                let end = ((i + 1) / options.length) * 360;
-                return `${colors[i % colors.length]} ${start}deg ${end}deg`;
-            }).join(', ');
-            
-            container.style.background = `conic-gradient(${gradientStr})`;
+                isChilling = !isChilling;
+                mascotImage.style.transform = 'scale(1)';
+            }, 150);
         }
 
-        window.spinPrizeRoulette = function() {
-            const btn = document.getElementById('btn-spin-prize');
-            const wheel = document.getElementById('prize-roulette-wheel');
-            const textResult = document.getElementById('prize-result-text');
-            const btnFinish = document.getElementById('btn-finish-prize');
+        // --- Parallax Effect for 404 Text ---
+        document.addEventListener('mousemove', (e) => {
+            const parallaxText = document.getElementById('parallax-text');
+            const x = (window.innerWidth - e.pageX * 2) / 90;
+            const y = (window.innerHeight - e.pageY * 2) / 90;
             
-            btn.disabled = true; btn.classList.add('opacity-50', 'cursor-not-allowed');
-            textResult.classList.add('hidden');
-            btnFinish.classList.add('hidden');
+            parallaxText.style.transform = `translate(${x}px, ${y}px)`;
+        });
 
-            const totalDeg = 3600 + Math.floor(Math.random() * 360); 
-            wheel.style.transform = `rotate(${totalDeg}deg)`;
+        // --- Interactive Particle Background ---
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let particles = [];
 
-            const optionsStr = window.appConfig.prizeOptions || "Sigue participando";
-            const options = optionsStr.split(',');
-            const selectedPrize = options[Math.floor(Math.random() * options.length)];
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
 
-            setTimeout(() => {
-                textResult.innerText = `🎁 Ganaste: ${selectedPrize}`;
-                textResult.classList.remove('hidden');
-                btnFinish.classList.remove('hidden');
-            }, 4000);
-        };
-
-        window.finishPrizeFlow = function() {
-            // CIERRA PREMIOS Y ENTRA A LA APP OFICIAL (Retos y Panel)
-            document.getElementById('modal-prize-roulette').classList.replace('flex', 'hidden');
-            document.getElementById('active-challenge-banner').classList.add('hidden');
-            document.getElementById('modal-roulette').classList.replace('hidden', 'flex');
-        };
-
-        // --- GRAN RULETA FINAL (SORTEO ADMIN) ---
-        window.promptGrandRoulette = function() {
-            const pass = prompt("Acceso Restringido. Ingrese clave del Sorteo:");
-            if (pass === window.appConfig.specialPassword) {
-                document.getElementById('modal-grand-roulette').classList.replace('hidden', 'flex');
-                drawGrandRouletteCanvas();
-            } else if(pass) {
-                alert("Clave incorrecta");
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedY = Math.random() * 0.5 + 0.1;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.5 + 0.1;
             }
-        };
 
-        window.closeGrandRoulette = function() {
-            document.getElementById('modal-grand-roulette').classList.replace('flex', 'hidden');
-        };
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX;
 
-        window.closeGrandWinner = function() {
-            document.getElementById('grand-winner-banner').classList.replace('flex', 'hidden');
-        };
+                // Reset position when particle goes off screen
+                if (this.y < 0) {
+                    this.y = height;
+                    this.x = Math.random() * width;
+                }
+            }
 
-        function drawGrandRouletteCanvas() {
-            const canvas = document.getElementById('grand-roulette-canvas');
-            const ctx = canvas.getContext('2d');
-            const size = 800; 
-            canvas.width = size;
-            canvas.height = size;
-            const cx = size / 2;
-            const cy = size / 2;
-            const radius = size / 2;
-            
-            const participants = window.guests.filter(g => g.name && g.name.length > 2).map(g => g.name);
-            if (participants.length === 0) participants.push("Sin Usuarios");
-
-            const colors = ['#1c1917', '#292524', '#44403c']; 
-            const sliceAngle = (2 * Math.PI) / participants.length;
-
-            ctx.clearRect(0, 0, size, size);
-            
-            for (let i = 0; i < participants.length; i++) {
+            draw() {
                 ctx.beginPath();
-                ctx.moveTo(cx, cy);
-                ctx.arc(cx, cy, radius, i * sliceAngle, (i + 1) * sliceAngle);
-                ctx.fillStyle = colors[i % colors.length];
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                // Using EQB Orange color for particles
+                ctx.fillStyle = `rgba(255, 100, 0, ${this.opacity})`;
                 ctx.fill();
-                ctx.strokeStyle = '#f59e0b';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-
-                ctx.save();
-                ctx.translate(cx, cy);
-                ctx.rotate(i * sliceAngle + sliceAngle / 2);
-                ctx.textAlign = 'right';
-                ctx.fillStyle = '#ffffff';
-                ctx.font = `bold ${participants.length > 30 ? 12 : 24}px sans-serif`;
-                ctx.shadowColor = 'rgba(0,0,0,0.5)';
-                ctx.shadowBlur = 4;
-                ctx.fillText(participants[i].substring(0, 25), radius - 30, 8);
-                ctx.restore();
             }
         }
 
-        window.spinGrandRoulette = function() {
-            const canvas = document.getElementById('grand-roulette-canvas');
-            const btn = document.getElementById('btn-spin-grand');
-            btn.style.pointerEvents = 'none';
-            btn.style.opacity = '0.5';
+        function initParticles() {
+            particles = [];
+            // Number of particles based on screen width
+            const numParticles = Math.floor(window.innerWidth / 15);
+            for (let i = 0; i < numParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
 
-            const participants = window.guests.filter(g => g.name && g.name.length > 2).map(g => g.name);
-            if (participants.length === 0) participants.push("Sin Usuarios");
-
-            const degrees = 5 * 360 + Math.floor(Math.random() * 360);
-            canvas.style.transform = `rotate(${degrees}deg)`;
-
-            const winner = participants[Math.floor(Math.random() * participants.length)];
-
-            setTimeout(() => {
-                document.getElementById('grand-winner-name').innerText = winner;
-                document.getElementById('grand-winner-banner').classList.replace('hidden', 'flex');
-                
-                btn.style.pointerEvents = 'auto';
-                btn.style.opacity = '1';
-                setTimeout(()=> {
-                    canvas.style.transition = 'none';
-                    canvas.style.transform = 'rotate(0deg)';
-                    setTimeout(() => canvas.style.transition = 'transform 7s cubic-bezier(0.1, 0, 0.1, 1)', 50);
-                }, 1000);
-
-            }, 7500); 
-        };
-
-        // --- UTILIDADES DEL PANEL ADMIN ---
-        window.exportGuestsCSV = function() {
-            if (window.guests.length === 0) { alert("No hay datos para exportar."); return; }
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
             
-            // UTF-8 BOM (\uFEFF) para que Excel reconozca tildes y caracteres especiales
-            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-            
-            // Usamos punto y coma (;) como separador para garantizar que en Excel (Español) se abran en celdas separadas
-            csvContent += "Nombres y Apellidos;Número de WhatsApp;Correo Electrónico;Cédula o Documento\n";
-            
-            window.guests.forEach(g => {
-                // Generamos la fila con los datos solicitados exactos
-                let row = `"${g.name || ''}";"${g.whatsapp || ''}";"${g.email || ''}";"${g.cedula || ''}"`;
-                csvContent += row + "\n";
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
             });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `Invitados_${Date.now()}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        };
-
-        // RenderAdminList muestra Fotos Y Registro
-        function renderAdminList() {
-            const list = document.getElementById('admin-guest-list');
-            if (!list) return; 
-            list.innerHTML = "";
-
-            const searchInput = document.getElementById('admin-search-guest');
-            const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
-
-            let filteredGuests = window.guests;
-            if (query !== '') {
-                filteredGuests = window.guests.filter(g => g.name && g.name.toLowerCase().includes(query));
-            }
-
-            if (filteredGuests.length === 0) {
-                list.innerHTML = `<li class="p-4 lg:p-8 text-center text-stone-500 font-medium">No hay invitados registrados aún${query ? ' que coincidan con la búsqueda' : ''}.</li>`; 
-                return;
-            }
-
-            const guestsWithCounts = filteredGuests.map(g => {
-                return { 
-                    ...g, 
-                    photoCount: window.photos.filter(p => p.guestId === g.id || (p.guestName && p.guestName.trim() === g.name)).length 
-                };
-            }).sort((a, b) => b.photoCount - a.photoCount); // Mantiene orden por fotos
-
-            const maxPhotos = Math.max(...guestsWithCounts.map(g => g.photoCount));
-
-            guestsWithCounts.forEach(g => {
-                const li = document.createElement("li");
-                li.className = "flex justify-between items-center p-4 lg:p-6 hover:bg-white/40 transition-colors border-b border-white/20";
-                
-                const isWinner = g.photoCount > 0 && g.photoCount === maxPhotos;
-                const crownBadge = isWinner ? `<svg class="w-5 h-5 lg:w-6 lg:h-6 text-blue-500 fill-blue-500 animate-bounce inline"><use href="#icon-crown"></use></svg>` : '';
-                const photoBadge = `<span class="inline-flex items-center gap-1 px-3 py-1 ${isWinner ? 'bg-blue-100 text-blue-800 border border-blue-200' : 'bg-white/50 text-stone-700 border border-white'} text-xs lg:text-sm rounded-full uppercase tracking-wide font-bold shadow-sm"><svg class="w-3 h-3"><use href="#icon-camera"></use></svg> ${g.photoCount}</span>`;
-
-                const regBadge = g.registered ? `<span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded font-bold inline-block ml-2">Registrado</span>` : '';
-                const igBadge = g.igClicks ? `<span class="text-xs text-pink-600 font-bold bg-pink-50 px-2 py-1 rounded inline-block ml-2">IG: ${g.igClicks}</span>` : '';
-                const spinsBadge = g.extraPrizeSpins > 0 ? `<span class="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded font-bold inline-block ml-2" title="Tiros extra disponibles">🎁 Extras: ${g.extraPrizeSpins}</span>` : '';
-                const contactInfo = g.registered ? `<p class="text-xs text-stone-500 font-mono mt-2">📧 ${g.email || '-'} | 📱 ${g.whatsapp || '-'} | 🆔 ${g.cedula || '-'}</p>` : '';
-
-                li.innerHTML = `
-                <div class="flex-grow">
-                    <div class="flex items-center flex-wrap gap-1">
-                        <span class="font-bold text-stone-800 flex items-center gap-2 text-lg lg:text-2xl">${g.name} ${crownBadge}</span>
-                        ${regBadge} ${igBadge} ${spinsBadge}
-                    </div>
-                    <div class="flex items-center gap-3 mt-1.5 lg:mt-2">
-                        <span class="text-sm font-bold text-blue-600 bg-white/50 px-2 py-0.5 rounded border border-white">Mesa ${g.table}</span>
-                        ${photoBadge}
-                    </div>
-                    ${contactInfo}
-                </div>
-                <div class="flex flex-col sm:flex-row gap-2 ml-4 flex-shrink-0 items-center justify-center">
-                    <button onclick="window.grantExtraPrizeSpin('${g.id}')" class="text-blue-500 hover:text-blue-600 bg-white/50 hover:bg-white p-3 rounded-xl border border-transparent hover:border-blue-100 transition-all shadow-sm" title="Dar 1 giro extra en Ruleta de Premios">
-                        <svg class="w-5 h-5 lg:w-6 lg:h-6"><use href="#icon-gift"></use></svg>
-                    </button>
-                    <button onclick="window.deleteGuest('${g.id}')" class="text-red-400 hover:text-red-600 bg-white/50 hover:bg-white p-3 rounded-xl border border-transparent hover:border-red-100 transition-all shadow-sm" title="Eliminar Invitado">
-                        <svg class="w-5 h-5 lg:w-6 lg:h-6"><use href="#icon-trash-2"></use></svg>
-                    </button>
-                </div>
-                `;
-                list.appendChild(li);
-            });
+            
+            requestAnimationFrame(animateParticles);
         }
 
-        // Lógica de Retos de Evento (Intacta)
-        window.spinRoulette = function() {
-            const btn = document.getElementById('btn-spin');
-            const wheel = document.getElementById('roulette-wheel');
-            btn.disabled = true; 
-            
-            const type = window.appConfig.eventType || 'boda';
-            const currentRetosList = window.RETOS_DB[type] || window.RETOS_DB['boda'];
-            window.selectedChallenge = currentRetosList[Math.floor(Math.random() * currentRetosList.length)];
-            
-            wheel.style.transform = `rotate(${3600 + Math.floor(Math.random() * 360)}deg)`;
+        // Event Listeners for Canvas
+        window.addEventListener('resize', () => {
+            resize();
+            initParticles();
+        });
 
-            setTimeout(() => {
-                document.getElementById('modal-roulette').classList.replace('flex', 'hidden');
-                document.getElementById('modal-countdown').classList.replace('hidden', 'flex');
-                
-                let count = 3; 
-                document.getElementById('countdown-text').innerText = count;
-                const interval = setInterval(() => {
-                    count--;
-                    if (count > 0) document.getElementById('countdown-text').innerText = count; 
-                    else {
-                        clearInterval(interval);
-                        document.getElementById('modal-countdown').classList.replace('flex', 'hidden');
-                        document.getElementById('modal-challenge-instruction').classList.replace('hidden', 'flex');
-                        document.getElementById('challenge-reveal-text').innerText = `"${window.selectedChallenge}"`;
-                        document.getElementById('active-challenge-text').innerText = `"${window.selectedChallenge}"`;
-                        
-                        setTimeout(() => {
-                            wheel.style.transition = 'none'; 
-                            wheel.style.transform = 'rotate(0deg)';
-                            btn.disabled = false; 
-                            setTimeout(() => wheel.style.transition = 'transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)', 50);
-                        }, 500);
-                    }
-                }, 1000);
-            }, 3000); 
-        };
-
-        window.showChallengeReveal = () => { document.getElementById('modal-challenge-instruction').classList.replace('flex', 'hidden'); document.getElementById('modal-challenge-reveal').classList.replace('hidden', 'flex'); };
-        
-        window.closeChallengeReveal = () => { 
-            document.getElementById('modal-challenge-reveal').classList.replace('flex', 'hidden');
-            window.challengeAccepted = true;
-            document.getElementById('active-challenge-banner').classList.remove('hidden');
-            window.switchView('view-guest-dashboard');
-        };
-        
-        window.skipRoulette = () => { document.getElementById('modal-roulette').classList.replace('flex', 'hidden'); window.switchView('view-guest-dashboard'); };
-        
-        // Modal Fotos HD
-        window.openPhotoModal = function(url, guestName, challengeText) {
-            window.currentPhotoUrl = url; 
-            window.currentPhotoName = guestName;
-            document.getElementById('modal-image').src = url;
-            document.getElementById('modal-guest-name').innerText = `📸 Compartida por: ${guestName}`;
-            
-            const challengeEl = document.getElementById('modal-challenge-name');
-            if (challengeText && challengeText !== "null") {
-                challengeEl.innerText = `🎯 Reto: ${challengeText}`; 
-                challengeEl.classList.remove('hidden');
-            } else { 
-                challengeEl.classList.add('hidden'); 
-            }
-            
-            const modal = document.getElementById('photo-modal');
-            modal.classList.remove('hidden'); 
-            modal.classList.add('flex');
-        };
-
-        window.closePhotoModal = function() {
-            const modal = document.getElementById('photo-modal');
-            modal.classList.add('hidden'); 
-            modal.classList.remove('flex');
-            window.currentPhotoUrl = ''; 
-            window.currentPhotoName = '';
-            document.getElementById('modal-image').src = ''; 
-            document.getElementById('modal-challenge-name').classList.add('hidden');
-        };
-
-        window.downloadCurrentPhoto = function() {
-            if(!window.currentPhotoUrl) return;
-            const a = document.createElement('a'); 
-            a.href = window.currentPhotoUrl;
-            const safeName = window.currentPhotoName ? window.currentPhotoName.replace(/[^a-zA-Z0-9]/g, '_') : 'Anonimo';
-            a.download = `Evento_${safeName}_${Date.now()}.jpg`; 
-            document.body.appendChild(a); 
-            a.click(); 
-            document.body.removeChild(a);
-        };
-
-        window.downloadAllPhotosZip = async function() {
-            if (window.photos.length === 0) { 
-                alert("No hay fotos para descargar."); 
-                return; 
-            }
-            
-            const btn = document.querySelector('button[onclick="window.downloadAllPhotosZip()"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = `<svg class="w-4 h-4 animate-spin"><use href="#icon-loader-2"></use></svg> Comprimiendo...`;
-            btn.disabled = true;
-
-            try {
-                const zip = new JSZip(); 
-                const folder = zip.folder("Fotos_Evento");
-                window.photos.forEach((photo, index) => {
-                    const base64Data = photo.url.split(',')[1];
-                    const safeGuestName = (photo.guestName || 'Anonimo').replace(/[^a-zA-Z0-9]/g, '_');
-                    folder.file(`Foto_${index + 1}_${safeGuestName}.jpg`, base64Data, {base64: true});
-                });
-                const content = await zip.generateAsync({type:"blob"});
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(content); 
-                link.download = `Fotos_Evento_${Date.now()}.zip`;
-                document.body.appendChild(link); 
-                link.click(); 
-                document.body.removeChild(link);
-            } catch (error) { 
-                console.error(error);
-                alert("Error al comprimir las fotos."); 
-            } finally { 
-                btn.innerHTML = originalText; 
-                btn.disabled = false; 
-            }
-        };
-
-        // Render Galería
-        function renderGallery() {
-            const container = document.getElementById('admin-gallery-container');
-            const countSpan = document.getElementById('admin-photo-count');
-            
-            if (!container) return; 
-            container.innerHTML = '';
-            
-            if (countSpan) {
-                countSpan.innerText = `${window.photos.length} Fotos Totales`;
-            }
-
-            if (window.photos.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full flex flex-col items-center justify-center text-stone-500 py-12 bg-white/40 rounded-[2rem] border-2 border-white border-dashed">
-                        <svg class="w-16 h-16 opacity-40 mb-4"><use href="#icon-image"></use></svg>
-                        <p class="text-lg font-medium">Aún no hay fotos en vivo.</p>
-                    </div>
-                `;
-            } else {
-                window.photos.forEach(photo => {
-                    const item = document.createElement('div');
-                    item.className = 'relative aspect-square rounded-2xl overflow-hidden shadow-sm group cursor-pointer border-[3px] border-white/80 hover:border-blue-400 transition-all';
-                    item.onclick = () => window.openPhotoModal(photo.url, photo.guestName, photo.challenge);
-                    
-                    const challengeText = photo.challenge ? `<p class="text-blue-300 text-[10px] md:text-xs truncate mt-1 drop-shadow-md font-medium">🎯 ${photo.challenge}</p>` : '';
-
-                    item.innerHTML = `
-                        <img src="${photo.url}" alt="Momento del evento" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        <button onclick="event.stopPropagation(); window.deletePhoto('${photo.id}')" class="absolute top-3 right-3 bg-red-500/90 hover:bg-red-600 text-white p-2 rounded-xl backdrop-blur-md z-10" title="Borrar foto">
-                            <svg class="w-4 h-4 lg:w-6 lg:h-6"><use href="#icon-trash-2"></use></svg>
-                        </button>
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 pt-12 pointer-events-none">
-                            <p class="text-white text-sm font-bold truncate drop-shadow-md">📸 ${photo.guestName}</p>
-                            ${challengeText}
-                        </div>
-                    `;
-                    container.appendChild(item);
-                });
-            }
-        }
-        window.renderGallery = renderGallery;
-
-        window.triggerCameraUpload = () => document.getElementById('camera-file-input').click();
-        window.triggerGalleryUpload = () => document.getElementById('gallery-file-input').click();
-        
-        window.completeChallenge = function() {
-            document.getElementById('challenge-action-container').classList.add('hidden');
-            document.getElementById('next-challenge-container').classList.remove('hidden');
-        };
-
-        window.declineNextChallenge = function() {
-            const successModal = document.getElementById('modal-challenge-success');
-            successModal.classList.add('hidden'); successModal.classList.remove('flex');
-        };
-
-        window.acceptNextChallenge = function() {
-            const successModal = document.getElementById('modal-challenge-success');
-            successModal.classList.add('hidden'); successModal.classList.remove('flex');
-            window.getNewChallenge();
-        };
-
-        window.getNewChallenge = function() {
-            const type = window.appConfig.eventType || 'boda';
-            const currentRetosList = window.RETOS_DB[type] || window.RETOS_DB['boda'];
-
-            if (window.pendingChallenges && window.pendingChallenges.length > 0) {
-                window.selectedChallenge = window.pendingChallenges.shift(); 
-                if (window.pendingChallenges.length === 0) {
-                    document.getElementById('pending-challenges-text').classList.add('hidden');
-                } else {
-                    document.getElementById('pending-count').innerText = window.pendingChallenges.length;
-                }
-            } else {
-                window.selectedChallenge = currentRetosList[Math.floor(Math.random() * currentRetosList.length)];
-            }
-            
-            document.getElementById('active-challenge-text').innerText = `"${window.selectedChallenge}"`;
-            document.getElementById('next-challenge-container').classList.add('hidden');
-            document.getElementById('challenge-action-container').classList.remove('hidden');
-        };
-
-        window.postponeChallenge = function() {
-            if (window.selectedChallenge) {
-                window.pendingChallenges.push(window.selectedChallenge);
-            }
-            const type = window.appConfig.eventType || 'boda';
-            const currentRetosList = window.RETOS_DB[type] || window.RETOS_DB['boda'];
-
-            window.selectedChallenge = currentRetosList[Math.floor(Math.random() * currentRetosList.length)];
-            document.getElementById('active-challenge-text').innerText = `"${window.selectedChallenge}"`;
-            
-            const pendingText = document.getElementById('pending-challenges-text');
-            pendingText.classList.remove('hidden');
-            document.getElementById('pending-count').innerText = window.pendingChallenges.length;
-        };
-
-    </script>
-
-
-    <!-- ==========================================
-         SCRIPT FIREBASE DB (COMPLETO)
-         ========================================== -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Configuración original del usuario
-        const originalConfig = {
-            apiKey: "AIzaSyBxE8t9sEWalMO_i0bFDjGp5I95iuYj5Io",
-            authDomain: "dinastiamesas.firebaseapp.com",
-            projectId: "dinastiamesas",
-            storageBucket: "dinastiamesas.firebasestorage.app",
-            messagingSenderId: "23829938113",
-            appId: "1:23829938113:web:d0d791c86b5b8c1df63940"
-        };
-
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : originalConfig;
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const isPreview = typeof __firebase_config !== 'undefined';
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        const getPublicCollection = (colName) => isPreview ? collection(db, 'artifacts', appId, 'public', 'data', colName) : collection(db, colName);
-        const getPublicDoc = (colName, docId) => isPreview ? doc(db, 'artifacts', appId, 'public', 'data', colName, docId) : doc(db, colName, docId);
-
-        // --- LISTENERS DE FIREBASE BACKGROUND ---
-        function cargarConfiguracionBackground() {
-            onSnapshot(getPublicDoc("configuracion", "general"), (docSnap) => {
-                if (docSnap.exists()) {
-                    const newData = docSnap.data();
-                    window.appConfig = { ...window.appConfig, ...newData };
-                    try { localStorage.setItem('eventAppConfig', JSON.stringify(window.appConfig)); } catch (e) {}
-                }
-                window.aplicarConfiguracion();
-            }, (error) => console.error("Error cargando configuración:", error));
-        }
-
-        function cargarInvitadosBackground() {
-            onSnapshot(getPublicCollection("invitados"), (snapshot) => {
-                window.firebaseConnected = true; 
-                window.guests = [];
-                snapshot.forEach((docu) => { window.guests.push({ id: docu.id, ...docu.data() }); });
-                try { localStorage.setItem('eventAppGuests', JSON.stringify(window.guests)); } catch (e) {}
-                
-                if (typeof renderAdminList === 'function') renderAdminList();
-            }, (error) => console.error("Error cargando invitados:", error));
-        }
-
-        function cargarGaleriaBackground() {
-            onSnapshot(getPublicCollection("galeria"), (snapshot) => {
-                window.photos = [];
-                snapshot.forEach((docu) => { window.photos.push({ id: docu.id, ...docu.data() }); });
-                window.photos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                
-                if (!document.getElementById('view-admin').classList.contains('hidden-view')) {
-                    if (typeof renderAdminList === 'function') renderAdminList();
-                    if (typeof window.renderGallery === 'function') window.renderGallery();
-                }
-            }, (error) => console.error("Error cargando galería:", error));
-        }
-
-        // --- FUNCIONES DB EXPORTADAS A WINDOW ---
-        
-        window.handleSaveConfig = async function(event) {
-            event.preventDefault();
-
-            // EXTRACCIÓN SEGURA (Optional Chaining evita errores si falta algún input HTML)
-            const newConfig = {
-                title: document.getElementById('cfg-title')?.value || "",
-                subtitle: document.getElementById('cfg-subtitle')?.value || "",
-                searchBtnText: document.getElementById('cfg-search-btn')?.value || "",
-                rouletteText: document.getElementById('cfg-roulette-text')?.value || "",
-                tableLabelText: document.getElementById('cfg-table-label')?.value || "",
-                acceptBtnText: document.getElementById('cfg-accept-btn')?.value || "",
-                requireRegistration: document.getElementById('cfg-req-registration')?.checked || false,
-                instagramUrl: document.getElementById('cfg-instagram-url')?.value || "",
-                prizeOptions: document.getElementById('cfg-prize-options')?.value || "",
-                specialPassword: document.getElementById('cfg-special-pass')?.value || "",
-                videoLink: document.getElementById('cfg-video')?.value || "",
-                showVideoBtn: document.getElementById('cfg-show-video')?.checked || false,
-                adminPassword: document.getElementById('cfg-admin-pass')?.value || "admin",
-                allowAnonymous: document.getElementById('cfg-anonymous')?.checked || false,
-                enablePrizeRoulette: document.getElementById('cfg-enable-prize-roulette')?.checked ?? true,
-                qrLogo: document.getElementById('cfg-qr-logo')?.value || "",
-                homeLogoUrl: document.getElementById('cfg-home-logo')?.value || "",
-                homeLogoSize: parseInt(document.getElementById('cfg-home-logo-size')?.value) || 250, 
-                rouletteBg: document.getElementById('cfg-roulette-bg')?.value || "", 
-                rouletteCenter: document.getElementById('cfg-roulette-center')?.value || "", 
-                themeColor: document.getElementById('cfg-theme-color')?.value || "amber"
-            };
-
-            window.appConfig = { ...window.appConfig, ...newConfig };
-            window.aplicarConfiguracion();
-
-            try {
-                await setDoc(getPublicDoc("configuracion", "general"), newConfig, { merge: true });
-                alert("✅ ¡Configuración guardada en la nube!\n\nTodos los celulares conectados en vivo se acaban de actualizar.");
-            } catch (error) { 
-                console.error("Error guardando en Firebase:", error);
-                alert("Error al intentar guardar en la nube."); 
-            }
-        };
-
-        window.handleSaveGuestData = async function(guestId, data) {
-            try {
-                // Chequear si el ID existe y no es uno temporal/anónimo
-                if (guestId && guestId.toString().startsWith('anon_') === false && guestId.toString().startsWith('local_') === false) {
-                    await setDoc(getPublicDoc("invitados", guestId), data, { merge: true });
-                    return guestId;
-                } else {
-                    // Si es un ID temporal o viene nulo (usuario nuevo), lo creamos en Firebase
-                    const docRef = await addDoc(getPublicCollection("invitados"), data);
-                    return docRef.id;
-                }
-            } catch (error) {
-                console.error("Error guardando invitado en DB:", error);
-                return null;
-            }
-        };
-
-        window.changeEventType = async function() {
-            const newType = document.getElementById('admin-event-type').value;
-            try {
-                await setDoc(getPublicDoc("configuracion", "general"), { eventType: newType }, { merge: true });
-                alert("Tipos de retos actualizados correctamente.");
-            } catch (error) { console.error("Error actualizando retos:", error); }
-        };
-
-        window.grantExtraPrizeSpin = async function(id) {
-            const guest = window.guests.find(g => g.id === id);
-            if (!guest) return;
-            
-            const currentSpins = guest.extraPrizeSpins || 0;
-            const newSpins = currentSpins + 1;
-            
-            if (typeof window.handleSaveGuestData === 'function') {
-                const updatedId = await window.handleSaveGuestData(id, { extraPrizeSpins: newSpins });
-                if(updatedId) {
-                    alert(`¡Se ha concedido 1 oportunidad extra a ${guest.name}!\n\nLa próxima vez que el usuario inicie sesión con su nombre, verá la ruleta de premios antes de entrar a sus retos.`);
-                }
-            } else {
-                guest.extraPrizeSpins = newSpins;
-                renderAdminList();
-                alert(`Oportunidad extra concedida localmente a ${guest.name}.`);
-            }
-        };
-
-        window.deleteGuest = async function(id) {
-            if(confirm("¿Estás seguro de eliminar a este invitado permanentemente?")) { 
-                try { await deleteDoc(getPublicDoc("invitados", id)); } catch (e) { console.error(e); } 
-            }
-        };
-
-        window.deleteAllGuests = async function() {
-            if(window.guests.length === 0) return;
-            if(confirm("⚠️ ATENCIÓN PELIGRO ⚠️\n\n¿Estás completamente seguro de eliminar a TODOS los invitados?")) {
-                try {
-                    await Promise.all(window.guests.map(g => deleteDoc(getPublicDoc("invitados", g.id))));
-                    alert("Todos los invitados han sido borrados.");
-                } catch (error) { console.error(error); }
-            }
-        };
-
-        window.deletePhoto = async function(id) {
-            if(confirm("¿Eliminar definitivamente esta foto?")) {
-                try { await deleteDoc(getPublicDoc("galeria", id)); } catch (error) { console.error(error); }
-            }
-        };
-
-        window.deleteAllPhotos = async function() {
-            if(window.photos.length === 0) return;
-            if(confirm("⚠️ ATENCIÓN PELIGRO ⚠️\n\n¿Estás seguro de eliminar TODAS las fotos capturadas?")) {
-                try {
-                    await Promise.all(window.photos.map(p => deleteDoc(getPublicDoc("galeria", p.id))));
-                    alert("Todas las fotos han sido eliminadas.");
-                } catch (error) { console.error(error); }
-            }
-        };
-
-        window.handleAddGuest = async function(event) {
-            event.preventDefault();
-            const nameInput = document.getElementById('admin-input-name'); 
-            const tableInput = document.getElementById('admin-input-table');
-            
-            if (!nameInput.value.trim() || !tableInput.value.trim()) return; 
-            
-            try {
-                await addDoc(getPublicCollection("invitados"), { 
-                    name: nameInput.value.trim(), 
-                    table: tableInput.value.trim() 
-                });
-                nameInput.value = ''; tableInput.value = '';
-            } catch (error) { console.error("Error guardando invitado:", error); }
-        };
-
-        window.handlePhotoUpload = function(event) {
-            const file = event.target.files[0]; 
-            if (!file) return;
-
-            const isChallengePending = !document.getElementById('challenge-action-container').classList.contains('hidden');
-            let wasChallenge = false;
-
-            if (window.challengeAccepted && isChallengePending) { 
-                wasChallenge = true; 
-                window.completeChallenge(); 
-            }
-            
-            event.target.value = ''; 
-            
-            if (wasChallenge) {
-                const successModal = document.getElementById('modal-challenge-success');
-                successModal.classList.remove('hidden'); successModal.classList.add('flex');
-            } else { 
-                alert('¡Foto compartiendo en la galería!'); 
-            }
-
-            const reader = new FileReader();
-            reader.onloadend = async () => {
-                const originalBase64 = reader.result;
-                const img = new Image(); 
-                img.src = originalBase64;
-                img.onload = async () => {
-                    const canvas = document.createElement('canvas'); 
-                    const MAX_WIDTH = 800; 
-                    let scaleSize = 1;
-                    if (img.width > MAX_WIDTH) scaleSize = MAX_WIDTH / img.width;
-                    canvas.width = img.width * scaleSize; canvas.height = img.height * scaleSize;
-                    const ctx = canvas.getContext('2d'); 
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
-
-                    try {
-                        await addDoc(getPublicCollection("galeria"), {
-                            url: compressedBase64,
-                            guestName: window.currentGuest ? window.currentGuest.name : 'Anónimo',
-                            guestId: window.currentGuest ? window.currentGuest.id : null,
-                            challenge: wasChallenge ? window.selectedChallenge : null,
-                            timestamp: Date.now()
-                        });
-                    } catch (e) { console.error("Error al subir a Firebase Galería:", e); }
-                };
-            };
-            reader.readAsDataURL(file);
-        };
-
-        // DOM Listeners de Login
-        window.handleAdminLogin = function(event) {
-            event.preventDefault();
-            const passInput = document.getElementById('admin-password-input');
-            const errorMsg = document.getElementById('admin-login-error');
-            
-            if (passInput.value === window.appConfig.adminPassword) {
-                passInput.value = ''; errorMsg.classList.add('hidden'); window.switchView('view-admin');
-            } else {
-                errorMsg.classList.remove('hidden'); passInput.value = ''; passInput.focus();
-            }
-        };
-
-        // --- ASIGNACIÓN DE EVENTOS DEL DOM ---
-        document.getElementById('btn-search').addEventListener('click', window.handleSearch);
-        document.getElementById('search-input').addEventListener('keypress', e => { if (e.key === 'Enter') window.handleSearch(); });
-        document.getElementById('admin-form').addEventListener('submit', window.handleAddGuest);
-        document.getElementById('config-form').addEventListener('submit', window.handleSaveConfig);
-        document.getElementById('camera-file-input').addEventListener('change', window.handlePhotoUpload);
-        document.getElementById('gallery-file-input').addEventListener('change', window.handlePhotoUpload);
-        document.getElementById('admin-login-form').addEventListener('submit', window.handleAdminLogin);
-        
-        // --- INICIALIZACIÓN ---
-        async function iniciarApp() {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-                
-                cargarConfiguracionBackground(); 
-                cargarInvitadosBackground();
-                cargarGaleriaBackground();
-            } catch (error) {
-                console.error("Error de inicialización de Firebase:", error);
-            }
-        }
-
-        iniciarApp();
+        // Initialize
+        resize();
+        initParticles();
+        animateParticles();
     </script>
 </body>
 </html>
